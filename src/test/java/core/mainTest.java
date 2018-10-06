@@ -7,5 +7,6 @@ public class mainTest extends TestCase{
 		TileRummyMain result = new TileRummyMain();
 		result.initialize();
 		result.showDeck();
+		result.showHands();
 	}
 }
