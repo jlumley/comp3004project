@@ -9,5 +9,6 @@ public class mainTest extends TestCase{
 		result.initialize();
 		result.showDeck();
 		result.showHands();
-	}	
+	}
+	
 }
