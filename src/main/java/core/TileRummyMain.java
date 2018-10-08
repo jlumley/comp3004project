@@ -44,4 +44,7 @@ public class TileRummyMain {
 	public void showHands() {
 		
 	}
+	public void getHand() {
+		
+	}
 }
