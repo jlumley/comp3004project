@@ -13,7 +13,13 @@ public class Player {
 	public ArrayList<Tile> getHand() {
 		return this.hand;
 	}
+	
 	public void addTile(Tile t) {
 		this.hand.add(t);
 	}
+	
+	public void drawTile(ArrayList<Tile> collection) {
+		this.addTile(collection.remove(0));
+	}
 }
+
