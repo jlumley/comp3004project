@@ -3,12 +3,13 @@ package core;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class TestTile
+import junit.framework.TestCase;
+
+public class TestTile extends TestCase
 {
-		@Test
-		public void TestGetValue()
+		public void testGetValue()
 		{
-			Tile testTile = new Tile();
+			Tile testTile = new Tile("", 0);
 			
 			/* Check extreme values */
 			assertEquals(testTile.setValue(-1), false);
@@ -17,35 +18,45 @@ public class TestTile
 			assertEquals(testTile.getValue(), 10);
 		}
 		@Test
-		public void TestGetColour()
+		public void testGetColour()
 		{
-			Tile testTile = new Tile();
+			Tile testTile = new Tile("", 0);
 			
 			//Check each colour Red, Green, Blue, Black
-			assertEquals(testTile.setColour("Green"), true);
-			assertEquals(testTile.getColour(), "Green");
+			assertEquals(testTile.setColour("green"), true);
+			assertEquals(testTile.getColour(), "G");
 			
-			assertEquals(testTile.setColour("Blue"), true);
-			assertEquals(testTile.getColour(), "Blue");
+			assertEquals(testTile.setColour("blue"), true);
+			assertEquals(testTile.getColour(), "B");
 			
-			assertEquals(testTile.setColour("Black"), true);
-			assertEquals(testTile.getColour(), "Black");
+			assertEquals(testTile.setColour("Yellow"), true);
+			assertEquals(testTile.getColour(), "Y");
 			
 			assertEquals(testTile.setColour("Red"), true);
-			assertEquals(testTile.getColour(), "Red");
+			assertEquals(testTile.getColour(), "R");
 		}
 		
+		@Test
+		public void testTileConstructor() {
+			Tile testTile = new Tile("Yellow", 13);
+			assertEquals(testTile.getValue(), 13);
+			assertEquals("Y", testTile.getColour());
+			
+			testTile = new Tile("blue", 1);
+			assertEquals(testTile.getValue(), 1);
+			assertEquals("B", testTile.getColour());
+		}
 		/* @Test
-		public void TestGetFileImage()
+		public void testGetFileImage()
 		{
 			Tile testTile = new Tile();
 			assertEquals(1, 2);
 		} */
 		
 		@Test
-		public void TestSetValue()
+		public void testSetValue()
 		{
-			Tile testTile = new Tile();
+			Tile testTile = new Tile("", 0);
 			/* Check values 1 to 13 */
 			for(int i = 1; i < 14; i++)
 			{
@@ -54,18 +65,28 @@ public class TestTile
 			}
 		}
 		@Test
-		public void TestSetColour()
+		public void testSetColour()
 		{
-			Tile testTile = new Tile();
+			Tile testTile = new Tile("", 0);
 			/* check each colour */
-			assertEquals(testTile.setColour("Green"), true);
+			assertEquals(testTile.setColour("green"), true);
 			assertEquals(testTile.setColour("Blue"), true);
 			assertEquals(testTile.setColour("Red"), true);
-			assertEquals(testTile.setColour("Black"), true);
+			assertEquals(testTile.setColour("Yellow"), true);
+			assertEquals(testTile.setColour("R"), true);
+			assertEquals(testTile.setColour("Blfdsafji"), true); //turns to Blue
 			assertEquals(testTile.setColour("Not a colour"), false);
 		}
+		
+		@Test
+		public void testToString() {
+			Tile testTile = new Tile("Y", 7);
+			assertEquals("Y7", testTile.toString());
+			testTile.setValue(11);
+			assertEquals("Y11", testTile.toString());
+		}
 		/*@Test
-		public void TestSetFileImage()
+		public void testSetFileImage()
 		{
 			Tile testTile = new Tile();
 			assertEquals(testTile.setFileImage("Green10"), true);
