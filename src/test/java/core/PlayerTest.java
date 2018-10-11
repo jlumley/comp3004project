@@ -3,12 +3,12 @@ package core;
 import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import org.junit.Test;
-import java.util.HashSet;
 
-public class PlayerTest
+import junit.framework.TestCase;
+
+public class PlayerTest extends TestCase
 {
-		@Test
-		public void TestaddTile()
+		public void testaddTile()
 		{
 			// testing that the cards added were actually added to their hand
 			Player testPlayer = new Player();
@@ -32,33 +32,36 @@ public class PlayerTest
 			
 		}
 		
-		@Test
-		public void TestdrawTile()
+		public void testdrawTile()
 		{
 			// testing that the cards added were actually added to their hand
 			Player testPlayer = new Player();
 			ArrayList<Tile> testHand = new ArrayList<Tile>();
 			ArrayList<Tile> collection = new ArrayList<Tile>();
-			HashSet<String> colors = new HashSet<String>();
+			String[] colors = {"R", "G", "B", "Y"};
 			
 			for (String s: colors) {
 				for (int i=1; i<=13; i++) {
 					collection.add(new Tile(s, i));
 				}
 			}
+			assertEquals(52, collection.size());
 			
 			testPlayer.drawTile(collection);
-			assertEquals(1, collection.size());
+			assertEquals(1, testPlayer.getHand().size());
+			assertEquals(51, collection.size());
 
 			testPlayer.drawTile(collection);
-			assertEquals(2, collection.size());
+			assertEquals(2, testPlayer.getHand().size());
+			assertEquals(50, collection.size());
 			
 			testPlayer.drawTile(collection);
-			assertEquals(3, collection.size());
+			assertEquals(3, testPlayer.getHand().size());
+			assertEquals(49, collection.size());
 			
 			testPlayer.drawTile(collection);
-			assertEquals(4, collection.size());
-			
+			assertEquals(4, testPlayer.getHand().size());
+			assertEquals(48, collection.size());
 			
 		}
 		
