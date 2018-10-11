@@ -11,6 +11,12 @@ public class Tile
 	public String getColour() { return colour;}
 	public int getValue() { return value;}
 	
+	public Tile(String tileColour, int value) {
+		setValue(value);
+		setColour(tileColour);
+		//TODO Set Image
+	}
+	
 	public boolean setValue(int tempValue) 
 	{
 		if( 13 < tempValue || tempValue < 1)
@@ -21,7 +27,11 @@ public class Tile
 
 	public boolean setColour(String tempColour) 
 	{
-		if(tempColour != "Black" & tempColour != "Blue" & tempColour != "Red" & tempColour != "Green")
+		tempColour.trim(); 
+		tempColour = tempColour.toUpperCase(); //case sensitive is handled
+		if(!tempColour.isEmpty()) {
+			tempColour = tempColour.substring(0,1);} //change to single letter form
+		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y"))
 			return false;
 		this.colour = tempColour;
 		return true;
@@ -40,5 +50,9 @@ public class Tile
 		{
 			return false;
 		}	
+	}
+	
+	public String toString() {
+		return colour + value;
 	}
 }
