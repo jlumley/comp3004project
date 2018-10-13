@@ -21,5 +21,9 @@ public class Player {
 		if(!collection.isEmpty())
 			addTile(collection.remove(0));
 	}
+	
+	public int countTiles() {
+		return this.hand.size();
+	}
 }
 

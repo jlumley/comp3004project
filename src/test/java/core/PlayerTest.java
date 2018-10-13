@@ -14,21 +14,25 @@ public class PlayerTest extends TestCase
 			Player testPlayer = new Player();
 			ArrayList<Tile> testHand = new ArrayList<Tile>();
 			
-			testPlayer.addTile("blue", 1);
-			testHand.add(new Tile("blue", 1));
-			assertEquals(testHand, testPlayer.getHand());
+		 	Tile t1 = new Tile("B", 1);
+			testPlayer.addTile(t1);
+			testHand.add(t1);
+			assertEquals(true, testHand.equals(testPlayer.getHand()));
 			
-			testPlayer.addTile("green", 4);
-			testHand.add(new Tile("green", 4));
-			assertEquals(testHand, testPlayer.getHand());
+			Tile t2 = new Tile("G", 4);
+			testPlayer.addTile(t2);
+			testHand.add(t2);
+			assertEquals(true, testHand.equals(testPlayer.getHand()));
 			
-			testPlayer.addTile("red", 10);
-			testHand.add(new Tile("red", 10));
-			assertEquals(testHand, testPlayer.getHand());
+			Tile t3 = new Tile("R", 10);
+			testPlayer.addTile(t3);
+			testHand.add(t3);
+			assertEquals(true, testHand.equals(testPlayer.getHand()));
 			
-			testPlayer.addTile("orange", 13);
-			testHand.add(new Tile("orange", 13));
-			assertEquals(testHand, testPlayer.getHand());	
+			Tile t4 = new Tile("Y", 13);
+			testPlayer.addTile(t4);
+			testHand.add(t4);
+			assertEquals(true, testHand.equals(testPlayer.getHand()));	
 			
 		}
 		
@@ -69,7 +73,7 @@ public class PlayerTest extends TestCase
 			Player testPlayer = new Player();
 			assertEquals(0, testPlayer.countTiles());
 			
-			testPlayer.addTile(new Tile("O", 12));
+			testPlayer.addTile(new Tile("Y", 12));
 			assertEquals(1, testPlayer.countTiles());
 			
 			testPlayer.addTile(new Tile("B", 9));
