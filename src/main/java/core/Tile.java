@@ -2,7 +2,7 @@ package core;
 
 import java.io.File;
 
-public class Tile 
+public class Tile implements Comparable<Tile>
 {
 	private int value;
 	private String colour;
@@ -54,5 +54,14 @@ public class Tile
 	
 	public String toString() {
 		return colour + value;
+	}
+	
+	@Override
+	public int compareTo(Tile o) {
+		if (this.value == o.value) {
+			return this.colour.compareTo(o.colour);
+		} else {
+			return Integer.compare(this.value, o.value);
+		}
 	}
 }
