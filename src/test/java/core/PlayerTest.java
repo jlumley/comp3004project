@@ -2,19 +2,21 @@ package core;
 
 import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.Test;
 
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase
 {
-		public void testaddTile()
+		public void testaddTileAndSortHand()
 		{
 			// testing that the cards added were actually added to their hand
 			Player testPlayer = new Player();
 			ArrayList<Tile> testHand = new ArrayList<Tile>();
 			
-		 	Tile t1 = new Tile("B", 1);
+		 	Tile t1 = new Tile("B", 2);
 			testPlayer.addTile(t1);
 			testHand.add(t1);
 			assertEquals(true, testHand.equals(testPlayer.getHand()));
@@ -33,6 +35,12 @@ public class PlayerTest extends TestCase
 			testPlayer.addTile(t4);
 			testHand.add(t4);
 			assertEquals(true, testHand.equals(testPlayer.getHand()));	
+			
+			Tile t5 = new Tile("B", 1);
+			testPlayer.addTile(t5);
+			testHand.add(0, t5);
+			assertEquals(true, testHand.equals(testPlayer.getHand()));	
+			
 			
 		}
 		
@@ -81,6 +89,48 @@ public class PlayerTest extends TestCase
 			
 			testPlayer.addTile(new Tile("G", 3));
 			assertEquals(3, testPlayer.countTiles());
+		}
+		
+		
+		public void TestInHandMelds() {
+			Player testPlayer = new Player();
+			ArrayList<ArrayList<Tile>> possibleMelds = new ArrayList<ArrayList<Tile>>();
+			assertEquals(possibleMelds, testPlayer.inHandMelds());
+			
+			ArrayList<Tile> temp = new ArrayList<Tile>();
+			Tile t1 = new Tile("B", 10);
+			testPlayer.addTile(t1);
+			temp.add(t1);
+			Tile t2 = new Tile("O", 10);
+			testPlayer.addTile(t2);
+			temp.add(t2);
+			Tile t3 = new Tile("B", 10);
+			testPlayer.addTile(t3);
+			temp.add(t3);
+			possibleMelds.add(temp);
+			assertEquals(possibleMelds, testPlayer.inHandMelds());
+			
+			temp = new ArrayList<Tile>();
+			Tile t4 = new Tile("G", 3);
+			testPlayer.addTile(t4);
+			temp.add(t4);
+			Tile t5 = new Tile("G", 4);
+			testPlayer.addTile(t5);
+			temp.add(t5);
+			Tile t6 = new Tile("G", 5);
+			testPlayer.addTile(t6);
+			temp.add(t6);
+			possibleMelds.add(temp);
+			assertEquals(possibleMelds, testPlayer.inHandMelds());
+			
+			Tile t7 = new Tile("G", 2);
+			testPlayer.addTile(t7);
+			temp.add(0, t7);
+			possibleMelds.remove(1);
+			possibleMelds.add(temp);
+			assertEquals(possibleMelds, testPlayer.inHandMelds());
+
+			
 		}
 		
 		
