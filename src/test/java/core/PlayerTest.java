@@ -65,5 +65,19 @@ public class PlayerTest extends TestCase
 			
 		}
 		
+		public void testcountTiles() {
+			Player testPlayer = new Player();
+			assertEquals(0, testPlayer.countTiles());
+			
+			testPlayer.addTile(new Tile("O", 12));
+			assertEquals(1, testPlayer.countTiles());
+			
+			testPlayer.addTile(new Tile("B", 9));
+			assertEquals(2, testPlayer.countTiles());
+			
+			testPlayer.addTile(new Tile("G", 3));
+			assertEquals(3, testPlayer.countTiles());
+		}
+		
 		
 }
