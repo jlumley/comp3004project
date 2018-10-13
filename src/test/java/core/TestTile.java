@@ -1,7 +1,9 @@
 package core;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
+
 
 import junit.framework.TestCase;
 
@@ -95,4 +97,13 @@ public class TestTile extends TestCase
 			assertEquals(testTile.setFileImage("Black09"), true);
 			assertEquals(testTile.setFileImage("Not a image"), false);
 		}*/
+		
+		@Test
+		public void testCompareTo() {
+			assertEquals(0, new Tile("B", 4).compareTo(new Tile("B", 4)));
+			assertEquals(23, new Tile("Y", 4).compareTo(new Tile("B", 4)));
+			assertEquals(-23, new Tile("B", 4).compareTo(new Tile("Y", 4)));
+			assertEquals(-1, new Tile("B", 4).compareTo(new Tile("B", 6)));
+			assertEquals(1, new Tile("B", 6).compareTo(new Tile("B", 4)));
+		}
 }
