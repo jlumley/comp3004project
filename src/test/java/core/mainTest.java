@@ -12,7 +12,7 @@ public class mainTest extends TestCase{
 		ArrayList<Tile> temp = new ArrayList<Tile>();
 		Tile t1 = new Tile("B", 10);
 		temp.add(t1);
-		Tile t2 = new Tile("O", 10);
+		Tile t2 = new Tile("Y", 10);
 		temp.add(t2);
 		Tile t3 = new Tile("B", 10);
 		temp.add(t3);
