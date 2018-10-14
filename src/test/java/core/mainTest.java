@@ -21,7 +21,8 @@ public class mainTest extends TestCase{
 		result.showDeck();
 		result.showHands();
 		result.showField();
-		assertEquals(true,result.checkSizeofHand(temp));
+		assertEquals(true,result.checkSizeofMendHand(temp));
+		result.showField();
 		assertEquals(false,result.checkGameStatus()); //checks if any user has an empty hand
 	}
 	public void testBuildDeck() {
