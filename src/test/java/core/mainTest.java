@@ -18,8 +18,9 @@ public class mainTest extends TestCase{
 		temp.add(t3);
 		
 		result.initialize();
+		result.playGame();
 		result.showDeck();
-		result.showHands();
+		result.player0.showHand();
 		result.showField();
 		result.getHandSize();
 		assertEquals(true,result.checkSizeofMendHand(temp)); // checks for addMend as well
