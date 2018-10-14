@@ -10,9 +10,14 @@ public class Tile implements Comparable<Tile>
 	private File tileImage;
 	public String getColour() { return colour;}
 	public int getValue() { return value;}
+	public boolean joker = false;
 	
 	public Tile(String tileColour, int value) {
-		setValue(value);
+		if(value == 99){ // setting it up as a dummy checker for Jokers, need team input
+			this.joker = true;
+		}else {
+			setValue(value);
+		}
 		setColour(tileColour);
 		//TODO Set Image
 	}
