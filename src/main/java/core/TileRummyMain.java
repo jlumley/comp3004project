@@ -7,7 +7,6 @@ public class TileRummyMain {
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
-	//[][] fieldOfTiles;
 	ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public Player player0 = new Player();
@@ -15,6 +14,7 @@ public class TileRummyMain {
 	public AI player2 = new AI();
 	public AI player3 = new AI();
 	boolean gameStatus = true;
+	public int playerTurn = 0;
 	public int fieldSize = 0;
 	
 	public void initialize() {
@@ -56,7 +56,7 @@ public class TileRummyMain {
 	}
 	
 	public void dealHands() {
-		for(int i = 0; i < 13; i++) {
+		for(int i = 0; i < 14; i++) {
 			player0.drawTile(initDeck);
 			player1.drawTile(initDeck);
 			player2.drawTile(initDeck);
@@ -122,5 +122,22 @@ public class TileRummyMain {
 			System.out.println("User 4 has won!");
 		}
 		return gameStatus;
+	}
+
+	public void playGame() { // where most of the game logic is going to go.
+		while(gameStatus){
+			if(playerTurn == 0) {
+				System.out.println("Players Turn");
+			}else if(playerTurn == 2){
+				System.out.println("AI 1's Turn");
+			}else if(playerTurn == 3){
+				System.out.println("AI 2's Turn");
+			}else if(playerTurn == 4){
+				System.out.println("AI 3's Turn");
+				playerTurn = playerTurn%4;
+				break;
+			}
+			playerTurn++;
+		}
 	}
 }
