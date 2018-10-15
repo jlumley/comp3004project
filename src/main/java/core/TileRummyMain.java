@@ -126,15 +126,16 @@ public class TileRummyMain {
 
 	public void playGame() { // where most of the game logic is going to go.
 		while(gameStatus){
+			System.out.print(playerTurn + " ");
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
-			}else if(playerTurn == 2){
+			}else if(playerTurn == 1){
 				System.out.println("AI 1's Turn");
-			}else if(playerTurn == 3){
+			}else if(playerTurn == 2){
 				System.out.println("AI 2's Turn");
-			}else if(playerTurn == 4){
+			}else if(playerTurn == 3){
 				System.out.println("AI 3's Turn");
-				playerTurn = playerTurn%4;
+				playerTurn = playerTurn%3;
 				break;
 			}
 			playerTurn++;
@@ -146,13 +147,13 @@ public class TileRummyMain {
 		if(playerTurn == 0) {
 			player0.addTile(drawTile);
 			System.out.println("Players draws a tile");
-		}else if(playerTurn == 2){
+		}else if(playerTurn == 1){
 			System.out.println("AI 1's draws a tile");
 			player1.addTile(drawTile);
-		}else if(playerTurn == 3){
+		}else if(playerTurn == 2){
 			System.out.println("AI 2's draws a tile");
 			player2.addTile(drawTile);
-		}else if(playerTurn == 4){
+		}else if(playerTurn == 3){
 			System.out.println("AI 3's draws a tile");
 			player3.addTile(drawTile);
 		}
