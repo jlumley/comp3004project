@@ -81,8 +81,9 @@ public class Player {
 			tilesToRemove.add(i);
 			// check to see if the following cards are of the same value
 			// but that they have different colours
-			while (this.hand.get(n).getValue() == value+1) {
-				if (this.hand.get(n).getColour() == colour) {
+			while (true) {
+				if (this.hand.get(n).getColour() == colour &&
+					this.hand.get(n).getValue() == value+1) {
 					tmp.add(this.hand.get(n));
 					tilesToRemove.add(this.hand.get(n).getId());
 					value += 1;
@@ -91,7 +92,7 @@ public class Player {
 				if (n >= this.hand.size()) {
 					break;
 				}
-			}
+			} 
 			// if you are able to make a meld of at least 3 tiles
 			// then make a new hand without the tiles used in the meld
 			if (tmp.size() >= 3) {
