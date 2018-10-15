@@ -4,21 +4,38 @@ import java.io.File;
 
 public class Tile implements Comparable<Tile>
 {
+	private static final String imageDir = "src/main/resources/core/cards/";
 	private int value;
 	private String colour;
+
 	private static int id_count = 0;
 	private int id;
 	private static final String imageDir = "src/main/resources/core/cards/";
+  
 	private File tileImage;
+	private float x;
+	private float y;
+	
+	public boolean joker = false;
 	public String getColour() { return colour;}
 	public int getValue() { return value;}
+	public float getX() {return x;}
+	public float getY() {return y;}
 	
 	public Tile(String tileColour, int value) {
-		setValue(value);
+		if(value == 99){ // setting it up as a dummy checker for Jokers, need team input
+			this.joker = true;
+		}else {
+			setValue(value);
+		}
 		setColour(tileColour);
 		this.id = id_count;
 		this.id_count += 1;
 		//TODO Set Image
+		//Tiles are expected to be in the format "Tile" + firstLetterOfColour + Value 
+		//for example TileB10 (tile blue 10 )or TileR2 (tile red 2) 
+		setFileImage("Tile" + tileColour + String.valueOf(value) + ".jpg");
+
 	}
 	
 	public boolean setValue(int tempValue) 

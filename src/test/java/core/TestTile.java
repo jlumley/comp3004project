@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 
 public class TestTile extends TestCase
 {
+		@Test
 		public void testGetValue()
 		{
 			Tile testTile = new Tile("", 0);
@@ -87,16 +88,15 @@ public class TestTile extends TestCase
 			testTile.setValue(11);
 			assertEquals("Y11", testTile.toString());
 		}
-		/*@Test
+		@Test
 		public void testSetFileImage()
 		{
-			Tile testTile = new Tile();
-			assertEquals(testTile.setFileImage("Green10"), true);
-			assertEquals(testTile.setFileImage("Red09"), true);
-			assertEquals(testTile.setFileImage("Blue10"), true);
-			assertEquals(testTile.setFileImage("Black09"), true);
-			assertEquals(testTile.setFileImage("Not a image"), false);
-		}*/
+			Tile testTile = new Tile("B", 4);
+			assertEquals(testTile.setFileImage("TileB10.jpg"), true);
+			assertEquals(testTile.setFileImage("TileR9.jpg"), true);
+			assertEquals(testTile.setFileImage("TileB10.jpg"), true);
+			assertEquals(testTile.setFileImage("TileO9.jpg"), true);
+		}
 		
 		@Test
 		public void testCompareTo() {

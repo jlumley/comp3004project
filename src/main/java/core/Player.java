@@ -16,7 +16,9 @@ public class Player {
 	public ArrayList<Tile> getHand() {
 		return hand;
 	}
-	
+	public void showHand() { 
+		System.out.println(hand);
+	}
 	public void addTile(Tile t) {
 		hand.add(t);
 		Collections.sort(hand);
