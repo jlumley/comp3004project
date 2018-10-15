@@ -21,8 +21,9 @@ public class Tile
 
 	public boolean setColour(String tempColour) 
 	{
-		if(tempColour != "Black" & tempColour != "Blue" & tempColour != "Red" & tempColour != "Green")
+		if(tempColour != "orange" & tempColour != "blue" & tempColour != "red" & tempColour != "green")
 			return false;
+		
 		this.colour = tempColour;
 		return true;
 	}

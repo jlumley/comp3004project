@@ -22,17 +22,17 @@ public class TestTile
 			Tile testTile = new Tile();
 			
 			//Check each colour Red, Green, Blue, Black
-			assertEquals(testTile.setColour("Green"), true);
-			assertEquals(testTile.getColour(), "Green");
+			assertEquals(testTile.setColour("green"), true);
+			assertEquals(testTile.getColour(), "green");
 			
-			assertEquals(testTile.setColour("Blue"), true);
-			assertEquals(testTile.getColour(), "Blue");
+			assertEquals(testTile.setColour("blue"), true);
+			assertEquals(testTile.getColour(), "blue");
 			
-			assertEquals(testTile.setColour("Black"), true);
-			assertEquals(testTile.getColour(), "Black");
+			assertEquals(testTile.setColour("orange"), true);
+			assertEquals(testTile.getColour(), "orange");
 			
-			assertEquals(testTile.setColour("Red"), true);
-			assertEquals(testTile.getColour(), "Red");
+			assertEquals(testTile.setColour("red"), true);
+			assertEquals(testTile.getColour(), "red");
 		}
 		
 		/* @Test
@@ -58,10 +58,10 @@ public class TestTile
 		{
 			Tile testTile = new Tile();
 			/* check each colour */
-			assertEquals(testTile.setColour("Green"), true);
-			assertEquals(testTile.setColour("Blue"), true);
-			assertEquals(testTile.setColour("Red"), true);
-			assertEquals(testTile.setColour("Black"), true);
+			assertEquals(testTile.setColour("green"), true);
+			assertEquals(testTile.setColour("blue"), true);
+			assertEquals(testTile.setColour("red"), true);
+			assertEquals(testTile.setColour("orange"), true);
 			assertEquals(testTile.setColour("Not a colour"), false);
 		}
 		/*@Test
