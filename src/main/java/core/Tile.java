@@ -10,8 +10,7 @@ public class Tile implements Comparable<Tile>
 
 	private static int id_count = 0;
 	private int id;
-	private static final String imageDir = "src/main/resources/core/cards/";
-  
+
 	private File tileImage;
 	private float x;
 	private float y;
