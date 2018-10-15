@@ -6,6 +6,8 @@ public class Tile implements Comparable<Tile>
 {
 	private int value;
 	private String colour;
+	private static int id_count = 0;
+	private int id;
 	private static final String imageDir = "src/main/resources/core/cards/";
 	private File tileImage;
 	public String getColour() { return colour;}
@@ -14,6 +16,8 @@ public class Tile implements Comparable<Tile>
 	public Tile(String tileColour, int value) {
 		setValue(value);
 		setColour(tileColour);
+		this.id = id_count;
+		this.id_count += 1;
 		//TODO Set Image
 	}
 	
@@ -56,8 +60,15 @@ public class Tile implements Comparable<Tile>
 		return colour + value;
 	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
 	@Override
 	public int compareTo(Tile o) {
+		if (o == null) {
+			return 0; 
+		}
 		if (this.value == o.value) {
 			return this.colour.compareTo(o.colour);
 		} else {
