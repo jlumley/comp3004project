@@ -80,16 +80,24 @@ public class TileRummyMain {
 		}
 	}
 
-	public boolean checkSizeofMendHand(ArrayList<Tile> collection){
+	public boolean checkSizeofMendHand(ArrayList<Tile> collection){ // checks for users first hand with sets 
 		boolean returnV = true;
 		int checkSum = 0;
+		ArrayList<String> suitDeck = new ArrayList<String>();
+		int checkValue = collection.get(0).getValue();
 		if(collection.size() == 0) {
 			return false;
 		}else {
 			for(int i = 0; i < collection.size(); i++) {
-				checkSum += collection.get(i).getValue();
+				if(!suitDeck.contains(collection.get(i).getColour())) {
+					if(collection.get(i).getValue() == checkValue){
+						suitDeck.add(collection.get(i).getColour());
+						checkSum += collection.get(i).getValue();
+					}
+				}
 			}
 		}
+		System.out.println(checkSum + " " + suitDeck + " " + checkValue);
 		if(checkSum < 30) {
 			returnV = false;
 		}
