@@ -32,6 +32,15 @@ public class TestTile extends TestCase
 			assertEquals(testTile.setColour("blue"), true);
 			assertEquals(testTile.getColour(), "B");
 			
+			assertEquals(testTile.setColour("yellow"), true);
+			assertEquals(testTile.getColour(), "Y");
+			
+			assertEquals(testTile.setColour("red"), true);
+			assertEquals(testTile.getColour(), "R");
+			
+			assertEquals(testTile.setColour("blue"), true);
+			assertEquals(testTile.getColour(), "B");
+			
 			assertEquals(testTile.setColour("Yellow"), true);
 			assertEquals(testTile.getColour(), "Y");
 			
@@ -73,6 +82,10 @@ public class TestTile extends TestCase
 			Tile testTile = new Tile("", 0);
 			/* check each colour */
 			assertEquals(testTile.setColour("green"), true);
+			assertEquals(testTile.setColour("blue"), true);
+			assertEquals(testTile.setColour("red"), true);
+			assertEquals(testTile.setColour("yellow"), true);
+
 			assertEquals(testTile.setColour("Blue"), true);
 			assertEquals(testTile.setColour("Red"), true);
 			assertEquals(testTile.setColour("Yellow"), true);
@@ -105,5 +118,15 @@ public class TestTile extends TestCase
 			assertEquals(-23, new Tile("B", 4).compareTo(new Tile("Y", 4)));
 			assertEquals(-1, new Tile("B", 4).compareTo(new Tile("B", 6)));
 			assertEquals(1, new Tile("B", 6).compareTo(new Tile("B", 4)));
+		}
+		
+		@Test
+		public void testSetPos() 
+		{
+			Tile r4 = new Tile("R", 4);
+			assertEquals(r4.setx(9999), false);
+			assertEquals(r4.sety(9999), false);
+			assertEquals(r4.setx(100), true);
+			assertEquals(r4.sety(100), true);
 		}
 }
