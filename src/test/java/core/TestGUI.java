@@ -7,6 +7,12 @@ import junit.framework.TestCase;
 public class TestGUI extends TestCase
 {
 	@Test
+	public void testStartGame()
+	{
+		GUI gui = new GUI();
+		gui.startGame();
+	}
+	@Test
 	public void testDealHand()
 	{
 		GUI gui = new GUI();
@@ -71,5 +77,6 @@ public class TestGUI extends TestCase
 	public void testCheckDrag()
 	{
 		/* Check if user is allowed to drag tile then drag the tile */
+		assertEquals(1, 2);
 	}
 }
