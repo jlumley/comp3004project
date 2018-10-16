@@ -52,22 +52,15 @@ public class TestGUI extends TestCase
 		GUI gui = new GUI();
 		
 		/* This will be used when AI said there action and serves as a message dispatch for anything else */
-		assertEquals(1, 2);
+		assertEquals(GUI.sayMessage("Game has started"), true);
 	}
 	@Test
 	public void testDisplayWinner()
 	{
-		/* Show winner this will happen at end of game */
-		assertEquals(1, 2);
+		/* Show winner this will happen at end of game */		
+		assertEquals(GUI.sayMessage("Game Winner is: "), true);
 	}
-	
-	//TODO
-	//Make test and implementations to deal with auto attaching to melds
-	@Test
-	public void testCheckBounds()
-	{
-		/* if tile is out of bounds when released put it back */
-	}
+	/* These tests still need to be written */
 	@Test
 	public void testAutoMeld()
 	{

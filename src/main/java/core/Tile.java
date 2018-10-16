@@ -84,4 +84,19 @@ public class Tile implements Comparable<Tile>
 			return Integer.compare(this.value, o.value);
 		}
 	}
+	public boolean setx(float pos) 
+	{
+		if(pos > 1000 || pos < 0)
+			return false;
+		x = pos;
+		return true;
+	}
+	
+	public boolean sety(float pos) 
+	{
+		if(pos > 1000 || pos < 0)
+			return false;
+		y = pos;
+		return true;
+	}
 }

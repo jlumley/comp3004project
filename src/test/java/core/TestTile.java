@@ -119,4 +119,14 @@ public class TestTile extends TestCase
 			assertEquals(-1, new Tile("B", 4).compareTo(new Tile("B", 6)));
 			assertEquals(1, new Tile("B", 6).compareTo(new Tile("B", 4)));
 		}
+		
+		@Test
+		public void testSetPos() 
+		{
+			Tile r4 = new Tile("R", 4);
+			assertEquals(r4.setx(9999), false);
+			assertEquals(r4.sety(9999), false);
+			assertEquals(r4.setx(100), true);
+			assertEquals(r4.sety(100), true);
+		}
 }
