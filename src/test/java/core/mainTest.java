@@ -10,13 +10,14 @@ public class mainTest extends TestCase{
 		TileRummyMain result = new TileRummyMain();
 		
 		ArrayList<Tile> temp = new ArrayList<Tile>();
+		ArrayList<ArrayList<Tile>> temp1 = new ArrayList<ArrayList<Tile>>();
 		Tile t1 = new Tile("B", 10);
 		temp.add(t1);
 		Tile t2 = new Tile("Y", 10);
 		temp.add(t2);
 		Tile t3 = new Tile("B", 10);
 		temp.add(t3);
-		
+		temp1.add(temp);
 		result.initialize();
 		result.playGame();
 		result.showDeck();
@@ -25,7 +26,7 @@ public class mainTest extends TestCase{
 		result.player0.showHand();
 		result.showField();
 		result.getHandSize();
-		assertEquals(false,result.player0.checkMend(temp)); // checks for addMend as well
+		assertEquals(false,result.player0.checkMend(temp1)); // checks for addMend as well
 		result.showField();
 		assertEquals(false,result.checkGameStatus()); //checks if any user has an empty hand
 	}
