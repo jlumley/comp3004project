@@ -22,6 +22,10 @@ public class Tile implements Comparable<Tile>
 	public float getY() {return y;}
 	
 	public Tile(String tileColour, int value) {
+		//Initialize coordinates
+		x = 0;
+		y = 0;
+		
 		if(value == 99){ // setting it up as a dummy checker for Jokers, need team input
 			this.joker = true;
 		}else {
@@ -46,13 +50,16 @@ public class Tile implements Comparable<Tile>
 	}
 
 	public boolean setColour(String tempColour) 
-	{
+	{		
 		tempColour.trim(); 
 		tempColour = tempColour.toUpperCase(); //case sensitive is handled
+		
 		if(!tempColour.isEmpty()) {
 			tempColour = tempColour.substring(0,1);} //change to single letter form
+		
 		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y"))
 			return false;
+		
 		this.colour = tempColour;
 		return true;
 	}
@@ -90,5 +97,20 @@ public class Tile implements Comparable<Tile>
 		} else {
 			return Integer.compare(this.value, o.value);
 		}
+	}
+	public boolean setx(float pos) 
+	{
+		if(pos > 1000 || pos < 0)
+			return false;
+		x = pos;
+		return true;
+	}
+	
+	public boolean sety(float pos) 
+	{
+		if(pos > 1000 || pos < 0)
+			return false;
+		y = pos;
+		return true;
 	}
 }
