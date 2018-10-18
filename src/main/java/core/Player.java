@@ -125,20 +125,22 @@ public class Player {
 		TileRummyMain.addMend(collection);
 	}
 	
-	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
+	public boolean checkMend(ArrayList<ArrayList<Tile>> collection){ // checks for users first hand with sets 
 		// move this to player after team meeting
 		boolean returnV = true;
 		int checkSum = 0;
 		ArrayList<String> suitDeck = new ArrayList<String>();
-		int checkValue = collection.get(0).getValue();
+		int checkValue = collection.get(0).get(0).getValue();
 		if(collection.size() == 0) {
 			return false;
 		}else {
 			for(int i = 0; i < collection.size(); i++) {
-				if(!suitDeck.contains(collection.get(i).getColour())) {
-					if(collection.get(i).getValue() == checkValue){
-						suitDeck.add(collection.get(i).getColour());
-						checkSum += collection.get(i).getValue();
+				for(int x = 0; x < collection.get(i).size(); x++) {
+					if(!suitDeck.contains(collection.get(i).get(x).getColour())) {
+						if(collection.get(i).get(x).getValue() == checkValue){
+							suitDeck.add(collection.get(i).get(x).getColour());
+							checkSum += collection.get(i).get(x).getValue();
+						}
 					}
 				}
 			}
@@ -148,8 +150,10 @@ public class Player {
 			returnV = false;
 		}
 		if(returnV) {
-			System.out.println(checkSum);
-			addMendtoMain(collection);
+			for(int i = 0; i < collection.size(); i++) {
+				System.out.println(checkSum);
+				addMendtoMain(collection.get(i));
+			}
 		}
 		return returnV;
 	}
