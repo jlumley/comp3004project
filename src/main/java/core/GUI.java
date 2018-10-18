@@ -47,8 +47,8 @@ public class GUI extends Application
 		
 		//Set scene and show it
 		primaryStage.setTitle("Rummy");
-		//Get CSS file
-		scene.getStylesheets().addAll(this.getClass().getResource("styles.css").toExternalForm());
+		//Get CSS file TODO when I get this working I will move css to external sheet
+		//scene.getStylesheets().addAll(this.getClass().getResource("styles.css").toExternalForm());
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
