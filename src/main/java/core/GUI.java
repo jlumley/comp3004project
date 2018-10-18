@@ -1,7 +1,14 @@
 package core;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -9,9 +16,13 @@ import javafx.scene.Scene;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.BackgroundImage;
+import javafx.geometry.Pos;
 
 public class GUI extends Application
 {
+	private int screenWidth;
+	private int screenHeight;
+	
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -19,15 +30,26 @@ public class GUI extends Application
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
-	{		
+	{	
+		//Grab user screen size 
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		screenWidth = screenSize.width;
+		screenHeight = 	screenSize.height;
+		
 		//Create layout, and scene
 		StackPane root = new StackPane();
-		Scene scene = new Scene(root, 500, 500);
+		Scene scene = new Scene(root, screenWidth, screenHeight);
 	
 		initUI(root);
 		
+		//Set the ID for root
+		root.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+		
 		//Set scene and show it
 		primaryStage.setTitle("Rummy");
+		//Get CSS file
+		scene.getStylesheets().addAll(this.getClass().getResource("styles.css").toExternalForm());
+		
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
@@ -47,14 +69,6 @@ public class GUI extends Application
 		Button btnStart = new Button("Start Game");
 		Button btnExit = new Button("Exit Game");
 		
-		//Set background image
-		BackgroundImage myBI= new BackgroundImage(new Image("my url",32,32,false,true),
-		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-		          BackgroundSize.DEFAULT);
-		
-		//then you set to your node
-		myContainer.setBackground(new Background(myBI));
-		
 		//Set events
 		btnStart.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -72,8 +86,29 @@ public class GUI extends Application
 			}
 		});
 		
-		//Add to layout 
-		root.getChildren().addAll(btnStart, btnExit);
+		/* Set up image views and load images */
+		Image deckImage;
+		ImageView imageView;
+		try 
+		{
+			deckImage = new Image(new FileInputStream("src/main/resources/core/images/deckImage.jpg"));
+			imageView = new ImageView(deckImage); 
+		    
+		    imageView.setFitHeight(screenHeight*0.9); 
+		    imageView.setFitWidth(screenWidth * 0.125); 
+		    
+		    imageView.setPreserveRatio(true); 
+		    root.setAlignment(imageView, Pos.TOP_RIGHT);
+		    
+			//Add to layout 
+			root.getChildren().addAll(btnStart, btnExit, imageView);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+			//Add to layout 
+			root.getChildren().addAll(btnStart, btnExit);
+		}
 	}
 
 	public boolean startGame() 
