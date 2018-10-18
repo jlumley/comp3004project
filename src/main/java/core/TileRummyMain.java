@@ -15,7 +15,7 @@ public class TileRummyMain {
 	public AI player3 = new AI();
 	boolean gameStatus = true;
 	public int playerTurn = 0;
-	public int fieldSize = 0;
+	public static int fieldSize = 0;
 	
 	public void initialize() {
 		initDeck = buildDeck(suites,values);
@@ -77,10 +77,13 @@ public class TileRummyMain {
 				System.out.print(field.get(x) + ",");
 			}
 			System.out.println(); //spacing
+		}else {
+			System.out.println("field is empty");
 		}
 	}
-
-	public boolean checkSizeofMendHand(ArrayList<Tile> collection){ // checks for users first hand with sets 
+/*
+	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
+		// move this to player after team meeting
 		boolean returnV = true;
 		int checkSum = 0;
 		ArrayList<String> suitDeck = new ArrayList<String>();
@@ -107,8 +110,8 @@ public class TileRummyMain {
 		}
 		return returnV;
 	}
-
-	private void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
+*/
+	public static void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
 		System.out.println(collection.size());
 		field.add(collection);
 		System.out.println(field.get(fieldSize));

@@ -121,5 +121,38 @@ public class Player {
 		}
 		return melds;
 	}
+	public void addMendtoMain(ArrayList<Tile> collection) { // basic adding into the field of tiles
+		TileRummyMain.addMend(collection);
+	}
+	
+	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
+		// move this to player after team meeting
+		boolean returnV = true;
+		int checkSum = 0;
+		ArrayList<String> suitDeck = new ArrayList<String>();
+		int checkValue = collection.get(0).getValue();
+		if(collection.size() == 0) {
+			return false;
+		}else {
+			for(int i = 0; i < collection.size(); i++) {
+				if(!suitDeck.contains(collection.get(i).getColour())) {
+					if(collection.get(i).getValue() == checkValue){
+						suitDeck.add(collection.get(i).getColour());
+						checkSum += collection.get(i).getValue();
+					}
+				}
+			}
+		}
+		System.out.println(checkSum + " " + suitDeck + " " + checkValue);
+		if(checkSum < 30) {
+			returnV = false;
+		}
+		if(returnV) {
+			System.out.println(checkSum);
+			addMendtoMain(collection);
+		}
+		return returnV;
+	}
+	
 }
 
