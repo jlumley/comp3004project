@@ -1,17 +1,21 @@
 package core;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import junit.framework.TestCase;
 
 public class TestGUI extends TestCase
 {
-	@Test
-	public void testStartGame()
+	public void testPlaceDeck()
 	{
 		GUI gui = new GUI();
-		gui.startGame();
+		ArrayList<Tile> deck = null;
+		/* This functions will give each player and AI there hand */
+		assertEquals(gui.placeDeck(deck), true);
 	}
+	
 	@Test
 	public void testDealHand()
 	{
@@ -49,7 +53,7 @@ public class TestGUI extends TestCase
 		player4.addTile(b9);
 		
 		/* This functions will give each player and AI there hand */
-		assertEquals(GUI.dealHand(player1.getHand(), player2.getHand(), player3.getHand(), player4.getHand()), true);
+		assertEquals(gui.dealHand(player1.getHand(), player2.getHand(), player3.getHand(), player4.getHand()), true);
 	}
 	
 	@Test
@@ -58,25 +62,13 @@ public class TestGUI extends TestCase
 		GUI gui = new GUI();
 		
 		/* This will be used when AI said there action and serves as a message dispatch for anything else */
-		assertEquals(GUI.sayMessage("Game has started"), true);
+		assertEquals(gui.sayMsg("Game has started"), true);
 	}
 	@Test
 	public void testDisplayWinner()
 	{
-		/* Show winner this will happen at end of game */		
-		assertEquals(GUI.sayMessage("Game Winner is: "), true);
-	}
-	/* These tests still need to be written */
-	@Test
-	public void testAutoMeld()
-	{
-		/* auto attach to melds */
-		assertEquals(1, 2);
-	}
-	@Test
-	public void testCheckDrag()
-	{
-		/* Check if user is allowed to drag tile then drag the tile */
-		assertEquals(1, 2);
+		/* Show winner this will happen at end of game */	
+		GUI gui = new GUI();
+		assertEquals(gui.sayMsg("Game Winner is: "), true);
 	}
 }

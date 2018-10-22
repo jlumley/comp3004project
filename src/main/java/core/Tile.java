@@ -34,7 +34,7 @@ public class Tile implements Comparable<Tile>
 		setColour(tileColour);
 		this.id = id_count;
 		this.id_count += 1;
-		//TODO Set Image
+
 		//Tiles are expected to be in the format "Tile" + firstLetterOfColour + Value 
 		//for example TileB10 (tile blue 10 )or TileR2 (tile red 2) 
 		setFileImage("Tile" + tileColour + String.valueOf(value) + ".jpg");
@@ -57,7 +57,7 @@ public class Tile implements Comparable<Tile>
 		if(!tempColour.isEmpty()) {
 			tempColour = tempColour.substring(0,1);} //change to single letter form
 		
-		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y"))
+		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y") & !tempColour.equals("O"))
 			return false;
 		
 		this.colour = tempColour;

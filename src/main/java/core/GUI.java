@@ -34,6 +34,10 @@ public class GUI extends Application
 	private int screenHeight;
 	private Map<String, Image> deck;
 	
+	/* TODO remove once TileMain calls GUI */
+	public static final String[] suites = {"R", "B", "G", "Y"};
+	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+	
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -45,13 +49,16 @@ public class GUI extends Application
 	 * */
 	@Override
 	public void start(Stage primaryStage) throws Exception 
-	{	
+	{			
 		setPanePos();	
 		Pane root = new Pane();
 		Scene scene = new Scene(root, screenWidth, screenHeight);
 		deck = new HashMap<String, Image>();
 		initUI(root, primaryStage, scene);
 		handleStage(primaryStage, scene);
+		
+		//TODO remove this once TileMain calls place deck
+		placeDeck(TileRummyMain.buildDeck(suites, values));
 	}
 	
 	/*
@@ -148,7 +155,6 @@ public class GUI extends Application
 		imgPlayer2View.setY(screenHeight/16 + screenHeight*0.05); 
 		
 		/* Player opposite side of screen */
-//		imgPlayer3View.setX(screenWidth/15); 
 		imgPlayer3View.setY(screenHeight*0.0125); 
 		imgPlayer3View.setX(screenWidth - screenWidth*0.99); 
 
@@ -202,13 +208,17 @@ public class GUI extends Application
 		//Create buttons 
 		Button btnStart = new Button("Start Game");
 		Button btnExit = new Button("Exit Game");
+	
+		btnStart.setLayoutX(screenWidth/2 + 100);
+		btnStart.setLayoutY(screenHeight/2);
 		
+		btnExit.setLayoutX(screenWidth/2);
+		btnExit.setLayoutY(screenHeight/2);
 		//Set events
 		btnStart.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
-				btnStart.relocate(btnStart.getLayoutX() + 100, 50);
-				startGame();
+				System.out.println("Start Game");
 			}
 		});
 		
@@ -235,17 +245,19 @@ public class GUI extends Application
 		screenHeight = 	screenSize.height;
 	}
 	
-	/* GUI interface */
-	
-	/*
-	 * Prototype: startGame()
-	 * 	 Purpose: Start a game of rummy
+	/* --------------------------------------------------------------------------------
+	 * 
+	 * 			GUI Interface
+	 * 
+	 * --------------------------------------------------------------------------------
 	 * */
-	public boolean startGame() 
+	
+	/*   prototype: placeDeck(ArrayList<Tile> deck)
+	 *   purpose: Place all cards given in pile
+	 * */
+	public boolean placeDeck(ArrayList<Tile> deck)
 	{
-		sayMsg("Hand being dealt", 2);
-		dealHand(null, null, null, null);
-		System.out.println("Start Game");
+		sayMsg("Place Deck");
 		return true;
 	}
 	
@@ -255,6 +267,7 @@ public class GUI extends Application
 	 * */
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
+		sayMsg("Hand being dealt");
 		return false;
 	}
 	
@@ -262,27 +275,12 @@ public class GUI extends Application
 	 * Prototype: sayMsg(String msg, int delay)
 	 * 	 Purpose: General function to prompt a message and add a delay
 	 * */
-	public boolean sayMsg(String msg, int delay)
+	public boolean sayMsg(String msg)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Message");
 		alert.setContentText(msg);
-		alert.show();
-		
-		if(delay < 0)
-			return false;
-		
-		try 
-		{
-			TimeUnit.SECONDS.sleep(delay);
-		} 
-		catch (InterruptedException e) 
-		{
-			e.printStackTrace();
-			return false;
-		}
-		
-		alert.close();
+		alert.show();	
 		return true;
 	}
 }
