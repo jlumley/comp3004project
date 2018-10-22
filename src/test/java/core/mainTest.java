@@ -23,7 +23,7 @@ public class mainTest extends TestCase{
 		temp2.add(t4);
 		Tile t5 = new Tile("B", 7);
 		temp2.add(t5);
-		Tile t6 = new Tile("B", 8);
+		Tile t6 = new Tile("B", 5);
 		temp2.add(t6);
 		temp1.add(temp2);
 		result.initialize();
