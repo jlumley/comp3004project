@@ -9,6 +9,10 @@ import java.util.Set;
 public class Player {
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
 	public boolean firstTurn = false; // need group thoughts
+	ArrayList<ArrayList<Tile>> tilesOnField = new ArrayList<ArrayList<Tile>>(); // used to store tiles used on turn 
+	public ArrayList<ArrayList<Tile>> getTilesUsed(){
+		return tilesOnField;
+	}
 	
 	private void Player() {
 		hand = new ArrayList<Tile>();
