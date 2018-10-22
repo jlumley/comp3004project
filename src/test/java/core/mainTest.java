@@ -9,9 +9,8 @@ public class mainTest extends TestCase{
 	public void testMain1() {
 		TileRummyMain result = new TileRummyMain();
 		
-		ArrayList<Tile> temp = new ArrayList<Tile>();
+		ArrayList<Tile> temp = new ArrayList<Tile>(); // set
 		ArrayList<ArrayList<Tile>> temp1 = new ArrayList<ArrayList<Tile>>();
-		ArrayList<Tile> temp2 = new ArrayList<Tile>();
 		Tile t1 = new Tile("B", 10);
 		temp.add(t1);
 		Tile t2 = new Tile("Y", 10);
@@ -19,7 +18,9 @@ public class mainTest extends TestCase{
 		Tile t3 = new Tile("B", 10);
 		temp.add(t3);
 		temp1.add(temp);
-		Tile t4 = new Tile("B", 6);
+		
+		ArrayList<Tile> temp2 = new ArrayList<Tile>(); // run
+		Tile t4 = new Tile("B", 6); 
 		temp2.add(t4);
 		Tile t5 = new Tile("B", 7);
 		temp2.add(t5);
