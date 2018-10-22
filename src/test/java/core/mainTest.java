@@ -19,11 +19,11 @@ public class mainTest extends TestCase{
 		Tile t3 = new Tile("B", 10);
 		temp.add(t3);
 		temp1.add(temp);
-		Tile t4 = new Tile("B", 5);
+		Tile t4 = new Tile("B", 6);
 		temp2.add(t4);
-		Tile t5 = new Tile("B", 6);
+		Tile t5 = new Tile("B", 7);
 		temp2.add(t5);
-		Tile t6 = new Tile("B", 7);
+		Tile t6 = new Tile("B", 8);
 		temp2.add(t6);
 		temp1.add(temp2);
 		result.initialize();
