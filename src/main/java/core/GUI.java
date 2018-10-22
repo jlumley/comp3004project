@@ -258,6 +258,13 @@ public class GUI extends Application
 	public boolean placeDeck(ArrayList<Tile> deck)
 	{
 		sayMsg("Place Deck");
+		int i = 0;
+		for(Tile card : deck)
+		{
+			i += 1;
+			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
+			//getImage
+		}
 		return true;
 	}
 	
