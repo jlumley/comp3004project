@@ -35,7 +35,8 @@ public class mainTest extends TestCase{
 		result.player0.showHand();
 		result.showField();
 		result.getHandSize();
-		assertEquals(false,result.player0.checkMend(temp1)); // checks for addMend as well
+		
+		assertEquals(false,result.player0.checkPlays(temp1)); // checks for addMend as well
 		result.showField();
 		assertEquals(false,result.checkGameStatus()); //checks if any user has an empty hand
 	}
