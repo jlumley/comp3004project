@@ -11,6 +11,7 @@ public class mainTest extends TestCase{
 		
 		ArrayList<Tile> temp = new ArrayList<Tile>();
 		ArrayList<ArrayList<Tile>> temp1 = new ArrayList<ArrayList<Tile>>();
+		ArrayList<Tile> temp2 = new ArrayList<Tile>();
 		Tile t1 = new Tile("B", 10);
 		temp.add(t1);
 		Tile t2 = new Tile("Y", 10);
@@ -18,6 +19,13 @@ public class mainTest extends TestCase{
 		Tile t3 = new Tile("B", 10);
 		temp.add(t3);
 		temp1.add(temp);
+		Tile t4 = new Tile("B", 1);
+		temp2.add(t4);
+		Tile t5 = new Tile("B", 2);
+		temp2.add(t5);
+		Tile t6 = new Tile("B", 3);
+		temp2.add(t6);
+		temp1.add(temp2);
 		result.initialize();
 		result.playGame();
 		result.showDeck();
