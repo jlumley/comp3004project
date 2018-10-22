@@ -111,12 +111,15 @@ public class TileRummyMain {
 		return returnV;
 	}
 */
+	
 	public static void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
 		System.out.println(collection.size());
 		field.add(collection);
 		System.out.println(field.get(fieldSize));
 		fieldSize++;
 	}
+	
+	
 
 	public boolean checkGameStatus() {
 		if(player0.getHand().size() == 0) {
@@ -168,5 +171,14 @@ public class TileRummyMain {
 			System.out.println("AI 3's draws a tile");
 			player3.addTile(drawTile);
 		}
+	}
+
+	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
+		if(player0.checkPlays(temp1)) {
+			for(int i = 0; i < temp1.size(); i++) {
+				addMend(temp1.get(i));
+			}
+		}
+		return false;
 	}
 }

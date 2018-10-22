@@ -32,7 +32,7 @@ public class Player {
 	public int countTiles() {
 		return this.hand.size();
 	}
-	
+
 	public ArrayList<ArrayList<Tile>> findSets() {
 		ArrayList<ArrayList<Tile>> melds = new ArrayList<ArrayList<Tile>>();
 		for (int i=0; i < this.hand.size()-1; i++) {
@@ -124,8 +124,8 @@ public class Player {
 	public void addMendtoMain(ArrayList<Tile> collection) { // basic adding into the field of tiles
 		TileRummyMain.addMend(collection);
 	}
-	
-	public boolean checkMend(ArrayList<ArrayList<Tile>> collection){ // checks for users first hand with sets 
+	/*
+	public boolean checkSet(ArrayList<ArrayList<Tile>> collection){ // checks for users first hand with sets 
 		// move this to player after team meeting
 		boolean returnV = true;
 		int checkSum = 0;
@@ -156,7 +156,87 @@ public class Player {
 			}
 		}
 		return returnV;
+	}*/
+
+	public boolean checkSet(ArrayList<Tile> collection){ // checks for users first hand with sets 
+		// move this to player after team meeting
+		boolean returnV = true;
+		int checkSum = 0;
+		ArrayList<String> suitDeck = new ArrayList<String>();
+		int checkValue = collection.get(0).getValue();
+		if(collection.size() == 0) {
+			return false;
+		}else {
+			for(int i = 0; i < collection.size(); i++) {
+				if(!suitDeck.contains(collection.get(i).getColour())) {
+					if(collection.get(i).getValue() == checkValue){
+						suitDeck.add(collection.get(i).getColour());
+						checkSum += collection.get(i).getValue();
+					}
+				}
+			}
+		}
+		if(checkSum < 30) {
+			returnV = false;
+		}
+		if(returnV) {
+			System.out.println(checkSum);
+		}
+		System.out.println(checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
+		return returnV;
 	}
 	
+	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) { // goes through each 'play' and splits them off into different reuseable functions
+		for(int i = 0; i < temp1.size(); i++) {
+				if(temp1.get(i).get(0).getValue() == temp1.get(i).get(1).getValue()) { // if it is a set
+					if(!checkSet(temp1.get(i))) {
+						return false;
+					}
+				}else {
+					System.out.println(temp1.get(i).get(0).getValue() == temp1.get(i).get(1).getValue());
+					System.out.println(temp1.get(i).get(0).getValue() + " " + temp1.get(i).get(1).getValue());
+					if(!checkRun(temp1.get(i))) {
+						return false;
+					}
+				}
+		}
+		System.out.println("true");
+		return true;
+	}
+
+	private boolean checkRun(ArrayList<Tile> temp1) { // still have to check for 30points and so on later.
+		boolean returnB = true;
+		String colourString = temp1.get(0).getColour();
+		int counter = 0;
+		ArrayList<Integer> valuesOfRun = new ArrayList<Integer>(); 
+		System.out.println("1");
+		for(Tile tile : temp1) { // checks for the same colour
+			valuesOfRun.add(tile.getValue()); // adds it into the array
+			if(!tile.getColour().equals(colourString)) { // if not same colour
+				System.out.println(tile.getColour() + " " + colourString);
+				return false;
+			}
+		}
+		counter = valuesOfRun.size();
+		System.out.println("2 " + valuesOfRun);
+		int minInt = Collections.min(valuesOfRun); // finds the lowest in the run
+		valuesOfRun.remove((Integer) minInt); // remove from dummy list
+		
+		System.out.println("3 " + minInt + " " + valuesOfRun);
+		
+		for(int x = 0; x < counter; x++) {
+			if(valuesOfRun.contains(minInt+1)) { // goes through it and checks for min + 1 
+				minInt += 1; // new pivot
+				valuesOfRun.remove((Integer) minInt); // remove the newest pivot
+			}
+		}
+		if(valuesOfRun.isEmpty()) {
+			returnB = true;
+		}else {
+			returnB = false;
+		}
+		System.out.println("4 " + valuesOfRun + " " + temp1.get(0).getColour() + " " + returnB);
+		return returnB;
+	}
 }
 
