@@ -235,7 +235,7 @@ public class GUI extends Application
 	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
-	 *   purpose: deal each card to player
+	 *   purpose: deal each card to the 4 players
 	 * */
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
