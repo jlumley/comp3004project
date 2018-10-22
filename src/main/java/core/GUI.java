@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.text.Position;
+
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -106,11 +108,20 @@ public class GUI extends Application
 		
 		try 
 		{
-			deckImage = new Image(new FileInputStream(image_dir + "deckImage.jpg"));
-			player1BoardImage = new Image(new FileInputStream(image_dir + "playerBoard.jpg"));
-			player2BoardImage = new Image(new FileInputStream(image_dir + "sideBoard.jpg"));
-			player3BoardImage = new Image(new FileInputStream(image_dir + "oppositeSideBoard.jpg"));
-			player4BoardImage = new Image(new FileInputStream(image_dir + "sideBoard.jpg"));
+			deckImage = new Image(new FileInputStream(image_dir + "deckImage.jpg"),
+					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
+			
+			player1BoardImage = new Image(new FileInputStream(image_dir + "playerBoard.jpg"), 
+					screenWidth - 0.05*screenWidth, screenHeight ,true,true);
+
+			player2BoardImage = new Image(new FileInputStream(image_dir + "sideBoard.jpg"), 
+					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
+			
+			player3BoardImage = new Image(new FileInputStream(image_dir + "oppositeSideBoard.jpg"),
+					screenWidth - 0.05*screenWidth, screenHeight ,true,true);
+			
+			player4BoardImage = new Image(new FileInputStream(image_dir + "sideBoard.jpg"),
+					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -124,21 +135,26 @@ public class GUI extends Application
 		imgPlayer3View = new ImageView(player3BoardImage);
 		imgPlayer4View = new ImageView(player4BoardImage);
 		
-		//Configure image views
-		imgDeckView.setX(300); 
-		imgDeckView.setY(250); 
-	    
-		imgPlayer1View.setX(25);
-		imgPlayer1View.setY(25);
+		/* Deck next to right player */
+		imgDeckView.setX(screenWidth - screenWidth*0.13); 
+		imgDeckView.setY(screenHeight/16 + screenHeight*0.05); 
 		
-		imgPlayer2View.setX(25);
-		imgPlayer2View.setY(25);
+		/* Player bottom of screen */
+		imgPlayer1View.setX(screenWidth - screenWidth*0.99); 
+		imgPlayer1View.setY(screenHeight - screenHeight*0.1025); 
+				
+		/* Left side player*/
+		imgPlayer2View.setX(0); 
+		imgPlayer2View.setY(screenHeight/16 + screenHeight*0.05); 
 		
-		imgPlayer3View.setX(25);
-		imgPlayer3View.setY(25);
-		
-		imgPlayer4View.setX(25);
-		imgPlayer4View.setY(25);
+		/* Player opposite side of screen */
+//		imgPlayer3View.setX(screenWidth/15); 
+		imgPlayer3View.setY(screenHeight*0.0125); 
+		imgPlayer3View.setX(screenWidth - screenWidth*0.99); 
+
+		/* Right side player */
+		imgPlayer4View.setX(screenWidth - screenWidth*0.05); 
+		imgPlayer4View.setY(screenHeight/16 + screenHeight*0.05); 
 		
 	    root.getChildren().addAll(imgDeckView, imgPlayer1View, imgPlayer2View, 
 	    		imgPlayer3View, imgPlayer4View);
