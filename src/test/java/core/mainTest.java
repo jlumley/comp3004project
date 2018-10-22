@@ -15,10 +15,9 @@ public class mainTest extends TestCase{
 		temp.add(t1);
 		Tile t2 = new Tile("Y", 10);
 		temp.add(t2);
-		Tile t3 = new Tile("B", 10);
+		Tile t3 = new Tile("R", 10);
 		temp.add(t3);
 		temp1.add(temp);
-		
 		ArrayList<Tile> temp2 = new ArrayList<Tile>(); // run
 		Tile t4 = new Tile("B", 6); 
 		temp2.add(t4);
@@ -35,8 +34,9 @@ public class mainTest extends TestCase{
 		result.player0.showHand();
 		result.showField();
 		result.getHandSize();
+		assertEquals(false,result.checkPlays(temp1));
+		//assertEquals(false,result.player0.checkPlays(temp1)); // checks for addMend as well
 		
-		assertEquals(false,result.player0.checkPlays(temp1)); // checks for addMend as well
 		result.showField();
 		assertEquals(false,result.checkGameStatus()); //checks if any user has an empty hand
 	}
