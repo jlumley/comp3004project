@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Player {
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
+	public boolean firstTurn = false; // need group thoughts
 	
 	private void Player() {
 		hand = new ArrayList<Tile>();
@@ -173,15 +174,15 @@ public class Player {
 						suitDeck.add(collection.get(i).getColour());
 						checkSum += collection.get(i).getValue();
 					}
+				}else {
+					returnV = false;
 				}
 			}
-		}
-		if(checkSum < 30) {
-			returnV = false;
 		}
 		if(returnV) {
 			System.out.println(checkSum);
 		}
+		
 		System.out.println(checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
 		return returnV;
 	}
@@ -193,15 +194,29 @@ public class Player {
 						return false;
 					}
 				}else {
-					System.out.println(temp1.get(i).get(0).getValue() == temp1.get(i).get(1).getValue());
-					System.out.println(temp1.get(i).get(0).getValue() + " " + temp1.get(i).get(1).getValue());
 					if(!checkRun(temp1.get(i))) {
 						return false;
 					}
 				}
 		}
-		System.out.println("true");
+		if(firstTurn == false) {
+			if(getTotal(temp1) >= 30) {
+				firstTurn = true;
+			}else {
+				return false;
+			}
+		}
 		return true;
+	}
+
+	private int getTotal(ArrayList<ArrayList<Tile>> temp1) {
+		int total = 0;
+		for(int i = 0; i < temp1.size(); i++) {
+			for(int x = 0; x < temp1.get(i).size(); x++) {
+				total += temp1.get(i).get(x).getValue();
+			}
+		}
+		return total;
 	}
 
 	private boolean checkRun(ArrayList<Tile> temp1) { // still have to check for 30points and so on later.
@@ -209,7 +224,6 @@ public class Player {
 		String colourString = temp1.get(0).getColour();
 		int counter = 0;
 		ArrayList<Integer> valuesOfRun = new ArrayList<Integer>(); 
-		System.out.println("1");
 		for(Tile tile : temp1) { // checks for the same colour
 			valuesOfRun.add(tile.getValue()); // adds it into the array
 			if(!tile.getColour().equals(colourString)) { // if not same colour
@@ -218,11 +232,9 @@ public class Player {
 			}
 		}
 		counter = valuesOfRun.size();
-		System.out.println("2 " + valuesOfRun);
+
 		int minInt = Collections.min(valuesOfRun); // finds the lowest in the run
 		valuesOfRun.remove((Integer) minInt); // remove from dummy list
-		
-		System.out.println("3 " + minInt + " " + valuesOfRun);
 		
 		for(int x = 0; x < counter; x++) {
 			if(valuesOfRun.contains(minInt+1)) { // goes through it and checks for min + 1 
@@ -235,7 +247,6 @@ public class Player {
 		}else {
 			returnB = false;
 		}
-		System.out.println("4 " + valuesOfRun + " " + temp1.get(0).getColour() + " " + returnB);
 		return returnB;
 	}
 }

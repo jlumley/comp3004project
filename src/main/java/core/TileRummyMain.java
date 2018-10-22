@@ -113,9 +113,9 @@ public class TileRummyMain {
 */
 	
 	public static void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
-		System.out.println(collection.size());
+		System.out.println("Size: " + collection.size());
 		field.add(collection);
-		System.out.println(field.get(fieldSize));
+		System.out.println("Add to Field" + field.get(fieldSize));
 		fieldSize++;
 	}
 	
