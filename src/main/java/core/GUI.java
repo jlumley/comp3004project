@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.text.Position;
-
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text; 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 
 public class GUI extends Application
 {
@@ -36,6 +37,9 @@ public class GUI extends Application
 	private Map<String, Image> deck;
 	private Pane root;
 	
+	/* TODO remove this when done*/
+	public final Text source = new Text(50, 100, "DRAG ME");
+	public final Text target = new Text(300, 100, "DROP HERE");
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	
@@ -58,6 +62,22 @@ public class GUI extends Application
 		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
 		placeDeck(TileRummyMain.buildDeck(suites, values));
+		
+		/* TODO this is an example remove once it works */
+		source.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = source.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putString(source.getText());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
 	}
 	
 	/*
