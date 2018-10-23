@@ -33,6 +33,8 @@ public class GUI extends Application
 	private int screenWidth;
 	private int screenHeight;
 	private Map<String, Image> deck;
+	public static final String[] suites = {"R", "B", "G", "Y"};
+	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	
 	public static void main(String[] args)
 	{
@@ -52,6 +54,7 @@ public class GUI extends Application
 		deck = new HashMap<String, Image>();
 		initUI(root, primaryStage, scene);
 		handleStage(primaryStage, scene);
+		placeDeck(TileRummyMain.buildDeck(suites, values));
 	}
 	
 	/*
@@ -250,6 +253,14 @@ public class GUI extends Application
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deck)
 	{
+		sayMsg("Place Deck");
+		int i = 0;
+		for(Tile card : deck)
+		{
+			i += 1;
+			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
+			//getImage
+		}
 		return true;
 	}
 	
