@@ -266,6 +266,8 @@ public class GUI extends Application
 		for(Tile card : deck)
 		{
 			i += 1;
+			if(i%4 == 0)
+				offsetY += screenHeight*0.0265;
 			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
 			tempImageView = new ImageView(card.getImage());
 			
@@ -274,10 +276,9 @@ public class GUI extends Application
 			tempImageView.setFitWidth(screenWidth*0.0225);
 			
 			//Set Pos
-			randNum = (0.5) * rand.nextDouble();
-			System.out.println("randNum is: " + randNum);
+			randNum = (0.0225) * rand.nextDouble();
 			tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
-			tempImageView.setY(screenHeight/16 + screenHeight*0.06); 
+			tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY); 
 			
 			root.getChildren().add(tempImageView);
 			//getImage
