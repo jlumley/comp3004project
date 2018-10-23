@@ -34,10 +34,6 @@ public class GUI extends Application
 	private int screenHeight;
 	private Map<String, Image> deck;
 	
-	/* TODO remove once TileMain calls GUI */
-	public static final String[] suites = {"R", "B", "G", "Y"};
-	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
-	
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -49,16 +45,13 @@ public class GUI extends Application
 	 * */
 	@Override
 	public void start(Stage primaryStage) throws Exception 
-	{			
+	{	
 		setPanePos();	
 		Pane root = new Pane();
 		Scene scene = new Scene(root, screenWidth, screenHeight);
 		deck = new HashMap<String, Image>();
 		initUI(root, primaryStage, scene);
 		handleStage(primaryStage, scene);
-		
-		//TODO remove this once TileMain calls place deck
-		placeDeck(TileRummyMain.buildDeck(suites, values));
 	}
 	
 	/*
@@ -218,7 +211,7 @@ public class GUI extends Application
 		btnStart.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
-				System.out.println("Start Game");
+				//startGame();
 			}
 		});
 		
@@ -257,14 +250,6 @@ public class GUI extends Application
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deck)
 	{
-		sayMsg("Place Deck");
-		int i = 0;
-		for(Tile card : deck)
-		{
-			i += 1;
-			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
-			//getImage
-		}
 		return true;
 	}
 	

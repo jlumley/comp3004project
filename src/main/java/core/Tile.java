@@ -26,14 +26,19 @@ public class Tile implements Comparable<Tile>
 	public float getX() {return x;}
 	public float getY() {return y;}
 	
-	public Tile(String tileColour, int value) {
+	public Tile(String tileColour, int value) 
+	{
 		//Initialize coordinates
 		x = 0;
 		y = 0;
 		
-		if(value == 99){ // setting it up as a dummy checker for Jokers, need team input
+		if(value == 99)
+		{ 
+			// setting it up as a dummy checker for Jokers, need team input
 			this.joker = true;
-		}else {
+		}
+		else 
+		{
 			setValue(value);
 		}
 		setColour(tileColour);
