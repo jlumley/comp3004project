@@ -266,8 +266,10 @@ public class GUI extends Application
 		for(Tile card : deck)
 		{
 			i += 1;
+			
 			if(i%4 == 0)
 				offsetY += screenHeight*0.0265;
+			
 			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
 			tempImageView = new ImageView(card.getImage());
 			
@@ -281,7 +283,6 @@ public class GUI extends Application
 			tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY); 
 			
 			root.getChildren().add(tempImageView);
-			//getImage
 		}
 		return true;
 	}
