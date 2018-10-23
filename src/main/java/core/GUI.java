@@ -274,8 +274,9 @@ public class GUI extends Application
 			tempImageView.setFitWidth(screenWidth*0.0225);
 			
 			//Set Pos
-			randNum = (0.125) * rand.nextDouble();
-			tempImageView.setX(screenWidth - screenWidth*0.10 + randNum*Math.pow(-1, i)); 
+			randNum = (0.5) * rand.nextDouble();
+			System.out.println("randNum is: " + randNum);
+			tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
 			tempImageView.setY(screenHeight/16 + screenHeight*0.06); 
 			
 			root.getChildren().add(tempImageView);
