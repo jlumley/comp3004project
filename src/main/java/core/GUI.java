@@ -7,8 +7,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
+import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.text.Position;
 
 import javafx.scene.control.Button;
@@ -33,6 +34,8 @@ public class GUI extends Application
 	private int screenWidth;
 	private int screenHeight;
 	private Map<String, Image> deck;
+	private Pane root;
+	
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	
@@ -49,10 +52,10 @@ public class GUI extends Application
 	public void start(Stage primaryStage) throws Exception 
 	{	
 		setPanePos();	
-		Pane root = new Pane();
+		root = new Pane();
 		Scene scene = new Scene(root, screenWidth, screenHeight);
 		deck = new HashMap<String, Image>();
-		initUI(root, primaryStage, scene);
+		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
 		placeDeck(TileRummyMain.buildDeck(suites, values));
 	}
@@ -73,10 +76,10 @@ public class GUI extends Application
 	 * 	 Purpose: Instantiated scene and create / place UI elements.
 	 * */
 	@SuppressWarnings("restriction")
-	private void initUI(Pane root, Stage primaryStage, Scene scene) 
+	private void initUI(Stage primaryStage, Scene scene) 
 	{		
-		handleButtonEvents(root);
-		handleImages(root);
+		handleButtonEvents();
+		handleImages();
 				
 		//Set style for nodes
 		root.setStyle("-fx-background-color: green; -fx-text-fill: white;");
@@ -86,16 +89,16 @@ public class GUI extends Application
 	 * Prototype: handleImages(Pane root) 
 	 * 	 Purpose: Create, add and position images.
 	 * */
-	private void handleImages(Pane root) 
+	private void handleImages() 
 	{
-		loadBackgroundImages(root);		    
+		loadBackgroundImages();		    
 	}
 
 	/*
 	 * Prototype: loadBackgroundImages() 
 	 * 	 Purpose: Read in background images and add to scene.
 	 * */
-	private boolean loadBackgroundImages(Pane root) 
+	private boolean loadBackgroundImages() 
 	{
 		Image deckImage;
 		Image player1BoardImage;
@@ -199,7 +202,7 @@ public class GUI extends Application
 	 * 	 Purpose: Create / add buttons. Handle events for buttons
 	 * */
 	@SuppressWarnings("restriction")
-	private void handleButtonEvents(Pane root) 
+	private void handleButtonEvents() 
 	{
 		//Create buttons 
 		Button btnStart = new Button("Start Game");
@@ -255,10 +258,27 @@ public class GUI extends Application
 	{
 		sayMsg("Place Deck");
 		int i = 0;
+		ImageView tempImageView;
+		double randNum = 0.0;
+		double offsetY = 0.0;
+		Random rand = new Random();
+		
 		for(Tile card : deck)
 		{
 			i += 1;
 			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
+			tempImageView = new ImageView(card.getImage());
+			
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			//Set Pos
+			randNum = (0.125) * rand.nextDouble();
+			tempImageView.setX(screenWidth - screenWidth*0.10 + randNum*Math.pow(-1, i)); 
+			tempImageView.setY(screenHeight/16 + screenHeight*0.06); 
+			
+			root.getChildren().add(tempImageView);
 			//getImage
 		}
 		return true;
