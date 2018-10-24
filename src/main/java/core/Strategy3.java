@@ -13,4 +13,14 @@ public class Strategy3 implements AIStrategy{
 		//Else: keep all in-hand melds, and try adding to existing melds on board
 	}
 	
+	public boolean existsAComparativelySmallHand() { // 3 or less Tiles then in this Player's Hand
+		int[] handSizes = TileRummyMain.getHandSizeOfOtherPlayers(TileRummyMain.player3); //get HandSizes
+		for(int i = 0; i < handSizes.length; i++) { 
+			if(TileRummyMain.player3.getHand().size() >= (handSizes[i] + 3)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
