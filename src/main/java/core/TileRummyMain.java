@@ -172,4 +172,14 @@ public class TileRummyMain {
 		}
 		return false;
 	}
+	
+	public int[] getHandSizeOfOtherPlayers(Player asker) {
+		int[] holder = new int[3]; //assuming always 3 other players
+		if(asker == player3) { //for now only used by p3
+			holder[0] = player0.getHand().size();
+			holder[1] = player1.getHand().size();
+			holder[2] = player2.getHand().size();
+		}
+		return holder;
+	}
 }
