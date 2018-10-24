@@ -1,7 +1,7 @@
 package core;
 
 public class AI extends Player{
-	private AIStrategy strategy;
+	public AIStrategy strategy;
 	
 	public AI(AIStrategy strat) {
 		super();
