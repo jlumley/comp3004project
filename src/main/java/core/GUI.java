@@ -306,21 +306,21 @@ public class GUI extends Application
 			randNum = (0.0225) * rand.nextDouble();
 			tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
 			tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY); 
-			
+			/*
 			tempImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
 			    public void handle(MouseEvent event) {
-			        /* drag was detected, start a drag-and-drop gesture*/
-			        /* allow any transfer mode */
+			        // drag was detected, start a drag-and-drop gesture
+			        // allow any transfer mode 
 			        Dragboard db = tempImageView.startDragAndDrop(TransferMode.ANY);
 			        
-			        /* Put a string on a dragboard */
+			   
 			        ClipboardContent content = new ClipboardContent();
 			        content.putData(tempImageView);
 			        db.setContent(content);
 			        
 			        event.consume();
 			    }
-			});
+			});*/
 			
 			root.getChildren().add(tempImageView);
 		}
