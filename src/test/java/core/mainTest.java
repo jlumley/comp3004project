@@ -59,4 +59,16 @@ public class mainTest extends TestCase{
 		assertEquals(0, result.player3.getHand().size());
 	}
 	
+	public void testGetHandSizeOfOtherPlayers() {
+		TileRummyMain result = new TileRummyMain();
+		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[0]);
+		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[1]);
+		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[2]);
+		result.initialize();
+		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[0]);
+		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[1]);
+		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[2]);
+		result.player1.addTile(new Tile("Y", 10));
+		assertEquals(15, result.getHandSizeOfOtherPlayers(result.player3)[1]);
+	}
 }
