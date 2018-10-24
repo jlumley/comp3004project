@@ -1,4 +1,5 @@
 package core;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -28,6 +29,9 @@ import javafx.scene.text.Text;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.input.DragEvent;
 
 public class GUI extends Application
 {
@@ -36,10 +40,8 @@ public class GUI extends Application
 	private int screenHeight;
 	private Map<String, Image> deck;
 	private Pane root;
-	
+	private Scene scene;
 	/* TODO remove this when done*/
-	public final Text source = new Text(50, 100, "DRAG ME");
-	public final Text target = new Text(300, 100, "DROP HERE");
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	
@@ -57,29 +59,32 @@ public class GUI extends Application
 	{	
 		setPanePos();	
 		root = new Pane();
-		Scene scene = new Scene(root, screenWidth, screenHeight);
+		scene = new Scene(root, screenWidth, screenHeight);
 		deck = new HashMap<String, Image>();
+		setUpscene();
 		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
 		placeDeck(TileRummyMain.buildDeck(suites, values));
-		
-		/* TODO this is an example remove once it works */
-		source.setOnDragDetected(new EventHandler<MouseEvent>() {
-		    public void handle(MouseEvent event) {
-		        /* drag was detected, start a drag-and-drop gesture*/
-		        /* allow any transfer mode */
-		        Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-		        
-		        /* Put a string on a dragboard */
-		        ClipboardContent content = new ClipboardContent();
-		        content.putString(source.getText());
-		        db.setContent(content);
-		        
+	}
+	
+	/*
+	 * Prototype: setUpscene()
+	 *   Purpose: Set the scene as the target to drop images
+	 * */
+	private void setUpscene() 
+	{
+		scene.setOnDragOver(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* data is dragged over the target */
+		        /* accept it only if it is not dragged from the same node 
+		         * and if it has a string data */
+		        /* allow for both copying and moving, whatever user chooses */
+		        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 		        event.consume();
 		    }
 		});
 	}
-	
+
 	/*
 	 * Prototype: handleStage()
 	 * 	 Purpose: Set scene for stage and configure stage
@@ -301,6 +306,21 @@ public class GUI extends Application
 			randNum = (0.0225) * rand.nextDouble();
 			tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
 			tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY); 
+			
+			tempImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+			    public void handle(MouseEvent event) {
+			        /* drag was detected, start a drag-and-drop gesture*/
+			        /* allow any transfer mode */
+			        Dragboard db = tempImageView.startDragAndDrop(TransferMode.ANY);
+			        
+			        /* Put a string on a dragboard */
+			        ClipboardContent content = new ClipboardContent();
+			        content.putData(tempImageView);
+			        db.setContent(content);
+			        
+			        event.consume();
+			    }
+			});
 			
 			root.getChildren().add(tempImageView);
 		}
