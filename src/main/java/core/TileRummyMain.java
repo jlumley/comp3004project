@@ -19,29 +19,20 @@ public class TileRummyMain {
 	
 	public void initialize() {
 		initDeck = buildDeck(suites,values);
-		//initDeckDummy = buildDeck(suites,values);
-		//Collections.shuffle(initDeckDummy);
 		Collections.shuffle(initDeck);
 		dealHands();
 	}
 	
-	//public static List<String> buildDeck(String[] suites, String[] values){
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
 		ArrayList<Tile> dummyDeck = new ArrayList<Tile>();
-		//List<String> initDeckDummy2 = new ArrayList<String>();
 		for(int x = 0; x < 2; x++) {
 			for (int i = 0; i < suites.length; i++){ // for each colour 
 				for (int j = 0; j < values.length; j++){ // for each value 
 					Tile k = new Tile(suites[i], values[j]); 
-					//String k = (values[j]) + (suites[i]);
-					//initDeckDummy2.add(k); // adding it into the dummy deck 
 					dummyDeck.add(k);
 				}
 			}
 		}
-		//initDeckDummy2.add("BJ");
-		//initDeckDummy2.add("RJ");
-		//return initDeckDummy2;
 		//TODO Add Wild Tiles
 		return dummyDeck;
 	}
