@@ -12,10 +12,16 @@ public class AITest extends TestCase{
 	public void testAIPlayer1() {
 		TileRummyMain result = new TileRummyMain();
 		result.initialize();
+		System.out.println("Player1 Hand: ");
 		result.player1.showHand();
+		System.out.println("Field: ");
 		result.showField();
+		
 		result.player1.playTurn();
+		
+		System.out.println("Player1 Hand: ");
 		result.player1.showHand();
+		System.out.println("Field: ");
 		result.showField();
 	}
 }
