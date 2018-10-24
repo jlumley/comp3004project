@@ -2,22 +2,23 @@ package core;
 
 import java.util.*;
 
-public class TileRummyMain implements Observer{
+public class TileRummyMain{
 	
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
 	ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
-	public Player player0 = new Player();
-	public AI player1 = new AI(new Strategy1());
-	public AI player2 = new AI(new Strategy2());
-	public AI player3 = new AI(new Strategy3());
+	public static Player player0 = new Player();
+	public static AI player1 = new AI(new Strategy1());
+	public static AI player2 = new AI(new Strategy2());
+	public static AI player3 = new AI(new Strategy3());
 	boolean gameStatus = true;
 	public int playerTurn = 0;
 	public static int fieldSize = 0;
 	
 	public void initialize() {
+		resetStaticVars();
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
 		dealHands();
@@ -171,6 +172,15 @@ public class TileRummyMain implements Observer{
 			}
 		}
 		return false;
+	}
+	
+	public void resetStaticVars() {
+		player0 = new Player();
+		player1 = new AI(new Strategy1());
+		player2 = new AI(new Strategy2());
+		player3 = new AI(new Strategy3());
+		field = new ArrayList<ArrayList<Tile>>();
+		fieldSize = 0;
 	}
 	
 	public int[] getHandSizeOfOtherPlayers(Player asker) {

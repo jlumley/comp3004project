@@ -61,6 +61,7 @@ public class mainTest extends TestCase{
 	
 	public void testGetHandSizeOfOtherPlayers() {
 		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
 		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[0]);
 		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[1]);
 		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[2]);
