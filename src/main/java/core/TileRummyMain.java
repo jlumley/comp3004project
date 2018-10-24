@@ -10,9 +10,9 @@ public class TileRummyMain {
 	ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public Player player0 = new Player();
-	public AI player1 = new AI();
-	public AI player2 = new AI();
-	public AI player3 = new AI();
+	public AI player1 = new AI(new Strategy1());
+	public AI player2 = new AI(new Strategy2());
+	public AI player3 = new AI(new Strategy3());
 	boolean gameStatus = true;
 	public int playerTurn = 0;
 	public static int fieldSize = 0;

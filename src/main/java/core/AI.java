@@ -3,14 +3,15 @@ package core;
 public class AI extends Player{
 	private AIStrategy strategy;
 	
-	public AI() {
+	public AI(AIStrategy strat) {
 		super();
+		setStrategy(strat);
 	}
 	
 	public void playTurn() {
 		strategy.playTurn();
 	}
-	public void setStategy(AIStrategy strat) {
+	public void setStrategy(AIStrategy strat) {
 		strategy = strat;
 	}
 }
