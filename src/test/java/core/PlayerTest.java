@@ -1,11 +1,9 @@
 package core;
 
 import static org.junit.Assert.assertEquals;
+import java.util.HashSet;
 import java.util.ArrayList;
-import java.util.Collection;
-
-import org.junit.Test;
-
+import java.util.Set;
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase
@@ -92,48 +90,70 @@ public class PlayerTest extends TestCase
 		}
 		
 	
-		public void testInHandMelds() {
+		public void testTileSetToMatrix() {
 			Player testPlayer = new Player();
-			ArrayList<ArrayList<Tile>> possibleMelds = new ArrayList<ArrayList<Tile>>();
-			assertEquals(possibleMelds, testPlayer.inHandMelds());
+			testPlayer.addTile(new Tile("R", 1));
+			testPlayer.addTile(new Tile("B", 7));
+			testPlayer.addTile(new Tile("G", 10));
+			testPlayer.addTile(new Tile("Y", 13));
+			testPlayer.addTile(new Tile("Y", 13));
+			testPlayer.addTile(new Tile("R", 99));
 			
-			ArrayList<Tile> temp = new ArrayList<Tile>();
-			Tile t1 = new Tile("B", 10);
-			testPlayer.addTile(t1);
-			temp.add(t1);
-			Tile t2 = new Tile("G", 10);
-			testPlayer.addTile(t2);
-			temp.add(t2);
-			Tile t3 = new Tile("Y", 10);
-			testPlayer.addTile(t3);
-			Tile t111 = new Tile("Y", 11);
-			testPlayer.addTile(t111);
-			temp.add(t3);
-			possibleMelds.add(temp);
-			//assertEquals(possibleMelds, testPlayer.inHandMelds());
-			
-			temp = new ArrayList<Tile>();
-			Tile t4 = new Tile("G", 3);
-			testPlayer.addTile(t4);
-			temp.add(t4);
-			Tile t5 = new Tile("G", 4);
-			testPlayer.addTile(t5);
-			temp.add(t5);
-			Tile t6 = new Tile("G", 5);
-			testPlayer.addTile(t6);
-			temp.add(t6);
-			possibleMelds.add(temp);
-			//assertEquals(possibleMelds, testPlayer.inHandMelds());
-			
-			Tile t7 = new Tile("G", 2);
-			testPlayer.addTile(t7);
-			temp.add(0, t7);
-			possibleMelds.remove(1);
-			possibleMelds.add(temp);
-			assertEquals(possibleMelds, testPlayer.inHandMelds());
-
-			
+			Set<Tile> tileset = new HashSet<Tile>(testPlayer.getHand());
+			int[][] m = testPlayer.tileSetToMatrix(tileset);
+			assertEquals(1, m[0][0]);
+			assertEquals(1, m[1][6]);
+			assertEquals(1, m[2][9]);
+			assertEquals(2, m[3][12]);
+			assertEquals(0, m[3][2]);
 		}
 		
+		public void testPlayAllCards() {
+			Player testPlayer = new Player();
+			testPlayer.addTile(new Tile("R", 1));
+			testPlayer.addTile(new Tile("R", 2));
+			testPlayer.addTile(new Tile("R", 3));
+			testPlayer.addTile(new Tile("R", 7));
+			
+			testPlayer.addTile(new Tile("B", 5));
+			testPlayer.addTile(new Tile("B", 6));
+			testPlayer.addTile(new Tile("B", 7));
+			testPlayer.addTile(new Tile("B", 8));
+			
+			testPlayer.addTile(new Tile("G", 11));
+			testPlayer.addTile(new Tile("G", 12));
+			testPlayer.addTile(new Tile("G", 13));
+			
+			testPlayer.addTile(new Tile("R", 4));
+			testPlayer.addTile(new Tile("G", 4));
+			testPlayer.addTile(new Tile("Y", 4));
+			
+			testPlayer.addTile(new Tile("R", 9));
+			testPlayer.addTile(new Tile("B", 9));
+			testPlayer.addTile(new Tile("G", 9));
+			
+			testPlayer.addTile(new Tile("Y", 6));
+			
+			ArrayList<ArrayList<Tile>> table = new ArrayList<ArrayList<Tile>>();
+			ArrayList<Tile> temp = new ArrayList<Tile>();
+			temp.add(new Tile("Y", 7));
+			temp.add(new Tile("Y", 8));
+			temp.add(new Tile("Y", 9));
+			table.add(temp);
+
+			
+			table = testPlayer.playAllTiles(table);
+			
+			testPlayer.showHand();
+			System.out.println();
+			System.out.println("Melds on Table:");
+			for (ArrayList<Tile> meld: table) {
+				for (Tile t : meld) {
+					System.out.print(t.toString()+ " ");
+				}
+				System.out.println();
+			}
+			assertEquals(18, testPlayer.getHand().size());
+		}
 		
 }
