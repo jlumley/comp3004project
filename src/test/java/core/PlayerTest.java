@@ -100,7 +100,7 @@ public class PlayerTest extends TestCase
 			testPlayer.addTile(new Tile("R", 99));
 			
 			Set<Tile> tileset = new HashSet<Tile>(testPlayer.getHand());
-			int[][] m = testPlayer.tileSetToMatrix(tileset);
+			int[][] m = Player.tileSetToMatrix(tileset);
 			assertEquals(1, m[0][0]);
 			assertEquals(1, m[1][6]);
 			assertEquals(1, m[2][9]);
