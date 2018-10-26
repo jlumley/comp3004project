@@ -57,7 +57,7 @@ public class Tile implements Comparable<Tile>
 		if(!tempColour.isEmpty()) {
 			tempColour = tempColour.substring(0,1);} //change to single letter form
 		
-		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y"))
+		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y") & !tempColour.equals("X"))
 			return false;
 		
 		this.colour = tempColour;
