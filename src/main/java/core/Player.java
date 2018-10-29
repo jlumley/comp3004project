@@ -1,5 +1,6 @@
 package core;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -58,8 +59,34 @@ public class Player {
 		Hand hand = new Hand(tilesMatrix, this.jokers);
 		
 		this.findMelds(hand, 0, 0);
+		this.hand = Player.matrixToTileArray(hand);
+		System.out.println(this.hand);
 		
 		return hand.getMelds();
+	}
+	
+	public static ArrayList<Tile> matrixToTileArray(Hand hand) {
+		ArrayList<Tile> newHand = new ArrayList<Tile>();
+		for (int suit = 0; suit < 4; suit++) {
+			for (int value=0; value < 13; value++) {
+				while (hand.cards[suit][value] > 0) {
+					String suitString = new String();
+					switch (suit) {
+		            case 0:  suitString = "R";
+		                     break;
+		            case 1:  suitString = "B";
+		                     break;
+		            case 2:  suitString = "G";
+		                     break;
+		            case 3:  suitString = "Y";
+		                     break;
+					}
+					hand.cards[suit][value]--;
+					newHand.add(new Tile(suitString, value+1));
+				}
+			}
+		}
+		return newHand;
 	}
 	
 	public static int [][] tileSetToMatrix(Set<Tile> tileSet){

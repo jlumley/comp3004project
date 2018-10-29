@@ -153,7 +153,7 @@ public class PlayerTest extends TestCase
 				}
 				System.out.println();
 			}
-			assertEquals(18, testPlayer.getHand().size());
+			assertEquals(1, testPlayer.getHand().size());
 		}
 		
 }
