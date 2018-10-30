@@ -32,6 +32,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.DragEvent;
+import javafx.scene.Node;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 public class GUI extends Application
 {
@@ -41,6 +59,8 @@ public class GUI extends Application
 	private Map<String, Image> deck;
 	private Pane root;
 	private Scene scene;
+	private Image tempImage;
+	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
@@ -269,6 +289,17 @@ public class GUI extends Application
 		screenHeight = 	screenSize.height;
 	}
 	
+    private void enableDragging(Node node) {
+        final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
+        node.setOnMousePressed(event -> mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY())));
+        node.setOnMouseDragged(event -> {
+            double deltaX = event.getSceneX() - mouseAnchor.get().getX();
+            double deltaY = event.getSceneY() - mouseAnchor.get().getY();
+            node.relocate(node.getLayoutX() + deltaX, node.getLayoutY() + deltaY);
+            mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
+            ;
+        });
+    }
 	/* --------------------------------------------------------------------------------
 	 * 
 	 * 			GUI Interface
@@ -290,38 +321,72 @@ public class GUI extends Application
 		
 		for(Tile card : deck)
 		{
-			i += 1;
+			i += 1; 
 			
 			if(i%4 == 0)
 				offsetY += screenHeight*0.0265;
 			
-			System.out.println("Card " + i + " is, Suite:" + card.getSuite() + ", Value:" + card.getValue());
 			tempImageView = new ImageView(card.getImage());
 			
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
 			tempImageView.setFitWidth(screenWidth*0.0225);
-			
+
 			//Set Pos
 			randNum = (0.0225) * rand.nextDouble();
 			tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
 			tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY); 
-			/*
-			tempImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
-			    public void handle(MouseEvent event) {
-			        // drag was detected, start a drag-and-drop gesture
-			        // allow any transfer mode 
-			        Dragboard db = tempImageView.startDragAndDrop(TransferMode.ANY);
-			        
-			   
-			        ClipboardContent content = new ClipboardContent();
-			        content.putData(tempImageView);
-			        db.setContent(content);
-			        
-			        event.consume();
-			    }
-			});*/
 			
+			/* Set drag and drop events */
+			tempImageView.setOnDragOver(new EventHandler<DragEvent>() {
+	            @Override
+	            public void handle(DragEvent event) 
+	            {
+	            	System.out.print("OnDragOver");
+	                Dragboard db = event.getDragboard();
+	                if (db.hasFiles()) 
+	                {
+	                	tempImage = card.getImage();
+	                    event.acceptTransferModes(TransferMode.ANY);
+	                }
+
+	                event.consume();
+	            }
+	        });
+			
+			tempImageView.setOnDragDropped(new EventHandler<DragEvent>() 
+			{
+	            @Override
+	            public void handle(DragEvent event) 
+	            {
+	            	System.out.print("OnDragDropped");
+	                Dragboard dashboard = event.getDragboard();
+
+	                if (dashboard.hasFiles()) 
+	                {
+	                    for (File file : dashboard.getFiles()) 
+	                    {
+	                        String absolutePath = file.toURI().toString();
+
+	                        Image dashBoardImage = tempImage;
+	                        ImageView dbImageView = new ImageView();
+	                        dbImageView.setFitHeight(screenHeight/19);
+	                        dbImageView.setFitWidth(screenWidth*0.0225);
+	                        dbImageView.setImage(tempImage);
+	                        root.getChildren().add(dbImageView);
+	                        //TODO this needs to be changed to place onto pain instead of using set fill
+	                        //rectangle.setFill(new ImagePattern(dashBoardImage, 0, 0, 1, 1, true));
+	                        root.getChildren().add(dbImageView);
+	                    }
+
+	                    event.setDropCompleted(true);
+	                } else {
+	                    event.setDropCompleted(false);
+	                }
+	                event.consume();
+	               
+	            }
+	        });
 			root.getChildren().add(tempImageView);
 		}
 		return true;
