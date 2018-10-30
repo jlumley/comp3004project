@@ -51,6 +51,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.DoubleProperty;
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
@@ -314,84 +316,108 @@ public class GUI extends Application
 	{
 		sayMsg("Place Deck");
 		int i = 0;
-		ImageView tempImageView;
-		double randNum = 0.0;
 		double offsetY = 0.0;
-		Random rand = new Random();
-		
+		ImageView tempImageView;
+
 		for(Tile card : deck)
 		{
-			i += 1; 
-			
+			i += 1;
 			if(i%4 == 0)
 				offsetY += screenHeight*0.0265;
 			
-			tempImageView = new ImageView(card.getImage());
-			
-			//Set width and height
-			tempImageView.setFitHeight(screenHeight/19);
-			tempImageView.setFitWidth(screenWidth*0.0225);
-
-			//Set Pos
-			randNum = (0.0225) * rand.nextDouble();
-			tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
-			tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY); 
-			
-			/* Set drag and drop events */
-			tempImageView.setOnDragOver(new EventHandler<DragEvent>() {
-	            @Override
-	            public void handle(DragEvent event) 
-	            {
-	            	System.out.print("OnDragOver");
-	                Dragboard db = event.getDragboard();
-	                if (db.hasFiles()) 
-	                {
-	                	tempImage = card.getImage();
-	                    event.acceptTransferModes(TransferMode.ANY);
-	                }
-
-	                event.consume();
-	            }
-	        });
-			
-			tempImageView.setOnDragDropped(new EventHandler<DragEvent>() 
-			{
-	            @Override
-	            public void handle(DragEvent event) 
-	            {
-	            	System.out.print("OnDragDropped");
-	                Dragboard dashboard = event.getDragboard();
-
-	                if (dashboard.hasFiles()) 
-	                {
-	                    for (File file : dashboard.getFiles()) 
-	                    {
-	                        String absolutePath = file.toURI().toString();
-
-	                        Image dashBoardImage = tempImage;
-	                        ImageView dbImageView = new ImageView();
-	                        dbImageView.setFitHeight(screenHeight/19);
-	                        dbImageView.setFitWidth(screenWidth*0.0225);
-	                        dbImageView.setImage(tempImage);
-	                        root.getChildren().add(dbImageView);
-	                        //TODO this needs to be changed to place onto pain instead of using set fill
-	                        //rectangle.setFill(new ImagePattern(dashBoardImage, 0, 0, 1, 1, true));
-	                        root.getChildren().add(dbImageView);
-	                    }
-
-	                    event.setDropCompleted(true);
-	                } else {
-	                    event.setDropCompleted(false);
-	                }
-	                event.consume();
-	               
-	            }
-	        });
+			tempImageView = createCard(i, card, offsetY);
 			root.getChildren().add(tempImageView);
 		}
 		return true;
 	}
 	
+	private ImageView createCard(int i, Tile card, double offsetY) 
+	{
+		ImageView tempImageView;
+		
+		double randNum = 0.0;
+	
+		Random rand = new Random();
+
+		Image imageHolder = card.getImage();
+		
+		/* Set drag and drop events */		
+		tempImageView = setUpCardEvents(imageHolder);
+
+		//Set width and height
+		tempImageView.setFitHeight(screenHeight/19);
+		tempImageView.setFitWidth(screenWidth*0.0225);
+
+		//Set Pos
+		randNum = (0.0225) * rand.nextDouble();
+		tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
+		tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY);
+		
+		return tempImageView;
+	}
+
+	private ImageView setUpCardEvents(Image imageHolder) 
+	{
+		final ObjectProperty<Point2D> anchor = new SimpleObjectProperty<>();
+		final ImageView imgView = new ImageView(imageHolder);
+		final DoubleProperty tempX = new SimpleDoubleProperty();
+		final DoubleProperty tempY = new SimpleDoubleProperty();
+		final DoubleProperty dragX = new SimpleDoubleProperty();
+		final DoubleProperty dragY = new SimpleDoubleProperty();
+		final DoubleProperty tempX2 = new SimpleDoubleProperty();
+		final DoubleProperty tempY2 = new SimpleDoubleProperty();
+
+		    
+		ImageView tempImageView = new ImageView(imageHolder);
+		tempImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+	        public void handle(MouseEvent event) 
+	        {
+	        	tempImageView.setVisible(false);
+	            ClipboardContent content = new ClipboardContent();
+	            content.putImage(imageHolder);
+	            Dragboard db = tempImageView.startDragAndDrop(TransferMode.ANY);
+	            db.setDragView(imageHolder,screenWidth*0.0225 ,screenHeight/19);
+	            db.setContent(content); 
+	            event.consume();
+	        }
+	    });
+	    
+	    imgView.setOnDragOver(new EventHandler<DragEvent>(){
+
+	        @Override
+	        public void handle(DragEvent event) {
+	            imgView.toFront();
+	            
+	            dragX.set(event.getSceneX() - anchor.get().getX());
+	            dragY.set(event.getSceneY() - anchor.get().getY());
+	            imgView.setOpacity(0.5);
+
+	            tempX2.set(tempX.get() + dragX.get());
+	            tempY2.set(tempY.get() + dragY.get());
+
+	            imgView.setTranslateX(tempX2.get());
+	            imgView.setTranslateY(tempY2.get());
+
+	            event.consume();
+	        }
+	    });	
+	    
+	    imgView.setOnDragDone(new EventHandler<DragEvent>() {
+	        public void handle(DragEvent event) 
+	        {
+	            ClipboardContent content = new ClipboardContent();
+	            content.putImage(imageHolder);
+	            Dragboard db = imgView.startDragAndDrop(TransferMode.ANY);
+	            db.setDragView(imageHolder, screenWidth*0.0225, screenHeight/19); 
+	            db.setContent(content); 
+	            tempImageView.setVisible(true);
+	            event.consume();	        
+	        }
+	    });
+	    
+	    return tempImageView;
+	}
+
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	 *   purpose: deal each card to player
