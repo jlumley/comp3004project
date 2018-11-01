@@ -110,7 +110,7 @@ public class PlayerTest extends TestCase
 			assertEquals(0, m[3][2]);
 		}
 		
-		public void testPlayAllCards() {
+		public void testPlayAllCards() { 
 			Player testPlayer = new Player();
 			testPlayer.addTile(new Tile("R", 1));
 			testPlayer.addTile(new Tile("R", 2));
@@ -155,7 +155,7 @@ public class PlayerTest extends TestCase
 				}
 				System.out.println();
 			}
-			assertEquals(0, testPlayer.getHand().size());
+			assertEquals(1, testPlayer.getHand().size());
 		}
 		
 }

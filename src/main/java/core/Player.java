@@ -86,7 +86,7 @@ public class Player {
 		                     break;
 		            case 2:  suitString = "G";
 		                     break;
-		            case 3:  suitString = "Y";
+		            case 3:  suitString = "O";
 		                     break;
 					}
 					hand.cards[suit][value]--;
@@ -130,7 +130,7 @@ public class Player {
 			if (t.getColour() == "R") colour=0;
 			if (t.getColour() == "B") colour=1;
 			if (t.getColour() == "G") colour=2;
-			if (t.getColour() == "Y") colour=3;
+			if (t.getColour() == "O") colour=3;
 			
 			matrix[colour][t.getValue()-1] = matrix[colour][t.getValue()-1] + 1;
 		}
@@ -162,7 +162,7 @@ public class Player {
 	                     break;
 	            case 2:  suitString = "G";
 	                     break;
-	            case 3:  suitString = "Y";
+	            case 3:  suitString = "O";
 	                     break;
 				}
 				run.add(new Tile(suitString, value+1));
@@ -202,7 +202,7 @@ public class Player {
 		                     break;
 		            case 2:  suitString = "G";
 		                     break;
-		            case 3:  suitString = "Y";
+		            case 3:  suitString = "O";
 		                     break;
 					}
 					set.add(new Tile(suitString, rank+1));
@@ -457,7 +457,7 @@ class Hand {
 		else if (t.getColour() == "G") {
 			suit = 2;
 		}
-		else if (t.getColour() == "Y") {
+		else if (t.getColour() == "O") {
 				suit = 3;
 			}
 			if (this.cards[suit][t.getValue()-1] > 0) {
