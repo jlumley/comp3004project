@@ -41,6 +41,7 @@ public class Player {
 	}
 	public void addTile(Tile t) {
 		hand.add(t);
+		System.out.println(t);
 		this.jokers = getJokers();
 		Collections.sort(hand);
 	}
@@ -90,6 +91,11 @@ public class Player {
 					}
 					hand.cards[suit][value]--;
 					newHand.add(new Tile(suitString, value+1));
+				}
+			}
+		}
+		return newHand;
+	}
 
 
 	public ArrayList<ArrayList<Tile>> findSets() {
@@ -112,7 +118,7 @@ public class Player {
 				}
 			}
 		}
-		return newHand;
+		return melds;
 	}
 	
 	public static int [][] tileSetToMatrix(Set<Tile> tileSet){
@@ -277,43 +283,7 @@ public class Player {
 			}
 		}
 		return hand;
-	}
-}
-
-
-	
-	public int[][] hardCopyMatrix() {
-		
-		int[][] copy = new int[4][13];
-		for (int n=0; n<4; n++) {
-			for (int i=0; i<13; i++) {
-				copy[n][i] = this.cards[n][i]; 
-			}
-		}
-		return copy;
-	}
-
-	
-	public ArrayList<ArrayList<Tile>> getMelds() {
-		pruneHand();
-		return this.melds;
-	}
-	
-	public void pruneHand() {
-		for (int i=0; i<this.melds.size()-1; i++) {
-			if (this.melds.get(i+1).size() - this.melds.get(i).size() == 1) {
-				if (this.melds.get(i+1).get(0) == this.melds.get(i).get(0)) {
-					if (this.melds.get(i+1).get(1) == this.melds.get(i).get(1)) {
-						if (this.melds.get(i+1).get(2) == this.melds.get(i).get(2)) {
-							this.melds.remove(i);
-						}
-					}
-				} 
-			}
-		}
-	}
-		
-
+	}		
 	public void addMendtoMain(ArrayList<Tile> collection) { // basic adding into the field of tiles
 		TileRummyMain.addMend(collection);
 	}
@@ -479,15 +449,15 @@ class Hand {
 			}
 			int suit = 0;
 			if (t.getColour() == "R") {
-				suit = 0;
-			}
-			else if (t.getColour() == "B") {
-				suit = 1;			
-			}
-			else if (t.getColour() == "G") {
-				suit = 2;
-			}
-			else if (t.getColour() == "Y") {
+			suit = 0;
+		}
+		else if (t.getColour() == "B") {
+			suit = 1;			
+		}
+		else if (t.getColour() == "G") {
+			suit = 2;
+		}
+		else if (t.getColour() == "Y") {
 				suit = 3;
 			}
 			if (this.cards[suit][t.getValue()-1] > 0) {
@@ -496,4 +466,37 @@ class Hand {
 			
 		}		
 	}
+	
+	public int[][] hardCopyMatrix() {
+		
+		int[][] copy = new int[4][13];
+		for (int n=0; n<4; n++) {
+			for (int i=0; i<13; i++) {
+				copy[n][i] = this.cards[n][i]; 
+			}
+		}
+		return copy;
+	}
+	
+	public ArrayList<ArrayList<Tile>> getMelds() {
+		pruneHand();
+		return this.melds;
+	}
+	
+	public void pruneHand() {
+		for (int i=0; i<this.melds.size()-1; i++) {
+			if (this.melds.get(i+1).size() - this.melds.get(i).size() == 1) {
+				if (this.melds.get(i+1).get(0) == this.melds.get(i).get(0)) {
+					if (this.melds.get(i+1).get(1) == this.melds.get(i).get(1)) {
+						if (this.melds.get(i+1).get(2) == this.melds.get(i).get(2)) {
+							this.melds.remove(i);
+						}
+					}
+				} 
+			}
+		}
+	}
+		
+	
+}
 
