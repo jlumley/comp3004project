@@ -4,7 +4,7 @@ import java.util.*;
 
 public class TileRummyMain{
 	
-	public static final String[] suites = {"R", "B", "G", "Y"};
+	public static final String[] suites = {"R", "B", "G", "O"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
 	ArrayList<Tile> initDeck = new ArrayList<Tile>();

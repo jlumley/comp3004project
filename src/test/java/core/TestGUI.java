@@ -30,8 +30,8 @@ public class TestGUI extends TestCase
 		Tile r4 = new Tile("R", 4);
 		Tile r5 = new Tile("R", 5);
 		
-		Tile y2 = new Tile("Y", 2);
-		Tile y3 = new Tile("Y", 3);
+		Tile o2 = new Tile("O", 2);
+		Tile o3 = new Tile("O", 3);
 		
 		Tile g6 = new Tile("G", 6);
 		Tile g7 = new Tile("G", 7);
@@ -43,8 +43,8 @@ public class TestGUI extends TestCase
 		player1.addTile(r4);
 		player1.addTile(r5);
 		
-		player2.addTile(y2);
-		player2.addTile(y3);
+		player2.addTile(o2);
+		player2.addTile(o3);
 		
 		player3.addTile(g6);
 		player3.addTile(g7);
