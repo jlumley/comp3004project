@@ -13,7 +13,7 @@ public class mainTest extends TestCase{
 		ArrayList<ArrayList<Tile>> temp1 = new ArrayList<ArrayList<Tile>>();
 		Tile t1 = new Tile("B", 10);
 		temp.add(t1);
-		Tile t2 = new Tile("Y", 10);
+		Tile t2 = new Tile("O", 10);
 		temp.add(t2);
 		Tile t3 = new Tile("R", 10);
 		temp.add(t3);
@@ -69,7 +69,7 @@ public class mainTest extends TestCase{
 		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[0]);
 		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[1]);
 		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[2]);
-		result.player1.addTile(new Tile("Y", 10));
+		result.player1.addTile(new Tile("O", 10));
 		assertEquals(15, result.getHandSizeOfOtherPlayers(result.player3)[1]);
 	}
 }
