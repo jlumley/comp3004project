@@ -1,43 +1,53 @@
 package core;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import javafx.scene.image.Image;
 
 public class Tile implements Comparable<Tile>
 {
-	private static final String imageDir = "src/main/resources/core/cards/";
+	private static final String imageDir = "src/main/resources/core/tiles/";
 	private int value;
 	private String colour;
 
 	private static int id_count = 0;
 	private int id;
 
-	private File tileImage;
+	private Image tileImage;
 	private float x;
 	private float y;
 	
 	public boolean joker = false;
 	public String getColour() { return colour;}
 	public int getValue() { return value;}
+	public String getSuite() { return colour;}
 	public float getX() {return x;}
 	public float getY() {return y;}
 	
-	public Tile(String tileColour, int value) {
+	public Tile(String tileColour, int value) 
+	{
 		//Initialize coordinates
 		x = 0;
 		y = 0;
 		
-		if(value == 99){ // setting it up as a dummy checker for Jokers, need team input
+		if(value == 99)
+		{ 
+			// setting it up as a dummy checker for Jokers, need team input
 			this.joker = true;
-		}else {
+		}
+		else 
+		{
 			setValue(value);
 		}
 		setColour(tileColour);
 		this.id = id_count;
 		this.id_count += 1;
-		//TODO Set Image
+
 		//Tiles are expected to be in the format "Tile" + firstLetterOfColour + Value 
 		//for example TileB10 (tile blue 10 )or TileR2 (tile red 2) 
-		setFileImage("Tile" + tileColour + String.valueOf(value) + ".jpg");
+		setFileImage("Tile" + colour + String.valueOf(value) + ".jpg");
 
 	}
 	
@@ -57,8 +67,14 @@ public class Tile implements Comparable<Tile>
 		if(!tempColour.isEmpty()) {
 			tempColour = tempColour.substring(0,1);} //change to single letter form
 		
-		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y") & !tempColour.equals("X"))
+
+		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("O") & !tempColour.equals("X"))
+
 			return false;
+		
+		//TODO remove this once we decide if we use orange or yellow
+		if(tempColour.equals("Y"))
+			tempColour = "O";
 		
 		this.colour = tempColour;
 		return true;
@@ -66,19 +82,25 @@ public class Tile implements Comparable<Tile>
 	
 	public boolean setFileImage(String fileName) 
 	{
-		File file = new File(imageDir + fileName);
-		tileImage = file;
-		
-		if(tileImage != null)
+		try 
 		{
-			return true;
-		}
-		else
+			Image cardImage;
+			cardImage = new Image(new FileInputStream(imageDir + fileName));
+			tileImage = cardImage;
+		} 
+		catch (FileNotFoundException e) 
 		{
+			e.printStackTrace();
 			return false;
-		}	
+		}
+		
+		return true;	
 	}
 	
+	public Image getImage()
+	{
+		return tileImage;
+	}
 	public String toString() {
 		return colour + value;
 	}

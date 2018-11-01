@@ -2,46 +2,38 @@ package core;
 
 import java.util.*;
 
-public class TileRummyMain {
+public class TileRummyMain{
 	
 	public static final String[] suites = {"R", "B", "G", "Y"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
 	ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
-	public Player player0 = new Player();
-	public AI player1 = new AI();
-	public AI player2 = new AI();
-	public AI player3 = new AI();
+	public static Player player0 = new Player();
+	public static AI player1 = new AI(new Strategy1());
+	public static AI player2 = new AI(new Strategy2());
+	public static AI player3 = new AI(new Strategy3());
 	boolean gameStatus = true;
 	public int playerTurn = 0;
-	public int fieldSize = 0;
+	public static int fieldSize = 0;
 	
 	public void initialize() {
+		resetStaticVars();
 		initDeck = buildDeck(suites,values);
-		//initDeckDummy = buildDeck(suites,values);
-		//Collections.shuffle(initDeckDummy);
 		Collections.shuffle(initDeck);
 		dealHands();
 	}
 	
-	//public static List<String> buildDeck(String[] suites, String[] values){
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
 		ArrayList<Tile> dummyDeck = new ArrayList<Tile>();
-		//List<String> initDeckDummy2 = new ArrayList<String>();
 		for(int x = 0; x < 2; x++) {
 			for (int i = 0; i < suites.length; i++){ // for each colour 
 				for (int j = 0; j < values.length; j++){ // for each value 
 					Tile k = new Tile(suites[i], values[j]); 
-					//String k = (values[j]) + (suites[i]);
-					//initDeckDummy2.add(k); // adding it into the dummy deck 
 					dummyDeck.add(k);
 				}
 			}
 		}
-		//initDeckDummy2.add("BJ");
-		//initDeckDummy2.add("RJ");
-		//return initDeckDummy2;
 		//TODO Add Wild Tiles
 		return dummyDeck;
 	}
@@ -77,10 +69,13 @@ public class TileRummyMain {
 				System.out.print(field.get(x) + ",");
 			}
 			System.out.println(); //spacing
+		}else {
+			System.out.println("field is empty");
 		}
 	}
-
-	public boolean checkSizeofMendHand(ArrayList<Tile> collection){ // checks for users first hand with sets 
+/*
+	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
+		// move this to player after team meeting
 		boolean returnV = true;
 		int checkSum = 0;
 		ArrayList<String> suitDeck = new ArrayList<String>();
@@ -107,13 +102,16 @@ public class TileRummyMain {
 		}
 		return returnV;
 	}
-
-	private void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
-		System.out.println(collection.size());
+*/
+	
+	public static void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
+		System.out.println("Size: " + collection.size());
 		field.add(collection);
-		System.out.println(field.get(fieldSize));
+		System.out.println("Add to Field" + field.get(fieldSize));
 		fieldSize++;
 	}
+	
+	
 
 	public boolean checkGameStatus() {
 		if(player0.getHand().size() == 0) {
@@ -165,5 +163,33 @@ public class TileRummyMain {
 			System.out.println("AI 3's draws a tile");
 			player3.addTile(drawTile);
 		}
+	}
+
+	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
+		if(player0.checkPlays(temp1)) {
+			for(int i = 0; i < temp1.size(); i++) {
+				addMend(temp1.get(i));
+			}
+		}
+		return false;
+	}
+	
+	public void resetStaticVars() {
+		player0 = new Player();
+		player1 = new AI(new Strategy1());
+		player2 = new AI(new Strategy2());
+		player3 = new AI(new Strategy3());
+		field = new ArrayList<ArrayList<Tile>>();
+		fieldSize = 0;
+	}
+	
+	public static int[] getHandSizeOfOtherPlayers(Player asker) {
+		int[] holder = new int[3]; //assuming always 3 other players
+		if(asker == player3) { //for now only used by p3
+			holder[0] = player0.getHand().size();
+			holder[1] = player1.getHand().size();
+			holder[2] = player2.getHand().size();
+		}
+		return holder;
 	}
 }
