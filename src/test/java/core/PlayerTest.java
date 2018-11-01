@@ -2,6 +2,7 @@ package core;
 
 import static org.junit.Assert.assertEquals;
 import java.util.HashSet;
+import java.awt.print.Printable;
 import java.util.ArrayList;
 import java.util.Set;
 import junit.framework.TestCase;
@@ -29,7 +30,7 @@ public class PlayerTest extends TestCase
 			testHand.add(t3);
 			assertEquals(true, testHand.equals(testPlayer.getHand()));
 			
-			Tile t4 = new Tile("Y", 13);
+			Tile t4 = new Tile("O", 13);
 			testPlayer.addTile(t4);
 			testHand.add(t4);
 			assertEquals(true, testHand.equals(testPlayer.getHand()));	
@@ -48,7 +49,7 @@ public class PlayerTest extends TestCase
 			Player testPlayer = new Player();
 			ArrayList<Tile> testHand = new ArrayList<Tile>();
 			ArrayList<Tile> collection = new ArrayList<Tile>();
-			String[] colors = {"R", "G", "B", "Y"};
+			String[] colors = {"R", "G", "B", "O"};
 			
 			for (String s: colors) {
 				for (int i=1; i<=13; i++) {
@@ -69,7 +70,7 @@ public class PlayerTest extends TestCase
 			assertEquals(3, testPlayer.getHand().size());
 			assertEquals(49, collection.size());
 			
-			testPlayer.drawTile(collection);
+			testPlayer.drawTile(collection); 
 			assertEquals(4, testPlayer.getHand().size());
 			assertEquals(48, collection.size());
 			
@@ -79,7 +80,7 @@ public class PlayerTest extends TestCase
 			Player testPlayer = new Player();
 			assertEquals(0, testPlayer.countTiles());
 			
-			testPlayer.addTile(new Tile("Y", 12));
+			testPlayer.addTile(new Tile("O", 12));
 			assertEquals(1, testPlayer.countTiles());
 			
 			testPlayer.addTile(new Tile("B", 9));
@@ -95,12 +96,13 @@ public class PlayerTest extends TestCase
 			testPlayer.addTile(new Tile("R", 1));
 			testPlayer.addTile(new Tile("B", 7));
 			testPlayer.addTile(new Tile("G", 10));
-			testPlayer.addTile(new Tile("Y", 13));
-			testPlayer.addTile(new Tile("Y", 13));
-			testPlayer.addTile(new Tile("R", 99));
+			testPlayer.addTile(new Tile("O", 13));
+			testPlayer.addTile(new Tile("O", 13));
+			testPlayer.addTile(new Tile("X", 99));
 			
 			Set<Tile> tileset = new HashSet<Tile>(testPlayer.getHand());
 			int[][] m = Player.tileSetToMatrix(tileset);
+			Player.printMatrix(m);
 			assertEquals(1, m[0][0]);
 			assertEquals(1, m[1][6]);
 			assertEquals(1, m[2][9]);
@@ -126,19 +128,19 @@ public class PlayerTest extends TestCase
 			
 			testPlayer.addTile(new Tile("R", 4));
 			testPlayer.addTile(new Tile("G", 4));
-			testPlayer.addTile(new Tile("Y", 4));
+			testPlayer.addTile(new Tile("O", 4));
 			
 			testPlayer.addTile(new Tile("R", 9));
 			testPlayer.addTile(new Tile("B", 9));
 			testPlayer.addTile(new Tile("G", 9));
 			
-			testPlayer.addTile(new Tile("Y", 6));
+			testPlayer.addTile(new Tile("O", 6));
 			
 			ArrayList<ArrayList<Tile>> table = new ArrayList<ArrayList<Tile>>();
 			ArrayList<Tile> temp = new ArrayList<Tile>();
-			temp.add(new Tile("Y", 7));
-			temp.add(new Tile("Y", 8));
-			temp.add(new Tile("Y", 9));
+			temp.add(new Tile("O", 7));
+			temp.add(new Tile("O", 8));
+			temp.add(new Tile("O", 9));
 			table.add(temp);
 
 			
@@ -153,7 +155,7 @@ public class PlayerTest extends TestCase
 				}
 				System.out.println();
 			}
-			assertEquals(1, testPlayer.getHand().size());
+			assertEquals(0, testPlayer.getHand().size());
 		}
 		
 }
