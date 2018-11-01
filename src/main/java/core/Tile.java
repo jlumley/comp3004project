@@ -67,7 +67,9 @@ public class Tile implements Comparable<Tile>
 		if(!tempColour.isEmpty()) {
 			tempColour = tempColour.substring(0,1);} //change to single letter form
 		
-		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("Y") & !tempColour.equals("O"))
+
+		if(!tempColour.equals("R") & !tempColour.equals("B") & !tempColour.equals("G") & !tempColour.equals("O") & !tempColour.equals("X"))
+
 			return false;
 		
 		//TODO remove this once we decide if we use orange or yellow
