@@ -52,7 +52,7 @@ public class TileRummyMain{
 			player0.drawTile(initDeck);
 			player1.drawTile(initDeck);
 			player2.drawTile(initDeck);
-			//player3.drawTile(initDeck);
+			player3.drawTile(initDeck);
 		}
 	}
 

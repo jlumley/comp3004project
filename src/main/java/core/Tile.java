@@ -116,10 +116,10 @@ public class Tile implements Comparable<Tile>
 		if (o == null) {
 			return 0; 
 		}
-		if (this.value == o.value) {
-			return this.colour.compareTo(o.colour);
+		if (this.colour == o.colour) {
+			return this.value - o.value;
 		} else {
-			return Integer.compare(this.value, o.value);
+			return this.colour.compareTo(o.colour);
 		}
 	}
 	public boolean setx(float pos) 
