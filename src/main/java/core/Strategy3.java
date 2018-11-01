@@ -4,6 +4,7 @@ public class Strategy3 implements AIStrategy{
 	
 	public void playTurn() {
 		//Check for 30 point limit and play it
+		//new 
 		
 		//Check if can win this turn, if so Win
 		
