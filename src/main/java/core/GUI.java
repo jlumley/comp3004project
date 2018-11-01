@@ -2,6 +2,7 @@ package core;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -290,18 +291,20 @@ public class GUI extends Application
 		screenWidth = screenSize.width;
 		screenHeight = 	screenSize.height;
 	}
-	
+/*
     private void enableDragging(Node node) {
         final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
         node.setOnMousePressed(event -> mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY())));
         node.setOnMouseDragged(event -> {
             double deltaX = event.getSceneX() - mouseAnchor.get().getX();
             double deltaY = event.getSceneY() - mouseAnchor.get().getY();
-            node.relocate(node.getLayoutX() + deltaX, node.getLayoutY() + deltaY);
-            mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
-            ;
+            //node.relocate(node.getLayoutX() + deltaX, node.getLayoutY() + deltaY);
+            //mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
+            
         });
     }
+    */
+	
 	/* --------------------------------------------------------------------------------
 	 * 
 	 * 			GUI Interface
@@ -353,9 +356,30 @@ public class GUI extends Application
 		tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
 		tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY);
 		
+		
 		return tempImageView;
 	}
-
+	private ImageView setUpCardEvents(Image imageHolder) {
+		final ImageView imgView = new ImageView(imageHolder);
+		final DoubleProperty tempX = new SimpleDoubleProperty();
+		final DoubleProperty tempY = new SimpleDoubleProperty();
+		final DoubleProperty dragX = new SimpleDoubleProperty();
+		final DoubleProperty dragY = new SimpleDoubleProperty();
+		final DoubleProperty tempX2 = new SimpleDoubleProperty();
+		final DoubleProperty tempY2 = new SimpleDoubleProperty();
+		
+		ImageView tempImageView = new ImageView(imageHolder);
+		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override public void handle(MouseEvent event) {
+				tempImageView.setVisible(false);
+				tempImageView.setX(event.getSceneX());
+				tempImageView.setY(event.getSceneY());
+				tempImageView.setVisible(true);
+			}
+		});
+		return tempImageView;
+	}
+/*
 	private ImageView setUpCardEvents(Image imageHolder) 
 	{
 		final ObjectProperty<Point2D> anchor = new SimpleObjectProperty<>();
@@ -417,7 +441,8 @@ public class GUI extends Application
 	    
 	    return tempImageView;
 	}
-
+ */
+	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	 *   purpose: deal each card to player
