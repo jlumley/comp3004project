@@ -1,6 +1,5 @@
 package core;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,7 +40,6 @@ public class Player {
 	}
 	public void addTile(Tile t) {
 		hand.add(t);
-		System.out.println(t);
 		this.jokers = getJokers();
 		Collections.sort(hand);
 	}
@@ -57,12 +55,29 @@ public class Player {
 
 	
 	public ArrayList<ArrayList<Tile>> playAllTiles(ArrayList<ArrayList<Tile>> tableTiles) {
+		// returns the new table
 		ArrayList<ArrayList<Tile>> newTable = new ArrayList<ArrayList<Tile>>();
 		Set<Tile> playableTiles = new HashSet<Tile>(this.getHand());
 		for (ArrayList<Tile> meld: tableTiles) {
 			playableTiles.addAll(meld);
 		}
 		
+		int [][] tilesMatrix = tileSetToMatrix(playableTiles);
+		Hand hand = new Hand(tilesMatrix, this.jokers);
+		
+		this.findMelds(hand, 0, 0);
+		this.hand = Player.matrixToTileArray(hand);
+		System.out.println(this.hand);
+		
+		return hand.getMelds();
+	}
+	
+	
+	public ArrayList<ArrayList<Tile>> playAllTiles() {
+		//returns an arraylist of melds to add to the table
+		ArrayList<ArrayList<Tile>> newTable = new ArrayList<ArrayList<Tile>>();
+		Set<Tile> playableTiles = new HashSet<Tile>(this.getHand());
+
 		int [][] tilesMatrix = tileSetToMatrix(playableTiles);
 		Hand hand = new Hand(tilesMatrix, this.jokers);
 		
