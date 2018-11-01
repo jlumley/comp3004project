@@ -65,7 +65,7 @@ public class GUI extends Application
 	private Image tempImage;
 	
 	/* TODO remove this when done*/
-	public static final String[] suites = {"R", "B", "G", "Y"};
+	public static final String[] suites = {"R", "B", "G", "O"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	
 	public static void main(String[] args)

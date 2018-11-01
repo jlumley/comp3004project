@@ -47,7 +47,7 @@ public class Tile implements Comparable<Tile>
 
 		//Tiles are expected to be in the format "Tile" + firstLetterOfColour + Value 
 		//for example TileB10 (tile blue 10 )or TileR2 (tile red 2) 
-		setFileImage("Tile" + colour + String.valueOf(value) + ".jpg");
+		setFileImage("Tile" + this.colour + String.valueOf(value) + ".jpg");
 
 	}
 	
