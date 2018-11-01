@@ -65,7 +65,7 @@ public class GUI extends Application
 	private Image tempImage;
 	
 	/* TODO remove this when done*/
-	public static final String[] suites = {"R", "B", "G", "Y"};
+	public static final String[] suites = {"R", "B", "G", "O"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	
 	public static void main(String[] args)
@@ -88,6 +88,10 @@ public class GUI extends Application
 		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
 		placeDeck(TileRummyMain.buildDeck(suites, values));
+		
+		/* TODO this needs to get the player hand */
+		TileRummyMain game = new TileRummyMain();
+		//dealHand();
 	}
 	
 	/*
@@ -166,7 +170,7 @@ public class GUI extends Application
 					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
 			
 			player1BoardImage = new Image(new FileInputStream(image_dir + "playerBoard.jpg"), 
-					screenWidth - 0.05*screenWidth, screenHeight ,true,true);
+					screenWidth - 0.25*screenWidth, screenHeight ,true,true);
 
 			player2BoardImage = new Image(new FileInputStream(image_dir + "sideBoard.jpg"), 
 					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
@@ -194,8 +198,8 @@ public class GUI extends Application
 		imgDeckView.setY(screenHeight/16 + screenHeight*0.05); 
 		
 		/* Player bottom of screen */
-		imgPlayer1View.setX(screenWidth - screenWidth*0.99); 
-		imgPlayer1View.setY(screenHeight - screenHeight*0.1025); 
+		imgPlayer1View.setX(screenWidth - screenWidth*0.92); 
+		imgPlayer1View.setY(screenHeight - screenHeight*0.2025); 
 				
 		/* Left side player*/
 		imgPlayer2View.setX(0); 
@@ -291,19 +295,6 @@ public class GUI extends Application
 		screenWidth = screenSize.width;
 		screenHeight = 	screenSize.height;
 	}
-/*
-    private void enableDragging(Node node) {
-        final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
-        node.setOnMousePressed(event -> mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY())));
-        node.setOnMouseDragged(event -> {
-            double deltaX = event.getSceneX() - mouseAnchor.get().getX();
-            double deltaY = event.getSceneY() - mouseAnchor.get().getY();
-            //node.relocate(node.getLayoutX() + deltaX, node.getLayoutY() + deltaY);
-            //mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
-            
-        });
-    }
-    */
 	
 	/* --------------------------------------------------------------------------------
 	 * 
@@ -360,13 +351,6 @@ public class GUI extends Application
 		return tempImageView;
 	}
 	private ImageView setUpCardEvents(Image imageHolder) {
-		final ImageView imgView = new ImageView(imageHolder);
-		final DoubleProperty tempX = new SimpleDoubleProperty();
-		final DoubleProperty tempY = new SimpleDoubleProperty();
-		final DoubleProperty dragX = new SimpleDoubleProperty();
-		final DoubleProperty dragY = new SimpleDoubleProperty();
-		final DoubleProperty tempX2 = new SimpleDoubleProperty();
-		final DoubleProperty tempY2 = new SimpleDoubleProperty();
 		
 		ImageView tempImageView = new ImageView(imageHolder);
 		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -379,69 +363,31 @@ public class GUI extends Application
 		});
 		return tempImageView;
 	}
-/*
-	private ImageView setUpCardEvents(Image imageHolder) 
+
+	public boolean dealHandHelper(ArrayList<Tile> playerHand)
 	{
-		final ObjectProperty<Point2D> anchor = new SimpleObjectProperty<>();
-		final ImageView imgView = new ImageView(imageHolder);
-		final DoubleProperty tempX = new SimpleDoubleProperty();
-		final DoubleProperty tempY = new SimpleDoubleProperty();
-		final DoubleProperty dragX = new SimpleDoubleProperty();
-		final DoubleProperty dragY = new SimpleDoubleProperty();
-		final DoubleProperty tempX2 = new SimpleDoubleProperty();
-		final DoubleProperty tempY2 = new SimpleDoubleProperty();
+		ImageView tempImageView;
+		int i = 0;
+		
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage());
 
-		    
-		ImageView tempImageView = new ImageView(imageHolder);
-		tempImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
-	        public void handle(MouseEvent event) 
-	        {
-	        	tempImageView.setVisible(false);
-	            ClipboardContent content = new ClipboardContent();
-	            content.putImage(imageHolder);
-	            Dragboard db = tempImageView.startDragAndDrop(TransferMode.ANY);
-	            db.setDragView(imageHolder,screenWidth*0.0225 ,screenHeight/19);
-	            db.setContent(content); 
-	            event.consume();
-	        }
-	    });
-	    
-	    imgView.setOnDragOver(new EventHandler<DragEvent>(){
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
 
-	        @Override
-	        public void handle(DragEvent event) {
-	            imgView.toFront();
-	            
-	            dragX.set(event.getSceneX() - anchor.get().getX());
-	            dragY.set(event.getSceneY() - anchor.get().getY());
-	            imgView.setOpacity(0.5);
-
-	            tempX2.set(tempX.get() + dragX.get());
-	            tempY2.set(tempY.get() + dragY.get());
-
-	            imgView.setTranslateX(tempX2.get());
-	            imgView.setTranslateY(tempY2.get());
-
-	            event.consume();
-	        }
-	    });	
-	    
-	    imgView.setOnDragDone(new EventHandler<DragEvent>() {
-	        public void handle(DragEvent event) 
-	        {
-	            ClipboardContent content = new ClipboardContent();
-	            content.putImage(imageHolder);
-	            Dragboard db = imgView.startDragAndDrop(TransferMode.ANY);
-	            db.setDragView(imageHolder, screenWidth*0.0225, screenHeight/19); 
-	            db.setContent(content); 
-	            tempImageView.setVisible(true);
-	            event.consume();	        
-	        }
-	    });
-	    
-	    return tempImageView;
+			//Set Pos
+			tempImageView.setFitWidth(screenWidth - screenWidth*0.10 + screenWidth); 
+			tempImageView.setFitHeight(screenHeight/16 + screenHeight*0.06);
+			tempImageView.setX(screenWidth - screenWidth*0.92 + i*(screenWidth - screenWidth*0.10 + screenWidth)); 
+			tempImageView.setY(screenHeight - screenHeight*0.2025); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		return true;
 	}
- */
 	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
@@ -449,7 +395,13 @@ public class GUI extends Application
 	 * */
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
-		sayMsg("Hand being dealt");
+		ImageView tempImageView;
+		int i = 0;
+		sayMsg("Hands being dealt");
+		dealHandHelper(p1Hand);
+		dealHandHelper(p2Hand);
+		dealHandHelper(p3Hand);
+		dealHandHelper(p4Hand);
 		return false;
 	}
 	

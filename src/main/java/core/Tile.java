@@ -26,6 +26,7 @@ public class Tile implements Comparable<Tile>
 	public float getX() {return x;}
 	public float getY() {return y;}
 	
+
 	public Tile(String tileColour, int value) 
 	{
 		//Initialize coordinates
@@ -41,6 +42,7 @@ public class Tile implements Comparable<Tile>
 		{
 			setValue(value);
 		}
+		
 		setColour(tileColour);
 		this.id = id_count;
 		this.id_count += 1;
