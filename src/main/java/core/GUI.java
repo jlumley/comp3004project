@@ -63,6 +63,7 @@ public class GUI extends Application
 	private Pane root;
 	private Scene scene;
 	private Image tempImage;
+	private Text playerInfo;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -93,6 +94,7 @@ public class GUI extends Application
 		TileRummyMain game = new TileRummyMain();
 		game.initialize();
 		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+		setPlayerTurn("player3");
 	}
 	
 	/*
@@ -214,8 +216,15 @@ public class GUI extends Application
 		imgPlayer4View.setX(screenWidth - screenWidth*0.05); 
 		imgPlayer4View.setY(screenHeight/16 + screenHeight*0.05); 
 		
+		/* Set text fields */
+		playerInfo = new Text();
+		playerInfo.setFont(new Font(50));
+		playerInfo.setText("Current Turn is: Player 1");
+		playerInfo.setY(screenWidth - screenWidth*0.465);
+		playerInfo.setX(0);
+		
 	    root.getChildren().addAll(imgDeckView, imgPlayer1View, imgPlayer2View, 
-	    		imgPlayer3View, imgPlayer4View);
+	    		imgPlayer3View, imgPlayer4View, playerInfo);
 	    
 	    return true;
 	}
@@ -365,12 +374,11 @@ public class GUI extends Application
 		return tempImageView;
 	}
 
-	public double dealHandHelper(ArrayList<Tile> playerHand, double totalRun)
+	public boolean dealHandPlayer1(ArrayList<Tile> playerHand)
 	{
 		ImageView tempImageView;
 		int i = 0;
-		if(totalRun != 0)
-			totalRun -= screenWidth*0.0725;
+
 		for(Tile tile:playerHand)
 		{
 			/* Set drag and drop events */		
@@ -384,14 +392,64 @@ public class GUI extends Application
 			tempImageView.setFitHeight(screenHeight/19);
 			tempImageView.setFitWidth(screenWidth*0.0225);
 			
-			tempImageView.setX(totalRun + screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
+			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
 			tempImageView.setY(screenHeight - screenHeight*0.2025); 
 			i += 1;
 			root.getChildren().add(tempImageView);
 		}
 		
-		totalRun = (screenWidth - screenWidth*0.92 + i*screenWidth*0.025);
-		return totalRun;
+		return true;
+	}
+	public boolean dealHandPlayer2(ArrayList<Tile> playerHand)
+	{
+		ImageView tempImageView;
+		int i = 1;
+
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage());
+
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+
+			//Set Pos
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			tempImageView.setX(screenWidth*0.0125); 
+			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		return true;
+	}
+	public boolean dealHandPlayer3(ArrayList<Tile> playerHand)
+	{
+		ImageView tempImageView;
+		int i = 0;
+
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage());
+
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+
+			//Set Pos
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
+			tempImageView.setY(screenHeight*0.025); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		
+		return true;
 	}
 	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
@@ -402,9 +460,9 @@ public class GUI extends Application
 	{
 		double totalRun = 0;
 		sayMsg("Hands being dealt");
-		totalRun = dealHandHelper(p1Hand, totalRun);
-		totalRun = dealHandHelper(p2Hand, totalRun);
-		dealHandHelper(p3Hand, totalRun);
+		dealHandPlayer1(p1Hand);
+		dealHandPlayer2(p2Hand);
+		dealHandPlayer3(p3Hand);
 		return true;
 	}
 	
@@ -418,6 +476,31 @@ public class GUI extends Application
 		alert.setTitle("Message");
 		alert.setContentText(msg);
 		alert.show();	
+		return true;
+	}
+	
+	/*
+	 * Prototype: setPlayerTurn(String playerName)
+	 *   Purpose: Display which user is currently playing
+	 */
+	public boolean setPlayerTurn(String playerName)
+	{
+		String result = "Current Turn is: Player";
+		switch (playerName)
+		{
+			case "player1": result += " 1"; 
+				 break;
+			case "player2": result += " 2"; 
+				 break;
+			case "player3": result += " 3"; 
+				 break;
+			case "player4": result += " 4"; 
+				 break;
+			default:
+				 return false;
+		}
+		
+		playerInfo.setText(result);
 		return true;
 	}
 }
