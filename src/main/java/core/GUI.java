@@ -91,7 +91,8 @@ public class GUI extends Application
 		
 		/* TODO this needs to get the player hand */
 		TileRummyMain game = new TileRummyMain();
-		//dealHand();
+		game.initialize();
+		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 	}
 	
 	/*
@@ -364,11 +365,12 @@ public class GUI extends Application
 		return tempImageView;
 	}
 
-	public boolean dealHandHelper(ArrayList<Tile> playerHand)
+	public double dealHandHelper(ArrayList<Tile> playerHand, double totalRun)
 	{
 		ImageView tempImageView;
 		int i = 0;
-		
+		if(totalRun != 0)
+			totalRun -= screenWidth*0.0725;
 		for(Tile tile:playerHand)
 		{
 			/* Set drag and drop events */		
@@ -379,30 +381,31 @@ public class GUI extends Application
 			tempImageView.setFitWidth(screenWidth*0.0225);
 
 			//Set Pos
-			tempImageView.setFitWidth(screenWidth - screenWidth*0.10 + screenWidth); 
-			tempImageView.setFitHeight(screenHeight/16 + screenHeight*0.06);
-			tempImageView.setX(screenWidth - screenWidth*0.92 + i*(screenWidth - screenWidth*0.10 + screenWidth)); 
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			tempImageView.setX(totalRun + screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
 			tempImageView.setY(screenHeight - screenHeight*0.2025); 
 			i += 1;
 			root.getChildren().add(tempImageView);
 		}
-		return true;
+		
+		totalRun = (screenWidth - screenWidth*0.92 + i*screenWidth*0.025);
+		return totalRun;
 	}
 	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	 *   purpose: deal each card to player
 	 * */
-	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
+	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand)
 	{
-		ImageView tempImageView;
-		int i = 0;
+		double totalRun = 0;
 		sayMsg("Hands being dealt");
-		dealHandHelper(p1Hand);
-		dealHandHelper(p2Hand);
-		dealHandHelper(p3Hand);
-		dealHandHelper(p4Hand);
-		return false;
+		totalRun = dealHandHelper(p1Hand, totalRun);
+		totalRun = dealHandHelper(p2Hand, totalRun);
+		dealHandHelper(p3Hand, totalRun);
+		return true;
 	}
 	
 	/*
