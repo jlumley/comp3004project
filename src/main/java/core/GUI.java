@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -63,6 +64,8 @@ public class GUI extends Application
 	private Pane root;
 	private Scene scene;
 	private Image tempImage;
+	private static Text playerInfo;
+	private TileRummyMain game;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -80,14 +83,21 @@ public class GUI extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{	
+		/* Set up GUI */
 		setPanePos();	
 		root = new Pane();
 		scene = new Scene(root, screenWidth, screenHeight);
-		deck = new HashMap<String, Image>();
 		setUpscene();
 		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
-		placeDeck(TileRummyMain.buildDeck(suites, values));
+		
+		/* Set up game */
+		game = new TileRummyMain();
+		game.initialize();
+		placeDeck(game.initDeck);
+		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+		
+		deck = new HashMap<String, Image>();
 	}
 	
 	/*
@@ -166,7 +176,7 @@ public class GUI extends Application
 					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
 			
 			player1BoardImage = new Image(new FileInputStream(image_dir + "playerBoard.jpg"), 
-					screenWidth - 0.05*screenWidth, screenHeight ,true,true);
+					screenWidth - 0.25*screenWidth, screenHeight ,true,true);
 
 			player2BoardImage = new Image(new FileInputStream(image_dir + "sideBoard.jpg"), 
 					screenWidth, (screenHeight - 0.15*screenHeight)*0.9,true,true);
@@ -194,8 +204,8 @@ public class GUI extends Application
 		imgDeckView.setY(screenHeight/16 + screenHeight*0.05); 
 		
 		/* Player bottom of screen */
-		imgPlayer1View.setX(screenWidth - screenWidth*0.99); 
-		imgPlayer1View.setY(screenHeight - screenHeight*0.1025); 
+		imgPlayer1View.setX(screenWidth - screenWidth*0.92); 
+		imgPlayer1View.setY(screenHeight - screenHeight*0.2025); 
 				
 		/* Left side player*/
 		imgPlayer2View.setX(0); 
@@ -209,8 +219,15 @@ public class GUI extends Application
 		imgPlayer4View.setX(screenWidth - screenWidth*0.05); 
 		imgPlayer4View.setY(screenHeight/16 + screenHeight*0.05); 
 		
+		/* Set text fields */
+		playerInfo = new Text();
+		playerInfo.setFont(new Font(50));
+		playerInfo.setText("Current Turn is: Player 1");
+		playerInfo.setY(screenWidth - screenWidth*0.465);
+		playerInfo.setX(0);
+		
 	    root.getChildren().addAll(imgDeckView, imgPlayer1View, imgPlayer2View, 
-	    		imgPlayer3View, imgPlayer4View);
+	    		imgPlayer3View, imgPlayer4View, playerInfo);
 	    
 	    return true;
 	}
@@ -261,11 +278,12 @@ public class GUI extends Application
 		
 		btnExit.setLayoutX(screenWidth/2);
 		btnExit.setLayoutY(screenHeight/2);
+		
 		//Set events
 		btnStart.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
-				//startGame();
+				game.playGame();
 			}
 		});
 		
@@ -291,19 +309,6 @@ public class GUI extends Application
 		screenWidth = screenSize.width;
 		screenHeight = 	screenSize.height;
 	}
-/*
-    private void enableDragging(Node node) {
-        final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
-        node.setOnMousePressed(event -> mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY())));
-        node.setOnMouseDragged(event -> {
-            double deltaX = event.getSceneX() - mouseAnchor.get().getX();
-            double deltaY = event.getSceneY() - mouseAnchor.get().getY();
-            //node.relocate(node.getLayoutX() + deltaX, node.getLayoutY() + deltaY);
-            //mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
-            
-        });
-    }
-    */
 	
 	/* --------------------------------------------------------------------------------
 	 * 
@@ -360,13 +365,6 @@ public class GUI extends Application
 		return tempImageView;
 	}
 	private ImageView setUpCardEvents(Image imageHolder) {
-		final ImageView imgView = new ImageView(imageHolder);
-		final DoubleProperty tempX = new SimpleDoubleProperty();
-		final DoubleProperty tempY = new SimpleDoubleProperty();
-		final DoubleProperty dragX = new SimpleDoubleProperty();
-		final DoubleProperty dragY = new SimpleDoubleProperty();
-		final DoubleProperty tempX2 = new SimpleDoubleProperty();
-		final DoubleProperty tempY2 = new SimpleDoubleProperty();
 		
 		ImageView tempImageView = new ImageView(imageHolder);
 		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -379,78 +377,103 @@ public class GUI extends Application
 		});
 		return tempImageView;
 	}
-/*
-	private ImageView setUpCardEvents(Image imageHolder) 
+
+	public boolean dealHandPlayer1(ArrayList<Tile> playerHand)
 	{
-		final ObjectProperty<Point2D> anchor = new SimpleObjectProperty<>();
-		final ImageView imgView = new ImageView(imageHolder);
-		final DoubleProperty tempX = new SimpleDoubleProperty();
-		final DoubleProperty tempY = new SimpleDoubleProperty();
-		final DoubleProperty dragX = new SimpleDoubleProperty();
-		final DoubleProperty dragY = new SimpleDoubleProperty();
-		final DoubleProperty tempX2 = new SimpleDoubleProperty();
-		final DoubleProperty tempY2 = new SimpleDoubleProperty();
+		ImageView tempImageView;
+		int i = 0;
 
-		    
-		ImageView tempImageView = new ImageView(imageHolder);
-		tempImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
-	        public void handle(MouseEvent event) 
-	        {
-	        	tempImageView.setVisible(false);
-	            ClipboardContent content = new ClipboardContent();
-	            content.putImage(imageHolder);
-	            Dragboard db = tempImageView.startDragAndDrop(TransferMode.ANY);
-	            db.setDragView(imageHolder,screenWidth*0.0225 ,screenHeight/19);
-	            db.setContent(content); 
-	            event.consume();
-	        }
-	    });
-	    
-	    imgView.setOnDragOver(new EventHandler<DragEvent>(){
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage());
 
-	        @Override
-	        public void handle(DragEvent event) {
-	            imgView.toFront();
-	            
-	            dragX.set(event.getSceneX() - anchor.get().getX());
-	            dragY.set(event.getSceneY() - anchor.get().getY());
-	            imgView.setOpacity(0.5);
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
 
-	            tempX2.set(tempX.get() + dragX.get());
-	            tempY2.set(tempY.get() + dragY.get());
-
-	            imgView.setTranslateX(tempX2.get());
-	            imgView.setTranslateY(tempY2.get());
-
-	            event.consume();
-	        }
-	    });	
-	    
-	    imgView.setOnDragDone(new EventHandler<DragEvent>() {
-	        public void handle(DragEvent event) 
-	        {
-	            ClipboardContent content = new ClipboardContent();
-	            content.putImage(imageHolder);
-	            Dragboard db = imgView.startDragAndDrop(TransferMode.ANY);
-	            db.setDragView(imageHolder, screenWidth*0.0225, screenHeight/19); 
-	            db.setContent(content); 
-	            tempImageView.setVisible(true);
-	            event.consume();	        
-	        }
-	    });
-	    
-	    return tempImageView;
+			//Set Pos
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
+			tempImageView.setY(screenHeight - screenHeight*0.2025); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		
+		return true;
 	}
- */
+
+	public boolean dealHandPlayer2(ArrayList<Tile> playerHand)
+	{
+		ImageView tempImageView;
+		int i = 1;
+
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage());
+
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+
+			//Set Pos
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			tempImageView.setX(screenWidth*0.0125); 
+			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		return true;
+	}
+	public boolean dealHandPlayer3(ArrayList<Tile> playerHand)
+	{
+		ImageView tempImageView;
+		int i = 0;
+
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage());
+
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+
+			//Set Pos
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			
+			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
+			tempImageView.setY(screenHeight*0.025); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		
+		return true;
+	}
 	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	 *   purpose: deal each card to player
 	 * */
-	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
+	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand)
 	{
-		sayMsg("Hand being dealt");
-		return false;
+		double totalRun = 0;
+		sayMsg("Hands being dealt");
+		
+		sortHand(p1Hand);
+		sortHand(p2Hand);
+		sortHand(p3Hand);
+		
+		dealHandPlayer1(sortHand(p1Hand));
+		dealHandPlayer2(sortHand(p2Hand));
+		dealHandPlayer3(sortHand(p3Hand));
+		return true;
 	}
 	
 	/*
@@ -464,6 +487,71 @@ public class GUI extends Application
 		alert.setContentText(msg);
 		alert.show();	
 		return true;
+	}
+	
+	/*
+	 * Prototype: setPlayerTurn(String playerName)
+	 *   Purpose: Display which user is currently playing
+	 */
+	public static boolean setPlayerTurn(String playerName)
+	{
+		String result = "Current Turn is: Player";
+		switch (playerName)
+		{
+			case "player1": result += " 1"; 
+				 break;
+			case "player2": result += " 2"; 
+				 break;
+			case "player3": result += " 3"; 
+				 break;
+			case "player4": result += " 4"; 
+				 break;
+			default:
+				 return false;
+		}
+		
+		playerInfo.setText(result);
+		return true;
+	}
+	public ArrayList<Tile> sortHand(ArrayList<Tile> tempHand)
+	{
+		ArrayList<Tile> masterHand = new ArrayList<Tile>();
+		ArrayList<Tile> redHand = new ArrayList<Tile>();
+		ArrayList<Tile> blueHand = new ArrayList<Tile>();
+		ArrayList<Tile> orangeHand = new ArrayList<Tile>();
+		ArrayList<Tile> greenHand = new ArrayList<Tile>();
+		
+		for(Tile temp:tempHand)
+		{
+			if(temp.getColour().equals("O"))
+			{
+				orangeHand.add(temp);
+			}
+			else if(temp.getColour().equals("G"))
+			{
+				greenHand.add(temp);
+			}
+			else if(temp.getColour().equals("B"))
+			{
+				blueHand.add(temp);
+			}
+			else if(temp.getColour().equals("R"))
+			{
+				redHand.add(temp);
+			}
+		}
+		
+		Collections.sort(orangeHand, new customComparitor());
+		Collections.sort(greenHand, new customComparitor());
+		Collections.sort(blueHand, new customComparitor());
+		Collections.sort(redHand, new customComparitor());
+		
+		masterHand.addAll(orangeHand);
+		masterHand.addAll(greenHand);
+		masterHand.addAll(blueHand);
+		masterHand.addAll(redHand);
+		
+		return masterHand;
 	}
 }
 

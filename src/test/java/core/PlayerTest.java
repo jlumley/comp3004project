@@ -142,7 +142,7 @@ public class PlayerTest extends TestCase
 			temp.add(new Tile("O", 8));
 			temp.add(new Tile("O", 9));
 			table.add(temp);
-
+			testPlayer.showHand();
 			
 			table = testPlayer.playAllTiles(table);
 			
@@ -156,6 +156,52 @@ public class PlayerTest extends TestCase
 				System.out.println();
 			}
 			assertEquals(1, testPlayer.getHand().size());
-		}
+		} 
+		
+		public void testPlayAllCardsInHand() { 
+			Player testPlayer = new Player();
+			testPlayer.addTile(new Tile("R", 1));
+			testPlayer.addTile(new Tile("R", 2));
+			testPlayer.addTile(new Tile("R", 3));
+			testPlayer.addTile(new Tile("R", 7));
+			
+			testPlayer.addTile(new Tile("B", 5));
+			testPlayer.addTile(new Tile("B", 6));
+			testPlayer.addTile(new Tile("B", 7));
+			testPlayer.addTile(new Tile("B", 8));
+			
+			testPlayer.addTile(new Tile("G", 11));
+			testPlayer.addTile(new Tile("G", 12));
+			testPlayer.addTile(new Tile("G", 13));
+			
+			testPlayer.addTile(new Tile("R", 4));
+			testPlayer.addTile(new Tile("G", 4));
+			testPlayer.addTile(new Tile("O", 4));
+			
+			testPlayer.addTile(new Tile("R", 9));
+			testPlayer.addTile(new Tile("B", 9));
+			testPlayer.addTile(new Tile("G", 9));
+			
+			testPlayer.addTile(new Tile("O", 6));
+			
+			ArrayList<ArrayList<Tile>> table = new ArrayList<ArrayList<Tile>>();
+
+			testPlayer.showHand();
+			
+			table = testPlayer.playAllTiles();
+			
+			testPlayer.showHand();
+			System.out.println();
+			System.out.println("Melds on Table:");
+			for (ArrayList<Tile> meld: table) {
+				for (Tile t : meld) {
+					System.out.print(t.toString()+ " ");
+				}
+				System.out.println();
+			}
+			testPlayer.showHand();
+			assertEquals(2, testPlayer.getHand().size());
+		} 
+		
 		
 }

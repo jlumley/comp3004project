@@ -4,7 +4,7 @@ import java.util.*;
 
 public class TileRummyMain{
 	
-	public static final String[] suites = {"R", "B", "G", "Y"};
+	public static final String[] suites = {"R", "B", "G", "O"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
 	ArrayList<Tile> initDeck = new ArrayList<Tile>();
@@ -52,7 +52,7 @@ public class TileRummyMain{
 			player0.drawTile(initDeck);
 			player1.drawTile(initDeck);
 			player2.drawTile(initDeck);
-			//player3.drawTile(initDeck);
+			player3.drawTile(initDeck);
 		}
 	}
 
@@ -135,11 +135,16 @@ public class TileRummyMain{
 			System.out.print(playerTurn + " ");
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
+				//Added in to set the text on GUI to the current player
+				GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1){
 				System.out.println("AI 1's Turn");
+				GUI.setPlayerTurn("player2");
 			}else if(playerTurn == 2){
 				System.out.println("AI 2's Turn");
+				GUI.setPlayerTurn("player3");
 			}else if(playerTurn == 3){
+				GUI.setPlayerTurn("player4");
 				System.out.println("AI 3's Turn");
 				playerTurn = playerTurn%3;
 				break;

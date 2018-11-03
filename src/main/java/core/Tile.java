@@ -11,7 +11,7 @@ public class Tile implements Comparable<Tile>
 	private static final String imageDir = "src/main/resources/core/tiles/";
 	private int value;
 	private String colour;
-
+	private boolean enableMove;
 	private static int id_count = 0;
 	private int id;
 
@@ -26,6 +26,7 @@ public class Tile implements Comparable<Tile>
 	public float getX() {return x;}
 	public float getY() {return y;}
 	
+
 	public Tile(String tileColour, int value) 
 	{
 		//Initialize coordinates
@@ -41,6 +42,7 @@ public class Tile implements Comparable<Tile>
 		{
 			setValue(value);
 		}
+		
 		setColour(tileColour);
 		this.id = id_count;
 		this.id_count += 1;
@@ -114,10 +116,10 @@ public class Tile implements Comparable<Tile>
 		if (o == null) {
 			return 0; 
 		}
-		if (this.value == o.value) {
-			return this.colour.compareTo(o.colour);
+		if (this.colour == o.colour) {
+			return this.value - o.value;
 		} else {
-			return Integer.compare(this.value, o.value);
+			return this.colour.compareTo(o.colour);
 		}
 	}
 	public boolean setx(float pos) 
