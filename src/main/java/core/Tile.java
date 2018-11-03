@@ -11,7 +11,7 @@ public class Tile implements Comparable<Tile>
 	private static final String imageDir = "src/main/resources/core/tiles/";
 	private int value;
 	private String colour;
-
+	private boolean enableMove;
 	private static int id_count = 0;
 	private int id;
 
