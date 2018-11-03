@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -63,7 +64,8 @@ public class GUI extends Application
 	private Pane root;
 	private Scene scene;
 	private Image tempImage;
-	private Text playerInfo;
+	private static Text playerInfo;
+	private TileRummyMain game;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -81,20 +83,21 @@ public class GUI extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{	
+		/* Set up GUI */
 		setPanePos();	
 		root = new Pane();
 		scene = new Scene(root, screenWidth, screenHeight);
-		deck = new HashMap<String, Image>();
 		setUpscene();
 		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
-		placeDeck(TileRummyMain.buildDeck(suites, values));
 		
-		/* TODO this needs to get the player hand */
-		TileRummyMain game = new TileRummyMain();
+		/* Set up game */
+		game = new TileRummyMain();
 		game.initialize();
+		placeDeck(game.initDeck);
 		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-		setPlayerTurn("player3");
+		
+		deck = new HashMap<String, Image>();
 	}
 	
 	/*
@@ -275,11 +278,12 @@ public class GUI extends Application
 		
 		btnExit.setLayoutX(screenWidth/2);
 		btnExit.setLayoutY(screenHeight/2);
+		
 		//Set events
 		btnStart.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
-				//startGame();
+				game.playGame();
 			}
 		});
 		
@@ -400,6 +404,7 @@ public class GUI extends Application
 		
 		return true;
 	}
+
 	public boolean dealHandPlayer2(ArrayList<Tile> playerHand)
 	{
 		ImageView tempImageView;
@@ -460,9 +465,14 @@ public class GUI extends Application
 	{
 		double totalRun = 0;
 		sayMsg("Hands being dealt");
-		dealHandPlayer1(p1Hand);
-		dealHandPlayer2(p2Hand);
-		dealHandPlayer3(p3Hand);
+		
+		sortHand(p1Hand);
+		sortHand(p2Hand);
+		sortHand(p3Hand);
+		
+		dealHandPlayer1(sortHand(p1Hand));
+		dealHandPlayer2(sortHand(p2Hand));
+		dealHandPlayer3(sortHand(p3Hand));
 		return true;
 	}
 	
@@ -483,7 +493,7 @@ public class GUI extends Application
 	 * Prototype: setPlayerTurn(String playerName)
 	 *   Purpose: Display which user is currently playing
 	 */
-	public boolean setPlayerTurn(String playerName)
+	public static boolean setPlayerTurn(String playerName)
 	{
 		String result = "Current Turn is: Player";
 		switch (playerName)
@@ -502,6 +512,46 @@ public class GUI extends Application
 		
 		playerInfo.setText(result);
 		return true;
+	}
+	public ArrayList<Tile> sortHand(ArrayList<Tile> tempHand)
+	{
+		ArrayList<Tile> masterHand = new ArrayList<Tile>();
+		ArrayList<Tile> redHand = new ArrayList<Tile>();
+		ArrayList<Tile> blueHand = new ArrayList<Tile>();
+		ArrayList<Tile> orangeHand = new ArrayList<Tile>();
+		ArrayList<Tile> greenHand = new ArrayList<Tile>();
+		
+		for(Tile temp:tempHand)
+		{
+			if(temp.getColour().equals("O"))
+			{
+				orangeHand.add(temp);
+			}
+			else if(temp.getColour().equals("G"))
+			{
+				greenHand.add(temp);
+			}
+			else if(temp.getColour().equals("B"))
+			{
+				blueHand.add(temp);
+			}
+			else if(temp.getColour().equals("R"))
+			{
+				redHand.add(temp);
+			}
+		}
+		
+		Collections.sort(orangeHand, new customComparitor());
+		Collections.sort(greenHand, new customComparitor());
+		Collections.sort(blueHand, new customComparitor());
+		Collections.sort(redHand, new customComparitor());
+		
+		masterHand.addAll(orangeHand);
+		masterHand.addAll(greenHand);
+		masterHand.addAll(blueHand);
+		masterHand.addAll(redHand);
+		
+		return masterHand;
 	}
 }
 

@@ -135,11 +135,16 @@ public class TileRummyMain{
 			System.out.print(playerTurn + " ");
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
+				//Added in to set the text on GUI to the current player
+				GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1){
 				System.out.println("AI 1's Turn");
+				GUI.setPlayerTurn("player2");
 			}else if(playerTurn == 2){
 				System.out.println("AI 2's Turn");
+				GUI.setPlayerTurn("player3");
 			}else if(playerTurn == 3){
+				GUI.setPlayerTurn("player4");
 				System.out.println("AI 3's Turn");
 				playerTurn = playerTurn%3;
 				break;
