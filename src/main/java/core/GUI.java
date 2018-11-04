@@ -67,6 +67,7 @@ public class GUI extends Application
 	private Image tempImage;
 	private static Text playerInfo;
 	private TileRummyMain game;
+	private static Button btnFinish;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -97,8 +98,8 @@ public class GUI extends Application
 		game.initialize();
 		placeDeck(game.initDeck);
 		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
-		
 		deck = new HashMap<String, Image>();
+		game.playGame();
 	}
 	
 	/*
@@ -223,7 +224,7 @@ public class GUI extends Application
 		/* Set text fields */
 		playerInfo = new Text();
 		playerInfo.setFont(new Font(50));
-		playerInfo.setText("Current Turn is: Player 1");
+		playerInfo.setText("");//TODO setText not updating right now so just using sayMsg
 		playerInfo.setY(screenWidth - screenWidth*0.465);
 		playerInfo.setX(0);
 		
@@ -271,19 +272,20 @@ public class GUI extends Application
 	private void handleButtonEvents() 
 	{
 		//Create buttons 
-		Button btnStart = new Button("Start Game");
+		btnFinish = new Button("Finish Move");
 		Button btnExit = new Button("Exit Game");
 	
-		btnStart.setLayoutX(screenWidth/2 + 100);
-		btnStart.setLayoutY(screenHeight/2);
+		btnFinish.setLayoutX(screenWidth/2 + 100);
+		btnFinish.setLayoutY(screenHeight*0.9);
 		
 		btnExit.setLayoutX(screenWidth/2);
-		btnExit.setLayoutY(screenHeight/2);
+		btnExit.setLayoutY(screenHeight*0.9);
 		
 		//Set events
-		btnStart.setOnAction(new EventHandler<ActionEvent>() {
+		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
+				btnFinish.setDisable(true);
 				game.playGame();
 			}
 		});
@@ -295,7 +297,8 @@ public class GUI extends Application
 			}
 		});
 		
-		root.getChildren().addAll(btnStart, btnExit);
+		root.getChildren().addAll(btnFinish, btnExit);
+		
 	}
 	
 	/* GUI Helpers */
@@ -492,7 +495,7 @@ public class GUI extends Application
 		dealHandPlayer1(sortHand(p1Hand));
 		dealHandPlayer2(sortHand(p2Hand));
 		dealHandPlayer3(sortHand(p3Hand));
-		dealHandPlayer3(sortHand(p4Hand));
+
 		return true;
 	}
 	
@@ -500,7 +503,7 @@ public class GUI extends Application
 	 * Prototype: sayMsg(String msg, int delay)
 	 * 	 Purpose: General function to prompt a message and add a delay
 	 * */
-	public boolean sayMsg(String msg)
+	public static boolean sayMsg(String msg)
 	{
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Message");
@@ -516,21 +519,38 @@ public class GUI extends Application
 	public static boolean setPlayerTurn(String playerName)
 	{
 		String result = "Current Turn is: Player";
+		
+		try 
+		{
+			//This is added in to show each players turn
+			TimeUnit.SECONDS.sleep(1);
+		} 
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
+		
 		switch (playerName)
 		{
-			case "player1": result += " 1"; 
-				 break;
+			case "player1": 
+				result += " 1"; 
+				btnFinish.setDisable(false);
+				break;
 			case "player2": result += " 2"; 
-				 break;
+				btnFinish.setDisable(true); 
+				break;
 			case "player3": result += " 3"; 
-				 break;
+				btnFinish.setDisable(true); 
+				break;
 			case "player4": result += " 4"; 
-				 break;
+				btnFinish.setDisable(true); 
+				break;
 			default:
 				 return false;
 		}
+		sayMsg(result);
+		playerInfo.setText("");
 		
-		playerInfo.setText(result);
 		return true;
 	}
 	public ArrayList<Tile> sortHand(ArrayList<Tile> tempHand)

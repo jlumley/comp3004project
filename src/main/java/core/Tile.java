@@ -16,15 +16,15 @@ public class Tile implements Comparable<Tile>
 	private int id;
 
 	private Image tileImage;
-	private double x;
-	private double y;
+	private float x;
+	private float y;
 	
 	public boolean joker = false;
 	public String getColour() { return colour;}
 	public int getValue() { return value;}
 	public String getSuite() { return colour;}
-	public double getX() {return x;}
-	public double getY() {return y;}
+	public float getX() {return x;}
+	public float getY() {return y;}
 	
 
 	public Tile(String tileColour, int value) 
@@ -137,4 +137,6 @@ public class Tile implements Comparable<Tile>
 		y = pos;
 		return true;
 	}
+	
+	
 }
