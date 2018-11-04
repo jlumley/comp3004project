@@ -3,6 +3,7 @@ package core;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.print.Printable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -95,7 +96,7 @@ public class GUI extends Application
 		game = new TileRummyMain();
 		game.initialize();
 		placeDeck(game.initDeck);
-		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
 		
 		deck = new HashMap<String, Image>();
 	}
@@ -350,10 +351,8 @@ public class GUI extends Application
 		Image imageHolder = card.getImage();
 		
 		/* Set drag and drop events */
-		String valueString1 = Integer.toString(card.getValue());
-		String valueString2 = card.getSuite();
-		String valueString3 = valueString2 + valueString1;
-		tempImageView = setUpCardEvents(imageHolder,valueString3);
+
+		tempImageView = setUpCardEvents(imageHolder, card);
 		
 		//Set width and height
 		tempImageView.setFitHeight(screenHeight/19);
@@ -368,7 +367,7 @@ public class GUI extends Application
 		return tempImageView;
 	}
 
-	private ImageView setUpCardEvents(Image imageHolder, String id) {
+	private ImageView setUpCardEvents(Image imageHolder, Tile tile) {
 		
 		ImageView tempImageView = new ImageView(imageHolder);
 		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -377,6 +376,8 @@ public class GUI extends Application
 				tempImageView.setX(event.getSceneX());
 				tempImageView.setY(event.getSceneY());
 				tempImageView.setVisible(true);
+				// if card being dragged in on the table, remove it
+				System.out.println(tile.toString());
 			}
 		});
 		tempImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -388,9 +389,10 @@ public class GUI extends Application
 				tempImageView.getId();
 				System.out.println(xCord + " " + yCord + " " + tempImageView.getId());
 				game.checkPerimeter(xCord,yCord);
+				// add card to array list if 
 			}
 		});
-		tempImageView.setId(id);
+		tempImageView.setId(tile.toString());
 		return tempImageView;
 	}
 
@@ -402,10 +404,7 @@ public class GUI extends Application
 		for(Tile tile:playerHand)
 		{
 			/* Set drag and drop events */		
-			String valueString1 = Integer.toString(tile.getValue());
-			String valueString2 = tile.getSuite();
-			String valueString3 = valueString2 + valueString1;
-			tempImageView = setUpCardEvents(tile.getImage(), valueString3);
+			tempImageView = setUpCardEvents(tile.getImage(), tile);
 
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
@@ -431,11 +430,8 @@ public class GUI extends Application
 
 		for(Tile tile:playerHand)
 		{
-			String valueString1 = Integer.toString(tile.getValue());
-			String valueString2 = tile.getSuite();
-			String valueString3 = valueString2 + valueString1;
 			/* Set drag and drop events */		
-			tempImageView = setUpCardEvents(tile.getImage(), valueString3);
+			tempImageView = setUpCardEvents(tile.getImage(), tile);
 
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
@@ -459,11 +455,8 @@ public class GUI extends Application
 
 		for(Tile tile:playerHand)
 		{
-			String valueString1 = Integer.toString(tile.getValue());
-			String valueString2 = tile.getSuite();
-			String valueString3 = valueString2 + valueString1;
 			/* Set drag and drop events */		
-			tempImageView = setUpCardEvents(tile.getImage(), valueString3);
+			tempImageView = setUpCardEvents(tile.getImage(), tile);
 
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
@@ -486,7 +479,7 @@ public class GUI extends Application
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	 *   purpose: deal each card to player
 	 * */
-	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand)
+	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
 		double totalRun = 0;
 		sayMsg("Hands being dealt");
@@ -494,10 +487,12 @@ public class GUI extends Application
 		sortHand(p1Hand);
 		sortHand(p2Hand);
 		sortHand(p3Hand);
+		sortHand(p4Hand);
 		
 		dealHandPlayer1(sortHand(p1Hand));
 		dealHandPlayer2(sortHand(p2Hand));
 		dealHandPlayer3(sortHand(p3Hand));
+		dealHandPlayer3(sortHand(p4Hand));
 		return true;
 	}
 	
