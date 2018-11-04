@@ -349,9 +349,12 @@ public class GUI extends Application
 
 		Image imageHolder = card.getImage();
 		
-		/* Set drag and drop events */		
-		tempImageView = setUpCardEvents(imageHolder);
-
+		/* Set drag and drop events */
+		String valueString1 = Integer.toString(card.getValue());
+		String valueString2 = card.getSuite();
+		String valueString3 = valueString2 + valueString1;
+		tempImageView = setUpCardEvents(imageHolder,valueString3);
+		
 		//Set width and height
 		tempImageView.setFitHeight(screenHeight/19);
 		tempImageView.setFitWidth(screenWidth*0.0225);
@@ -364,7 +367,8 @@ public class GUI extends Application
 		
 		return tempImageView;
 	}
-	private ImageView setUpCardEvents(Image imageHolder) {
+
+	private ImageView setUpCardEvents(Image imageHolder, String id) {
 		
 		ImageView tempImageView = new ImageView(imageHolder);
 		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -375,6 +379,18 @@ public class GUI extends Application
 				tempImageView.setVisible(true);
 			}
 		});
+		tempImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				double xCord = tempImageView.getX();
+				double yCord = tempImageView.getY();
+				tempImageView.getId();
+				System.out.println(xCord + " " + yCord + " " + tempImageView.getId());
+				game.checkPerimeter(xCord,yCord);
+			}
+		});
+		tempImageView.setId(id);
 		return tempImageView;
 	}
 
@@ -386,7 +402,10 @@ public class GUI extends Application
 		for(Tile tile:playerHand)
 		{
 			/* Set drag and drop events */		
-			tempImageView = setUpCardEvents(tile.getImage());
+			String valueString1 = Integer.toString(tile.getValue());
+			String valueString2 = tile.getSuite();
+			String valueString3 = valueString2 + valueString1;
+			tempImageView = setUpCardEvents(tile.getImage(), valueString3);
 
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
@@ -412,8 +431,11 @@ public class GUI extends Application
 
 		for(Tile tile:playerHand)
 		{
+			String valueString1 = Integer.toString(tile.getValue());
+			String valueString2 = tile.getSuite();
+			String valueString3 = valueString2 + valueString1;
 			/* Set drag and drop events */		
-			tempImageView = setUpCardEvents(tile.getImage());
+			tempImageView = setUpCardEvents(tile.getImage(), valueString3);
 
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
@@ -437,8 +459,11 @@ public class GUI extends Application
 
 		for(Tile tile:playerHand)
 		{
+			String valueString1 = Integer.toString(tile.getValue());
+			String valueString2 = tile.getSuite();
+			String valueString3 = valueString2 + valueString1;
 			/* Set drag and drop events */		
-			tempImageView = setUpCardEvents(tile.getImage());
+			tempImageView = setUpCardEvents(tile.getImage(), valueString3);
 
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);

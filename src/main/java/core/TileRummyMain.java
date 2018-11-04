@@ -197,4 +197,16 @@ public class TileRummyMain{
 		}
 		return holder;
 	}
+
+	public void checkPerimeter(double xCord, double yCord) {
+		if(fieldSize == 0) {
+			
+		}
+		for(int i = 0; i < fieldSize; i++) {
+			for(int x = 0; x < field.get(i).size(); x++) {
+				System.out.print(field.get(i).get(x).getX() + " .");
+				System.out.println(field.get(i).get(x).getY());
+			}
+		}
+	}
 }
