@@ -380,7 +380,10 @@ public class GUI extends Application
 				tempImageView.setY(event.getSceneY());
 				tempImageView.setVisible(true);
 				// if card being dragged in on the table, remove it
-				System.out.println(tile.toString());
+				GUI.removeTileFromTable(tile, game.field);
+				game.player0.removeTileFromHand(tile);
+				System.out.println(game.player0.getHand());
+				
 			}
 		});
 		tempImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -392,11 +395,24 @@ public class GUI extends Application
 				tempImageView.getId();
 				System.out.println(xCord + " " + yCord + " " + tempImageView.getId());
 				game.checkPerimeter(xCord,yCord);
-				// add card to array list if 
+				// add card to array list if
 			}
 		});
 		tempImageView.setId(tile.toString());
 		return tempImageView;
+	}
+	
+	public static boolean removeTileFromTable(Tile tile, ArrayList<ArrayList<Tile>> table) {
+		//return true if tile was removed from table
+		for (ArrayList<Tile> meld: table) {
+			for (Tile t: meld) {
+				if (tile.getId() == t.getId()) {
+					meld.remove(t);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean dealHandPlayer1(ArrayList<Tile> playerHand)

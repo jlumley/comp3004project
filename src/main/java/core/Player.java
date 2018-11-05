@@ -426,6 +426,16 @@ public class Player {
 		}
 		return returnB;
   }
+	
+	public boolean removeTileFromHand(Tile tile) {
+		for (Tile t: this.hand) {
+			if (tile.getId() == t.getId()) {
+				this.hand.remove(t);
+				return true;
+			}
+		}
+		return false;
+	}
 }
 class Hand {
 	public int [][]cards = new int[4][13];
