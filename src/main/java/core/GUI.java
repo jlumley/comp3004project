@@ -382,6 +382,7 @@ public class GUI extends Application
 				// if card being dragged in on the table, remove it
 				GUI.removeTileFromTable(tile, game.field);
 				game.player0.removeTileFromHand(tile);
+				System.out.println(game.player0.getHand());
 				
 			}
 		});
