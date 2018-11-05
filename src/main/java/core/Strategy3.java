@@ -34,13 +34,41 @@ public class Strategy3 implements AIStrategy{
 			}
 			//(Observer) Ask game for the Hand sizes of all other players
 			if(existsAComparativelySmallHand()) { //If This has +3 than any of them: Play all Tiles possible
-				TileRummyMain.field = p3NewBoard; //replace old board with this new one
-				for(int i = 0; i < p3Melds.size(); i++) { 
-					TileRummyMain.addMend(p3Melds.get(i)); 
+				if(TileRummyMain.field.size() != p3NewBoard.size()) { //check num of melds
+					TileRummyMain.field = p3NewBoard; //replace old board with this new one
+					for(int i = 0; i < p3Melds.size(); i++) { 
+						TileRummyMain.addMend(p3Melds.get(i)); 
+					}
+					return;
 				}
+				else { //if equal num melds
+					for(int i = 0; i < TileRummyMain.field.size(); i++) { //check size of each meld
+						if(TileRummyMain.field.get(i).size() != p3NewBoard.get(i).size()) {
+							TileRummyMain.field = p3NewBoard; //replace old board with this new one
+							for(int k = 0; k < p3Melds.size(); k++) { 
+								TileRummyMain.addMend(p3Melds.get(k)); 
+							}
+							return;
+						}
+					}
+				}
+				//otherwise
+				System.out.println("p3 could play but has no tile to play");
+				returnCardsAndDrawCard(p3Melds);
 			}
 			else {//Else: keep all in-hand melds, and try adding to existing melds on board
-				TileRummyMain.field = p3NewBoard; //replace old board with this new one
+				if(TileRummyMain.field.size() != p3NewBoard.size()) { //check num of melds
+					TileRummyMain.field = p3NewBoard; //replace old board with this new one
+					return;
+				}
+				else { //if equal num melds
+					for(int i = 0; i < TileRummyMain.field.size(); i++) { //check size of each meld
+						if(TileRummyMain.field.get(i).size() != p3NewBoard.get(i).size()) {
+							TileRummyMain.field = p3NewBoard; //replace old board with this new one
+							return;
+						}
+					}
+				}
 				returnCardsAndDrawCard(p3Melds);
 			}
 		}
