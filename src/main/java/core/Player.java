@@ -438,6 +438,7 @@ public class Player {
 	}
 
 	public void addToDummyField(Tile tile, int arrayPos, ArrayList<ArrayList<Tile>> currField) {
+		checkInDummyField(tile);
 		boolean onDummy = false;
 		boolean onField = false;
 		if(arrayPos == 0) { // adds if nothing on the field
@@ -481,7 +482,7 @@ public class Player {
 						}
 					}
 				}	
-				if(!onField) {
+				if(!onField && !onDummy) {
 					ArrayList<Tile> dummyHand = new ArrayList<Tile>();
 					dummyHand.add(tile);
 					tilesOnField.add(dummyHand);
@@ -490,6 +491,22 @@ public class Player {
 			
 		System.out.println(tilesOnField);
 		}
+
+
+	private void checkInDummyField(Tile tile) {
+		for(int i = 0; i < tilesOnField.size(); i++) { // checks if in dummy array
+			for(int x = 0; x < tilesOnField.get(i).size(); x++) {
+				if( tilesOnField.get(i).get(x).getId() == tile.getId() ) {
+					tilesOnField.get(i).remove(x);
+				}
+			}
+		}
+		for(int a = 0; a < tilesOnField.size(); a++) { // deletes empty arrays
+			if(tilesOnField.get(a).size() == 0) {
+				tilesOnField.remove(a);
+			}
+		}
+	}
 }
 class Hand {
 	public int [][]cards = new int[4][13];
