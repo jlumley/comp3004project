@@ -1,5 +1,6 @@
 package core;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -70,5 +71,19 @@ public class TestGUI extends TestCase
 		/* Show winner this will happen at end of game */	
 		GUI gui = new GUI();
 		assertEquals(gui.sayMsg("Game Winner is: "), true);
+	}
+	
+	@Test
+	public void testRemoveTileFromTable() {
+		
+		Tile testTile = new Tile("O", 8);
+		ArrayList<ArrayList<Tile>> table = new ArrayList<ArrayList<Tile>>();
+		ArrayList<Tile> temp = new ArrayList<Tile>();
+		temp.add(new Tile("O", 7));
+		temp.add(testTile);
+		temp.add(new Tile("O", 9));
+		table.add(temp);
+		
+		assertEquals(true, GUI.removeTileFromTable(testTile, table));
 	}
 }

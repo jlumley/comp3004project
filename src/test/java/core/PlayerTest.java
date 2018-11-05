@@ -203,5 +203,15 @@ public class PlayerTest extends TestCase
 			assertEquals(2, testPlayer.getHand().size());
 		} 
 		
+		public void testRemoveTileFromHand() {
+			Tile tile = new Tile("O", 10);
+			Player p1 = new Player();
+			
+			p1.addTile(tile);
+			
+			assertEquals(true, p1.removeTileFromHand(tile));
+			assertEquals(false, p1.removeTileFromHand(new Tile("B", 3)));
+		}
+		
 		
 }

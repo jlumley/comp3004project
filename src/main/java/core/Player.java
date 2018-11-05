@@ -426,6 +426,60 @@ public class Player {
 		}
 		return returnB;
   }
+	
+	public boolean removeTileFromHand(Tile tile) {
+		for (Tile t: this.hand) {
+			if (tile.getId() == t.getId()) {
+				this.hand.remove(t);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void addToDummyField(Tile tile, int arrayPos, ArrayList<ArrayList<Tile>> currField) {
+		boolean onDummy = false;
+		if(arrayPos == 0) { // adds if nothing on the field
+			ArrayList<Tile> dummyHand = new ArrayList<Tile>();
+			dummyHand.add(tile);
+			tilesOnField.add(dummyHand);
+			System.out.println(tilesOnField);
+			}else {
+				double xTile = tile.getX();
+				double yTile = tile.getY();
+				
+				for(int i = 0; i < tilesOnField.size(); i++) { // check everything on the dummyField.
+					for(int x = 0; x < tilesOnField.get(i).size(); x++) { // current position
+						double xTile2 = tilesOnField.get(i).get(x).getX();
+						double xFinal = Math.abs(xTile - xTile2);
+						if(xFinal >= 0 && xFinal <= 22) {
+							double yTile2 = tilesOnField.get(i).get(x).getY();
+							double yFinal = Math.abs(yTile - yTile2);
+							if(yFinal >= 0 && xFinal <= 22) {
+								tilesOnField.get(i).add(tile);
+								onDummy = true;
+							}
+						}
+					}
+				}
+				if(!onDummy) {
+					for(int i = 0; i < currField.size(); i++) { // check everything on the dummyField.
+						for(int x = 0; x < currField.get(i).size(); x++) { // current position
+							double xTile2 = currField.get(i).get(x).getX();
+							double xFinal = Math.abs(xTile - xTile2);
+							if(xFinal >= 0 && xFinal <= 22) {
+								double yTile2 = tilesOnField.get(i).get(x).getY();
+								double yFinal = Math.abs(yTile - yTile2);
+								if(yFinal >= 0 && xFinal <= 22) {
+									tilesOnField.get(i).add(tile);
+								}
+							}
+						}
+					}
+				}
+			}
+		System.out.println(tilesOnField);
+		}
 }
 class Hand {
 	public int [][]cards = new int[4][13];

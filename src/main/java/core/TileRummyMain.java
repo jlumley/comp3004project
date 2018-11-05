@@ -198,15 +198,13 @@ public class TileRummyMain{
 		return holder;
 	}
 
-	public void checkPerimeter(double xCord, double yCord) {
-		if(fieldSize == 0) {
-			
-		}
-		for(int i = 0; i < fieldSize; i++) {
-			for(int x = 0; x < field.get(i).size(); x++) {
-				System.out.print(field.get(i).get(x).getX() + " .");
-				System.out.println(field.get(i).get(x).getY());
-			}
+	public void checkPerimeter(double xCord, double yCord, int tileInfo,Tile tile) {
+		if(player0.tilesOnField.size() == 0) {
+			System.out.println("1");
+			player0.addToDummyField(tile, 0, field); // only 0 when no other tiles on the field
+		}else {
+			System.out.println("3");
+			player0.addToDummyField(tile, 1, field);
 		}
 	}
 }
