@@ -228,15 +228,15 @@ public class AITest extends TestCase{
 		result.player3.addTile(new Tile("O", 12));
 		result.player3.addTile(new Tile("G", 12));
 		result.player3.addTile(new Tile("B", 12));
-		result.player3.addTile(new Tile("R", 5));
+		result.player3.addTile(new Tile("R", 10));
 		result.player3.playTurn(); //11a
 		System.out.println("Field: ");
 		result.showField();
 		assertNotNull(result.field.get(0));
 
-		result.player1.addTile(new Tile("R", 2));
-		result.player1.addTile(new Tile("R", 3));
-		result.player1.addTile(new Tile("R", 4));
+		result.player1.addTile(new Tile("R", 11));
+		result.player1.addTile(new Tile("R", 12));
+		result.player1.addTile(new Tile("R", 13));
 		result.player1.playTurn();
 		System.out.println("Field: ");
 		result.showField();
@@ -263,7 +263,7 @@ public class AITest extends TestCase{
 		result.showField();
 		assertNotNull(result.field.get(0));
 		
-		result.player3.addTile(new Tile("O", 1));
+		result.player3.addTile(new Tile("O", 10));
 		result.player3.addTile(new Tile("B", 8));
 		result.player3.addTile(new Tile("G", 2));
 		assertEquals(4, result.player3.getHand().size());
@@ -273,9 +273,9 @@ public class AITest extends TestCase{
 		result.showField();
 		assertEquals(5, result.player3.getHand().size());
 		
-		result.player1.addTile(new Tile("O", 2));
-		result.player1.addTile(new Tile("O", 3));
-		result.player1.addTile(new Tile("O", 4));
+		result.player1.addTile(new Tile("O", 11));
+		result.player1.addTile(new Tile("O", 12));
+		result.player1.addTile(new Tile("O", 13));
 		result.player1.playTurn();
 		System.out.println("Field: ");
 		result.showField();

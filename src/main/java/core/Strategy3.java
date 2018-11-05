@@ -12,7 +12,7 @@ public class Strategy3 implements AIStrategy{
 		System.out.println("Possible Melds in Hand: " + p3Melds);
 		//Check if still first turn (not yet played 30P)
 		if(TileRummyMain.player3.firstTurn == false) { //first turn has not passed yet
-			if(TileRummyMain.player1.checkPlays(p3Melds)) { //checks for >=30 size
+			if(TileRummyMain.player3.checkPlays(p3Melds)) { //checks for >=30 size
 				for(int i = 0; i < p3Melds.size(); i++) { //Play all the tiles it can
 					TileRummyMain.addMend(p3Melds.get(i)); //add all melds to board
 				}
