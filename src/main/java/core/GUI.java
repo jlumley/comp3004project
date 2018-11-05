@@ -99,8 +99,6 @@ public class GUI extends Application
 		game.initialize();
 		placeDeck(game.initDeck);
 	  dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-
-		deck = new HashMap<String, Image>();
 		game.playGame();
 	}
 	
