@@ -217,4 +217,47 @@ public class TileRummyMain{
 			player0.addToDummyField(tile, 1, field);
 		}
 	}
+	
+	public static boolean isValidTable(ArrayList<ArrayList<Tile>> table) {
+		for (ArrayList<Tile> meld: table) {
+			if (!validRun(meld) && !validSet(meld)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean validSet(ArrayList<Tile> set) {
+		if (set.size() > 4) return false;
+		Set<String> colours = new HashSet<>();
+		int value = set.get(0).getValue();
+		for (Tile t: set) {
+			if (t.getValue() != value) {
+				return false;
+			}
+			if (colours.contains(t.getColour())) {
+				return false;
+			} else colours.add(t.getColour());	
+		}
+		return true;
+	}
+	
+	public static boolean validRun(ArrayList<Tile> run) {
+		String colour = run.get(0).getColour();
+		int value = 0;
+		for (Tile t: run) {
+			if (value == 0) {
+				value = t.getValue();
+				continue;
+			}
+			if (!t.getColour().equals(colour)) {
+				return false;
+			}
+			if (t.getValue() != value+1) {
+				return false;
+			}else value++;
+			
+		}
+		return true;
+	}
 }
