@@ -248,6 +248,80 @@ public class AITest extends TestCase{
 		assertEquals(false, result.checkGameStatus());
 	}
 	
+	public void test3AIPlayer3() {
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		result.player0.addTile(new Tile("O", 9));
+		result.player1.addTile(new Tile("G", 9));
+		result.player2.addTile(new Tile("B", 9));
+		result.player3.addTile(new Tile("O", 12));
+		result.player3.addTile(new Tile("G", 12));
+		result.player3.addTile(new Tile("B", 12));
+		result.player3.addTile(new Tile("R", 5));
+		result.player3.playTurn(); 
+		System.out.println("Field: ");
+		result.showField();
+		assertNotNull(result.field.get(0));
+		
+		result.player3.addTile(new Tile("O", 1));
+		result.player3.addTile(new Tile("B", 8));
+		result.player3.addTile(new Tile("G", 2));
+		assertEquals(4, result.player3.getHand().size());
+		System.out.println("@@@@@@@@@@@@ 13a @@@@@@@@@@@@");
+		result.player3.playTurn(); //13a
+		System.out.println("Field: ");
+		result.showField();
+		assertEquals(5, result.player3.getHand().size());
+		
+		result.player1.addTile(new Tile("O", 2));
+		result.player1.addTile(new Tile("O", 3));
+		result.player1.addTile(new Tile("O", 4));
+		result.player1.playTurn();
+		System.out.println("Field: ");
+		result.showField();
+		
+		result.player3.playTurn();  //13b
+		System.out.println("Field: ");
+		result.showField();
+		assertEquals(4, result.player3.getHand().size());
+	}
+	
+	public void test4AIPlayer3() {
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		result.player0.addTile(new Tile("O", 9));
+		result.player1.addTile(new Tile("G", 9));
+		result.player2.addTile(new Tile("B", 9));
+		result.player0.addTile(new Tile("O", 10));
+		result.player1.addTile(new Tile("G", 10));
+		result.player2.addTile(new Tile("B", 10));
+		result.player0.addTile(new Tile("O", 11));
+		result.player1.addTile(new Tile("G", 11));
+		result.player2.addTile(new Tile("B", 11));
+		
+		result.player3.addTile(new Tile("O", 12));
+		result.player3.addTile(new Tile("G", 12));
+		result.player3.addTile(new Tile("B", 12));
+		result.player3.addTile(new Tile("G", 8));
+		result.player3.playTurn(); 
+		System.out.println("Field: ");
+		result.showField();
+		assertNotNull(result.field.get(0));
+		
+		result.player3.playTurn();  //14b
+		assertEquals(2, result.player3.getHand().size());
+		
+		
+		result.player1.playTurn();
+		System.out.println("Field: ");
+		result.showField();
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 14a");
+		result.player3.playTurn();  //14a
+		assertEquals(1, result.player3.getHand().size());
+		System.out.println("Field: ");
+		result.showField();
+	}
+	
 	//Works when TileRummyMain dealHands() deals to Player3
 	public void testExistsAComparativelySmallHand() {
 		TileRummyMain result = new TileRummyMain();
