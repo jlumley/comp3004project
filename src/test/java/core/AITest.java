@@ -11,7 +11,7 @@ public class AITest extends TestCase{
 	}
 	public void testValidField() { //checks if the board contains all valid melds without extra tiles
 		
-	}
+	}/*
 	public void testAIPlayer1() {
 		TileRummyMain result = new TileRummyMain();
 		result.initialize();
@@ -138,13 +138,57 @@ public class AITest extends TestCase{
 		assertEquals(false, result.checkGameStatus()); //won
 	}
 	
-	public void testPlayer1DrawTile() {
+	public void testPlayer1DrawTile() { //10e
 		TileRummyMain result = new TileRummyMain();
 		result.resetStaticVars();
 		result.buildDeck(TileRummyMain.suites, TileRummyMain.values);
 		Collections.shuffle(result.initDeck);
 		result.player1.playTurn(); //should draw a Tile
 		assertEquals(1, result.player1.getHand().size());
+		result.player1.playTurn(); //should draw a Tile
+		assertEquals(2, result.player1.getHand().size());
+		result.player1.playTurn(); //should draw a Tile
+		assertEquals(3, result.player1.getHand().size());
+	}
+	*/
+	public void test3AIPlayer1() { //10d requirements
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		//setupHand
+		result.player1.addTile(new Tile("O", 1)); 
+		result.player1.addTile(new Tile("R", 1));
+		result.player1.addTile(new Tile("G", 1));
+		result.player1.addTile(new Tile("O", 2)); 
+		result.player1.addTile(new Tile("R", 2));
+		result.player1.addTile(new Tile("G", 2));
+		result.player1.addTile(new Tile("O", 3)); 
+		result.player1.addTile(new Tile("R", 3));
+		result.player1.addTile(new Tile("G", 3));
+		result.player1.addTile(new Tile("O", 4)); 
+		result.player1.addTile(new Tile("R", 4));
+		result.player1.addTile(new Tile("B", 13));
+		//setUpDeck
+		result.initDeck.add(new Tile("G", 4));
+		result.initDeck.add(new Tile("G", 7));
+		result.initDeck.add(new Tile("G", 10));
+		result.initDeck.add(new Tile("B", 8));
+		result.initDeck.add(new Tile("R", 10));
+		
+		System.out.println("///// test3AIPlayer1() /////");
+		assertEquals(12, result.player1.getHand().size());
+		result.player1.playTurn();
+		assertEquals(13, result.player1.getHand().size());
+		System.out.println("Field: ");
+		result.showField();
+		ArrayList<ArrayList<Tile>> aa1 = new ArrayList<ArrayList<Tile>>();
+		assertEquals(aa1, result.field); //nothing played
+		
+		result.player1.playTurn();
+		assertEquals(1,result.player1.getHand().size());
+		assertNotNull(result.field.get(0));
+		assertNotNull(result.field.get(1)); //multi melds played
+		assertNotNull(result.field.get(2));
+		result.showField();
 	}
 	
 	//Works when TileRummyMain dealHands() deals to Player3
