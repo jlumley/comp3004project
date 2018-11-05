@@ -97,7 +97,7 @@ public class GUI extends Application
 		game = new TileRummyMain();
 		game.initialize();
 		placeDeck(game.initDeck);
-		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
+		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 		deck = new HashMap<String, Image>();
 		game.playGame();
 	}
@@ -478,6 +478,29 @@ public class GUI extends Application
 		return true;
 	}
 	
+	public boolean dealHandPlayer4(ArrayList<Tile> playerHand)
+	{
+		ImageView tempImageView;
+		int i = 1;
+
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage(), tile);
+
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+
+			//Set Pos
+			tempImageView.setX(screenWidth*0.965); 
+			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
+			i += 1;
+			root.getChildren().add(tempImageView);
+		}
+		return true;
+	}
+	
 	/*   prototype: dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, 
 	 *   ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	 *   purpose: deal each card to player
@@ -495,6 +518,7 @@ public class GUI extends Application
 		dealHandPlayer1(sortHand(p1Hand));
 		dealHandPlayer2(sortHand(p2Hand));
 		dealHandPlayer3(sortHand(p3Hand));
+		dealHandPlayer4(sortHand(p4Hand));
 
 		return true;
 	}
@@ -520,15 +544,15 @@ public class GUI extends Application
 	{
 		String result = "Current Turn is: Player";
 		
-		try 
+/*		try 
 		{
 			//This is added in to show each players turn
-			TimeUnit.SECONDS.sleep(1);
+			//TimeUnit.SECONDS.sleep(1);
 		} 
 		catch (InterruptedException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
 		
 		switch (playerName)
 		{
