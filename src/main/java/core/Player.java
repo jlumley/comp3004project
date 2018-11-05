@@ -439,11 +439,11 @@ public class Player {
 
 	public void addToDummyField(Tile tile, int arrayPos, ArrayList<ArrayList<Tile>> currField) {
 		boolean onDummy = false;
+		boolean onField = false;
 		if(arrayPos == 0) { // adds if nothing on the field
 			ArrayList<Tile> dummyHand = new ArrayList<Tile>();
 			dummyHand.add(tile);
 			tilesOnField.add(dummyHand);
-			System.out.println(tilesOnField);
 			}else {
 				double xTile = tile.getX();
 				double yTile = tile.getY();
@@ -452,12 +452,15 @@ public class Player {
 					for(int x = 0; x < tilesOnField.get(i).size(); x++) { // current position
 						double xTile2 = tilesOnField.get(i).get(x).getX();
 						double xFinal = Math.abs(xTile - xTile2);
-						if(xFinal >= 0 && xFinal <= 22) {
+						System.out.println(xFinal + " x");
+						if(xFinal >= 0 && xFinal <= 33) {
 							double yTile2 = tilesOnField.get(i).get(x).getY();
 							double yFinal = Math.abs(yTile - yTile2);
-							if(yFinal >= 0 && xFinal <= 22) {
+							System.out.println(yFinal + " y");
+							if(yFinal >= 0 && yFinal <= 33) {
 								tilesOnField.get(i).add(tile);
 								onDummy = true;
+								break;
 							}
 						}
 					}
@@ -467,17 +470,24 @@ public class Player {
 						for(int x = 0; x < currField.get(i).size(); x++) { // current position
 							double xTile2 = currField.get(i).get(x).getX();
 							double xFinal = Math.abs(xTile - xTile2);
-							if(xFinal >= 0 && xFinal <= 22) {
+							if(xFinal >= 0 && xFinal <= 33) {
 								double yTile2 = tilesOnField.get(i).get(x).getY();
 								double yFinal = Math.abs(yTile - yTile2);
-								if(yFinal >= 0 && xFinal <= 22) {
+								if(yFinal >= 0 && yFinal <= 33) {
 									tilesOnField.get(i).add(tile);
+									onField = true;
 								}
 							}
 						}
 					}
+				}	
+				if(!onField) {
+					ArrayList<Tile> dummyHand = new ArrayList<Tile>();
+					dummyHand.add(tile);
+					tilesOnField.add(dummyHand);
 				}
 			}
+			
 		System.out.println(tilesOnField);
 		}
 }
