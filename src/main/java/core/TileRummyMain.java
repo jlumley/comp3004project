@@ -8,7 +8,7 @@ public class TileRummyMain{
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<ArrayList<Tile>> justPlayed = new ArrayList<ArrayList<Tile>>();
-	ArrayList<Tile> initDeck = new ArrayList<Tile>();
+	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public static Player player0 = new Player();
 	public static AI player1 = new AI(new Strategy1());
@@ -196,6 +196,7 @@ public class TileRummyMain{
 		player3 = new AI(new Strategy3());
 		field = new ArrayList<ArrayList<Tile>>();
 		fieldSize = 0;
+		initDeck = new ArrayList<Tile>();
 	}
 	
 	public static int[] getHandSizeOfOtherPlayers(Player asker) {
