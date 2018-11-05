@@ -322,6 +322,78 @@ public class AITest extends TestCase{
 		result.showField();
 	}
 	
+	public void testAIPlayer2() {
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		result.player0.addTile(new Tile("O", 13));
+		result.player1.addTile(new Tile("G", 13));
+		result.player2.addTile(new Tile("B", 13));
+		result.player3.addTile(new Tile("R", 13));
+		
+		result.player1.addTile(new Tile("O", 12));
+		result.player1.addTile(new Tile("G", 12));
+		result.player1.addTile(new Tile("B", 12));
+		result.player1.playTurn();
+		
+		result.player2.addTile(new Tile("O", 10));
+		result.player2.addTile(new Tile("G", 10));
+		result.player2.addTile(new Tile("B", 10));
+		result.player2.playTurn(); //15a
+		System.out.println("Field: ");
+		result.showField();
+		assertEquals(1, result.player2.countTiles());
+		
+		result.player2.playTurn(); //17b
+		assertEquals(2, result.player2.countTiles());
+		
+		result.player1.addTile(new Tile("R", 2));
+		result.player1.addTile(new Tile("R", 3));
+		result.player1.addTile(new Tile("R", 4));
+		result.player1.playTurn();
+		
+		result.player2.playTurn(); //17a
+		assertEquals(1, result.player2.countTiles());
+		
+		result.player1.addTile(new Tile("O", 13));
+		result.player1.addTile(new Tile("R", 13));
+		result.player1.addTile(new Tile("B", 7));
+		result.player1.playTurn(); 
+		assertEquals(true, result.checkGameStatus()); //check win
+		result.player2.playTurn(); //
+		assertEquals(0, result.player2.countTiles());
+		assertEquals(false, result.checkGameStatus()); //won 16b
+	}
+	
+	public void test2AIPlayer2() {
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		result.player0.addTile(new Tile("O", 13));
+		result.player1.addTile(new Tile("G", 13));
+		result.player2.addTile(new Tile("B", 13));
+		result.player3.addTile(new Tile("R", 13));
+		
+		result.player1.addTile(new Tile("O", 12));
+		result.player1.addTile(new Tile("G", 12));
+		result.player1.addTile(new Tile("B", 12));
+		result.player1.playTurn();
+		
+		result.player2.addTile(new Tile("B", 12));
+		result.player2.addTile(new Tile("R", 3));
+		assertEquals(3, result.player2.countTiles());
+		result.player2.playTurn(); //15b
+		assertEquals(4, result.player2.countTiles());
+		
+		result.player2.addTile(new Tile("B", 11));
+		result.player2.playTurn();
+		assertEquals(2, result.player2.countTiles());
+		result.player2.playTurn(); //draw
+		assertEquals(true, result.checkGameStatus()); //check win
+		result.player2.playTurn(); //win
+		System.out.println("Field: ");
+		result.showField();
+		assertEquals(false, result.checkGameStatus()); //won 16a
+	}
+	
 	//Works when TileRummyMain dealHands() deals to Player3
 	public void testExistsAComparativelySmallHand() {
 		TileRummyMain result = new TileRummyMain();
