@@ -282,7 +282,16 @@ public class GUI extends Application
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
-				btnFinish.setDisable(true);
+				btnFinish.setDisable(false);
+				if (game.isValidTable(game.player0.tilesOnField)) {
+					game.field = game.player0.tilesOnField;
+					game.player0.oldHand = game.player0.hand;
+				} else {
+					//reset table to previous state and draw tile 
+					game.player0.drawTile(game.initDeck);
+					game.player0.hand = game.player0.oldHand;
+				}
+				
 				game.playGame();
 			}
 		});

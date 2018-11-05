@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Player {
 	private int jokers = 0;
+	public ArrayList<Tile> oldHand = new ArrayList<Tile>();
 	protected ArrayList<Tile> hand = new ArrayList<Tile>();
 	public boolean firstTurn = false; // need group thoughts
 	ArrayList<ArrayList<Tile>> tilesOnField = new ArrayList<ArrayList<Tile>>(); // used to store tiles used on turn 
@@ -42,11 +43,14 @@ public class Player {
 		hand.add(t);
 		this.jokers = getJokers();
 		Collections.sort(hand);
+		
+		oldHand = hand;
 	}
 	
 	public void drawTile(ArrayList<Tile> collection) {
 		if(!collection.isEmpty())
 			addTile(collection.remove(0));
+		oldHand = hand;
 	}
 	
 	public int countTiles() {
