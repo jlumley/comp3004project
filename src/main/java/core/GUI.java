@@ -97,7 +97,7 @@ public class GUI extends Application
 		game = new TileRummyMain();
 		game.initialize();
 		placeDeck(game.initDeck);
-		dealHand(game.player1.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
+		dealHand(game.player0.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
 		deck = new HashMap<String, Image>();
 		game.playGame();
 	}
@@ -394,11 +394,13 @@ public class GUI extends Application
 				double yCord = tempImageView.getY();
 				tempImageView.getId();
 				System.out.println(xCord + " " + yCord + " " + tempImageView.getId());
-				game.checkPerimeter(xCord,yCord);
+				tile.setx(xCord);
+				tile.sety(yCord);
+				game.checkPerimeter(xCord,yCord, tile.getId(), tile);
 				// add card to array list if
 			}
 		});
-		tempImageView.setId(tile.toString());
+		tempImageView.setId(Integer.toString(tile.getId()));
 		return tempImageView;
 	}
 	

@@ -16,15 +16,15 @@ public class Tile implements Comparable<Tile>
 	private int id;
 
 	private Image tileImage;
-	private float x;
-	private float y;
+	private double x;
+	private double y;
 	
 	public boolean joker = false;
 	public String getColour() { return colour;}
 	public int getValue() { return value;}
 	public String getSuite() { return colour;}
-	public float getX() {return x;}
-	public float getY() {return y;}
+	public double getX() {return x;}
+	public double getY() {return y;}
 	
 
 	public Tile(String tileColour, int value) 
@@ -122,7 +122,7 @@ public class Tile implements Comparable<Tile>
 			return this.colour.compareTo(o.colour);
 		}
 	}
-	public boolean setx(float pos) 
+	public boolean setx(double pos) 
 	{
 		if(pos > 1000 || pos < 0)
 			return false;
@@ -130,7 +130,7 @@ public class Tile implements Comparable<Tile>
 		return true;
 	}
 	
-	public boolean sety(float pos) 
+	public boolean sety(double pos) 
 	{
 		if(pos > 1000 || pos < 0)
 			return false;
