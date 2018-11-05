@@ -138,13 +138,114 @@ public class AITest extends TestCase{
 		assertEquals(false, result.checkGameStatus()); //won
 	}
 	
-	public void testPlayer1DrawTile() {
+	public void testPlayer1DrawTile() { //10e
 		TileRummyMain result = new TileRummyMain();
 		result.resetStaticVars();
-		result.buildDeck(TileRummyMain.suites, TileRummyMain.values);
+		TileRummyMain.initDeck = result.buildDeck(TileRummyMain.suites, TileRummyMain.values);
 		Collections.shuffle(result.initDeck);
 		result.player1.playTurn(); //should draw a Tile
 		assertEquals(1, result.player1.getHand().size());
+		result.player1.playTurn(); //should draw a Tile
+		assertEquals(2, result.player1.getHand().size());
+		result.player1.playTurn(); //should draw a Tile
+		assertEquals(3, result.player1.getHand().size());
+	}
+	
+	public void test3AIPlayer1() { //10d requirements
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		//setupHand
+		result.player1.addTile(new Tile("O", 1)); 
+		result.player1.addTile(new Tile("R", 1));
+		result.player1.addTile(new Tile("G", 1));
+		result.player1.addTile(new Tile("O", 2)); 
+		result.player1.addTile(new Tile("R", 2));
+		result.player1.addTile(new Tile("G", 2));
+		result.player1.addTile(new Tile("O", 3)); 
+		result.player1.addTile(new Tile("R", 3));
+		result.player1.addTile(new Tile("G", 3));
+		result.player1.addTile(new Tile("O", 4)); 
+		result.player1.addTile(new Tile("R", 4));
+		result.player1.addTile(new Tile("B", 13));
+		//setUpDeck
+		result.initDeck.add(new Tile("G", 4));
+		result.initDeck.add(new Tile("G", 7));
+		result.initDeck.add(new Tile("G", 10));
+		result.initDeck.add(new Tile("B", 8));
+		result.initDeck.add(new Tile("R", 10));
+		
+		System.out.println("///// test3AIPlayer1() /////");
+		assertEquals(12, result.player1.getHand().size());
+		result.player1.playTurn();
+		assertEquals(13, result.player1.getHand().size());
+		System.out.println("Field: ");
+		result.showField();
+		ArrayList<ArrayList<Tile>> aa1 = new ArrayList<ArrayList<Tile>>();
+		assertEquals(aa1, result.field); //nothing played
+		
+		result.player1.playTurn();
+		assertEquals(1,result.player1.getHand().size());
+		assertNotNull(result.field.get(0));
+		assertNotNull(result.field.get(1)); //multi melds played
+		assertNotNull(result.field.get(2));
+		result.showField();
+	}
+	
+	public void testAIPlayer3() {
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		TileRummyMain.initDeck = result.buildDeck(TileRummyMain.suites, TileRummyMain.values);
+		result.player0.addTile(new Tile("O", 9));
+		result.player1.addTile(new Tile("G", 9));
+		result.player2.addTile(new Tile("B", 9));
+		
+		result.player3.playTurn();
+		assertEquals(1, result.player3.getHand().size());
+		result.player3.playTurn();
+		assertEquals(2, result.player3.getHand().size());
+		result.player3.playTurn();
+		assertEquals(3, result.player3.getHand().size());
+		result.player3.playTurn();
+		assertEquals(4, result.player3.getHand().size());
+		result.player3.addTile(new Tile("O", 9));
+		result.player3.addTile(new Tile("G", 9));
+		result.player3.addTile(new Tile("B", 9));
+		assertEquals(true, result.checkGameStatus()); //check win
+		result.player3.playTurn(); //11b
+		System.out.println("Field: ");
+		result.showField();
+		assertNotNull(result.field.get(0));
+		assertNotNull(result.field.get(1));
+		assertEquals(false, result.checkGameStatus()); //won 12a
+	}
+	
+	public void test2AIPlayer3() {
+		TileRummyMain result = new TileRummyMain();
+		result.resetStaticVars();
+		result.player0.addTile(new Tile("O", 9));
+		result.player1.addTile(new Tile("G", 9));
+		result.player2.addTile(new Tile("B", 9));
+		result.player3.addTile(new Tile("O", 12));
+		result.player3.addTile(new Tile("G", 12));
+		result.player3.addTile(new Tile("B", 12));
+		result.player3.addTile(new Tile("R", 5));
+		result.player3.playTurn(); //11a
+		System.out.println("Field: ");
+		result.showField();
+		assertNotNull(result.field.get(0));
+
+		result.player1.addTile(new Tile("R", 2));
+		result.player1.addTile(new Tile("R", 3));
+		result.player1.addTile(new Tile("R", 4));
+		result.player1.playTurn();
+		System.out.println("Field: ");
+		result.showField();
+		
+		result.player3.playTurn();
+		System.out.println("Field: ");
+		result.showField();
+		assertNotNull(result.field.get(1));
+		assertEquals(false, result.checkGameStatus());
 	}
 	
 	//Works when TileRummyMain dealHands() deals to Player3
