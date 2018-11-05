@@ -84,7 +84,6 @@ public class Player {
 		this.findMelds(hand, 0, 0);
 		this.hand = Player.matrixToTileArray(hand);
 		System.out.println(this.hand);
-		
 		return hand.getMelds();
 	}
 	
@@ -162,6 +161,7 @@ public class Player {
 			System.out.println();
 		}
 		System.out.println();
+
 	}
 	
 	public ArrayList<Tile> findRun(Hand hand, int suit, int value) {
@@ -359,7 +359,7 @@ public class Player {
 		if(returnV) {
 			System.out.println(checkSum);
 		}
-		
+
 		System.out.println(checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
 		return returnV;
 	}

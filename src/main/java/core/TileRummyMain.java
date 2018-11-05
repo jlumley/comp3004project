@@ -16,6 +16,19 @@ public class TileRummyMain{
 	boolean gameStatus = true;
 	public int playerTurn = 0;
 	public static int fieldSize = 0;
+	private GUI gui;
+	private boolean guiMode = false;
+
+	public boolean isGUI()
+	{
+		return guiMode;
+	}
+	
+	public void setGUI(GUI tempGUI)
+	{
+		guiMode = true;
+		gui = tempGUI;
+	}
 	
 	public void initialize() {
 		resetStaticVars();
@@ -45,6 +58,10 @@ public class TileRummyMain{
 		}
 		System.out.println();
 		System.out.println(initDeck.size());
+		if(gui != null) //Make sure gui is set then update tiles
+			gui.updateTiles();
+		if(isGUI() == true)
+			GUI.sayMsg("Building deck");
 	}
 	
 	public void dealHands() {
@@ -57,8 +74,10 @@ public class TileRummyMain{
 	}
 
 	public void showHands() {
+		GUI.sayMsg("User's 1 Hand: Show Hand" + player1.getHand());
 		System.out.println("User's 1 Hand: " + player1.getHand() );
-		
+		if(isGUI() == true) //Make sure gui is set then update tiles
+			gui.updateTiles();
 	}
 	public void getHandSize() { 
 		
@@ -72,6 +91,9 @@ public class TileRummyMain{
 		}else {
 			System.out.println("field is empty");
 		}
+		
+		if(isGUI() == true) //Make sure gui is set then update tiles
+			gui.updateTiles();
 	}
 /*
 	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
@@ -109,6 +131,7 @@ public class TileRummyMain{
 		field.add(collection);
 		System.out.println("Add to Field" + field.get(fieldSize));
 		fieldSize++;
+		
 	}
 	
 	
@@ -117,15 +140,23 @@ public class TileRummyMain{
 		if(player0.getHand().size() == 0) {
 			gameStatus = false;
 			System.out.println("Player has won!");
+			if(isGUI() == true)
+				GUI.sayMsg("Player has won!");
 		}else if(player1.getHand().size() == 0) {
-			gameStatus = false;
+			if(isGUI() == true)
+				gameStatus = false;
 			System.out.println("User 2 has won!");
+			GUI.sayMsg("User 2 has won!");
 		}else if(player2.getHand().size() == 0) {
-			gameStatus = false;
+			if(isGUI() == true)
+				gameStatus = false;
 			System.out.println("User 3 has won!");
+			GUI.sayMsg("User 3 has won!");
 		}else if(player3.getHand().size() == 0) {
-			gameStatus = false;
+			if(isGUI() == true)
+				gameStatus = false;
 			System.out.println("User 4 has won!");
+			GUI.sayMsg("User 4 has won!");
 		}
 		return gameStatus;
 	}
@@ -133,22 +164,31 @@ public class TileRummyMain{
 	public void playGame() { // where most of the game logic is going to go.
 		while(gameStatus){
 			System.out.print(playerTurn + " ");
+			
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
 				//Added in to set the text on GUI to the current player
-				GUI.setPlayerTurn("player1"); 
+				if(isGUI() == true)
+					GUI.sayMsg("Players Turn"); 
 			}else if(playerTurn == 1){
 				System.out.println("AI 1's Turn");
-				GUI.setPlayerTurn("player2");
+				if(isGUI() == true)
+					GUI.sayMsg("AI 1's Turn");
 			}else if(playerTurn == 2){
 				System.out.println("AI 2's Turn");
-				GUI.setPlayerTurn("player3");
+				if(isGUI() == true)
+					GUI.sayMsg("AI 2's Turn");
 			}else if(playerTurn == 3){
-				GUI.setPlayerTurn("player4");
+				if(isGUI() == true)
+					GUI.sayMsg("AI 3's Turn");
 				System.out.println("AI 3's Turn");
 				playerTurn = playerTurn%3;
 				break;
 			}
+			
+			if(isGUI() == true) //Make sure gui is set then update tiles
+				gui.updateTiles();
+			
 			playerTurn++;
 		}
 	}
@@ -156,18 +196,28 @@ public class TileRummyMain{
 	public void drawTile() {
 		Tile drawTile = initDeck.remove(0);
 		if(playerTurn == 0) {
+			if(isGUI() == true)
+				GUI.sayMsg("Player draws tile"); 
 			player0.addTile(drawTile);
 			System.out.println("Players draws a tile");
 		}else if(playerTurn == 1){
 			System.out.println("AI 1's draws a tile");
+			if(isGUI() == true)	
+				GUI.sayMsg("AI 1's draws a tile"); 
 			player1.addTile(drawTile);
 		}else if(playerTurn == 2){
 			System.out.println("AI 2's draws a tile");
+			if(isGUI() == true)
+				GUI.sayMsg("AI 2's draws a tile"); 
 			player2.addTile(drawTile);
 		}else if(playerTurn == 3){
 			System.out.println("AI 3's draws a tile");
+			if(isGUI() == true)
+				GUI.sayMsg("AI 3's draws a tile"); 
 			player3.addTile(drawTile);
 		}
+		if(isGUI() == true) //Make sure gui is set then update tiles
+			gui.updateTiles();
 	}
 
 	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
