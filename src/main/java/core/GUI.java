@@ -98,11 +98,9 @@ public class GUI extends Application
 		game = new TileRummyMain();
 		game.initialize();
 		placeDeck(game.initDeck);
-//<<<<<<< HEAD
-	//	dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-//=======
-		dealHand(game.player0.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
-//>>>>>>> e1ad3cf8cec007316482b0849f3c8902c16f3ae1
+	  dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+
+		deck = new HashMap<String, Image>();
 		game.playGame();
 	}
 	
@@ -383,7 +381,6 @@ public class GUI extends Application
 				// if card being dragged in on the table, remove it
 				GUI.removeTileFromTable(tile, game.field);
 				game.player0.removeTileFromHand(tile);
-				System.out.println(game.player0.getHand());
 				
 			}
 		});
