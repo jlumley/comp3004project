@@ -67,7 +67,8 @@ public class GUI extends Application
 	private Image tempImage;
 	private static Text playerInfo;
 	private TileRummyMain game;
-	private static Button btnFinish;
+	static Button btnFinish;
+	static Button drawCard;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -99,8 +100,7 @@ public class GUI extends Application
 		game.setGUI(this);
 		game.initialize();
 		placeDeck(game.initDeck);
-	  dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-		game.playGame();
+	    dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 	}
 	
 	/*
@@ -268,9 +268,13 @@ public class GUI extends Application
 	private void handleButtonEvents() 
 	{
 		//Create buttons 
+		drawCard = new Button("Draw Card");
 		btnFinish = new Button("Finish Move");
 		Button btnExit = new Button("Exit Game");
 	
+		drawCard.setLayoutX(screenWidth/2 + 200);
+		drawCard.setLayoutY(screenHeight*0.9);
+
 		btnFinish.setLayoutX(screenWidth/2 + 100);
 		btnFinish.setLayoutY(screenHeight*0.9);
 		
@@ -283,6 +287,9 @@ public class GUI extends Application
 			{
 				btnFinish.setDisable(true);
 				game.playGame();
+				game.playGame();
+				game.playGame();
+				game.playGame();
 			}
 		});
 		
@@ -293,7 +300,19 @@ public class GUI extends Application
 			}
 		});
 		
-		root.getChildren().addAll(btnFinish, btnExit);
+		drawCard.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event)
+			{
+				System.out.println("Card Drawn");
+				game.drawTile();
+				game.playGame();
+				game.playGame();
+				game.playGame();
+				game.playGame();
+			}
+		});
+		
+		root.getChildren().addAll(btnFinish, btnExit, drawCard);
 		
 	}
 	
@@ -386,7 +405,6 @@ public class GUI extends Application
 		tempImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				// TODO Auto-generated method stub
 				double xCord = tempImageView.getX();
 				double yCord = tempImageView.getY();
 				tempImageView.getId();
@@ -526,9 +544,6 @@ public class GUI extends Application
 	 * */
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
-		double totalRun = 0;
-		sayMsg("Hands being dealt");
-		
 		sortHand(p1Hand);
 		sortHand(p2Hand);
 		sortHand(p3Hand);
@@ -578,15 +593,19 @@ public class GUI extends Application
 			case "player1": 
 				result += " 1"; 
 				btnFinish.setDisable(false);
+				drawCard.setDisable(false);
 				break;
 			case "player2": result += " 2"; 
 				btnFinish.setDisable(true); 
+				drawCard.setDisable(true);
 				break;
 			case "player3": result += " 3"; 
 				btnFinish.setDisable(true); 
+				drawCard.setDisable(true);
 				break;
 			case "player4": result += " 4"; 
 				btnFinish.setDisable(true); 
+				drawCard.setDisable(true);
 				break;
 			default:
 				 return false;

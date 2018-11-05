@@ -31,6 +31,7 @@ public class TileRummyMain{
 	}
 	
 	public void initialize() {
+		System.out.println("Initialized");
 		resetStaticVars();
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
@@ -162,35 +163,44 @@ public class TileRummyMain{
 	}
 
 	public void playGame() { // where most of the game logic is going to go.
-		while(gameStatus){
+		//while(gameStatus){ I removed this loop as Finish Move will call this function each time
 			System.out.print(playerTurn + " ");
 			
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
+				//TODO in GUI get player move
 				//Added in to set the text on GUI to the current player
 				if(isGUI() == true)
 					GUI.sayMsg("Players Turn"); 
 			}else if(playerTurn == 1){
+				player1.playTurn();
 				System.out.println("AI 1's Turn");
 				if(isGUI() == true)
 					GUI.sayMsg("AI 1's Turn");
 			}else if(playerTurn == 2){
+				player2.playTurn();
 				System.out.println("AI 2's Turn");
 				if(isGUI() == true)
 					GUI.sayMsg("AI 2's Turn");
 			}else if(playerTurn == 3){
+				player3.playTurn();
 				if(isGUI() == true)
 					GUI.sayMsg("AI 3's Turn");
 				System.out.println("AI 3's Turn");
 				playerTurn = playerTurn%3;
-				break;
+				//break;
 			}
+			
+			checkGameStatus();
 			
 			if(isGUI() == true) //Make sure gui is set then update tiles
 				gui.updateTiles();
 			
 			playerTurn++;
-		}
+			gui.btnFinish.setDisable(false);
+			gui.drawCard.setDisable(false);
+			
+		//}
 	}
 
 	public void drawTile() {
