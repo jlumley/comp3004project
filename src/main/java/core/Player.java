@@ -438,6 +438,7 @@ public class Player {
 	}
 
 	public void addToDummyField(Tile tile, int arrayPos, ArrayList<ArrayList<Tile>> currField) {
+
 		checkInDummyField(tile);
 		boolean onDummy = false;
 		boolean onField = false;
@@ -445,6 +446,9 @@ public class Player {
 			ArrayList<Tile> dummyHand = new ArrayList<Tile>();
 			dummyHand.add(tile);
 			tilesOnField.add(dummyHand);
+
+			System.out.println(tilesOnField);
+
 			}else {
 				double xTile = tile.getX();
 				double yTile = tile.getY();
@@ -453,6 +457,7 @@ public class Player {
 					for(int x = 0; x < tilesOnField.get(i).size(); x++) { // current position
 						double xTile2 = tilesOnField.get(i).get(x).getX();
 						double xFinal = Math.abs(xTile - xTile2);
+            
 						System.out.println(xFinal + " x");
 						if(xFinal >= 0 && xFinal <= 33) {
 							double yTile2 = tilesOnField.get(i).get(x).getY();
@@ -462,6 +467,7 @@ public class Player {
 								tilesOnField.get(i).add(tile);
 								onDummy = true;
 								break;
+
 							}
 						}
 					}
@@ -477,6 +483,7 @@ public class Player {
 								if(yFinal >= 0 && yFinal <= 33) {
 									tilesOnField.get(i).add(tile);
 									onField = true;
+
 								}
 							}
 						}

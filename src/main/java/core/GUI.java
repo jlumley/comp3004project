@@ -61,7 +61,7 @@ public class GUI extends Application
 	public static final String image_dir = "src/main/resources/core/images/";
 	private int screenWidth;
 	private int screenHeight;
-	private Map<String, Image> deck;
+	private Map<Integer, ImageView> deck;
 	private Pane root;
 	private Scene scene;
 	private Image tempImage;
@@ -94,10 +94,12 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
+		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
 		game.initialize();
 		placeDeck(game.initDeck);
-		dealHand(game.player0.getHand(), game.player2.getHand(), game.player3.getHand(), game.player0.getHand());
+	  dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+
 		deck = new HashMap<String, Image>();
 		game.playGame();
 	}
@@ -241,8 +243,7 @@ public class GUI extends Application
 	private boolean getCards() 
 	{
 		//TODO getCards can be removed since tile will load in the card image
-		try 
-		{
+		
 			char[] colours = {'B', 'G', 'O', 'R'};
 			String tempCardName;
 			
@@ -252,15 +253,11 @@ public class GUI extends Application
 				{
 					//Create card file name
 					tempCardName = "Tile" + colours[i] + j;
-					deck.put(tempCardName, new Image(new FileInputStream(image_dir + tempCardName + ".jpg")));
+					//deck.put(tempCardName, new Image(new FileInputStream(image_dir + tempCardName + ".jpg")));
 				}
 			}
-		} 
-		catch (FileNotFoundException e) 
-		{
-			e.printStackTrace();
-			return false;
-		}
+		 
+	
 		return true;
 	}
 
@@ -324,20 +321,22 @@ public class GUI extends Application
 	/*   prototype: placeDeck(ArrayList<Tile> deck)
 	 *   purpose: Place all cards given in pile
 	 * */
-	public boolean placeDeck(ArrayList<Tile> deck)
+	public boolean placeDeck(ArrayList<Tile> deckTemp)
 	{
 		sayMsg("Place Deck");
 		int i = 0;
 		double offsetY = 0.0;
 		ImageView tempImageView;
 
-		for(Tile card : deck)
+		for(Tile card : deckTemp)
 		{
 			i += 1;
 			if(i%4 == 0)
 				offsetY += screenHeight*0.0265;
 			
+			//Store all tiles in hash map
 			tempImageView = createCard(i, card, offsetY);
+			deck.put(card.getId(), tempImageView);	
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -382,7 +381,6 @@ public class GUI extends Application
 				// if card being dragged in on the table, remove it
 				GUI.removeTileFromTable(tile, game.field);
 				game.player0.removeTileFromHand(tile);
-				//System.out.println(game.player0.getHand());
 				
 			}
 		});
@@ -438,6 +436,7 @@ public class GUI extends Application
 			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
 			tempImageView.setY(screenHeight - screenHeight*0.2025); 
 			i += 1;
+			deck.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		
@@ -465,6 +464,7 @@ public class GUI extends Application
 			tempImageView.setX(screenWidth*0.0125); 
 			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
 			i += 1;
+			deck.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -490,9 +490,34 @@ public class GUI extends Application
 			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
 			tempImageView.setY(screenHeight*0.025); 
 			i += 1;
+			deck.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		
+		return true;
+	}
+	
+	public boolean dealHandPlayer4(ArrayList<Tile> playerHand)
+	{
+		ImageView tempImageView;
+		int i = 1;
+
+		for(Tile tile:playerHand)
+		{
+			/* Set drag and drop events */		
+			tempImageView = setUpCardEvents(tile.getImage(), tile);
+
+			//Set width and height
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+
+			//Set Pos
+			tempImageView.setX(screenWidth*0.965); 
+			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
+			i += 1;
+			deck.put(tile.getId(), tempImageView);
+			root.getChildren().add(tempImageView);
+		}
 		return true;
 	}
 	
@@ -513,6 +538,7 @@ public class GUI extends Application
 		dealHandPlayer1(sortHand(p1Hand));
 		dealHandPlayer2(sortHand(p2Hand));
 		dealHandPlayer3(sortHand(p3Hand));
+		dealHandPlayer4(sortHand(p4Hand));
 
 		return true;
 	}
@@ -538,15 +564,15 @@ public class GUI extends Application
 	{
 		String result = "Current Turn is: Player";
 		
-		try 
+/*		try 
 		{
 			//This is added in to show each players turn
-			TimeUnit.SECONDS.sleep(1);
+			//TimeUnit.SECONDS.sleep(1);
 		} 
 		catch (InterruptedException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
 		
 		switch (playerName)
 		{
@@ -611,6 +637,33 @@ public class GUI extends Application
 		
 		return masterHand;
 	}
-}
+	
+	public boolean updateTiles(ArrayList<ArrayList<Tile>> newCards)
+	{
+		ImageView tempImageView;
+		
+		/* Hide all cards */
+		for(ImageView view: deck.values())
+		{
+			view.setVisible(false);
+		}
+		
+		/* Create new cards and add */
+		for(ArrayList<Tile> tileList: newCards)
+		{
+			for(Tile tiles: tileList)
+			{
+				tempImageView = setUpCardEvents(tiles.getImage(), tiles);
+				tempImageView.setFitHeight(screenHeight/19);
+				tempImageView.setFitWidth(screenWidth*0.0225);
+				tempImageView.setX(tiles.getX());
+				tempImageView.setY(tiles.getY());
+				deck.put(tiles.getId(), tempImageView);
+				root.getChildren().add(tempImageView);
+			}
+		}
 
+		return true;
+	}
+}
 
