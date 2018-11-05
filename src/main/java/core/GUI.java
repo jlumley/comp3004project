@@ -69,6 +69,7 @@ public class GUI extends Application
 	private TileRummyMain game;
 	static Button btnFinish;
 	static Button drawCard;
+	private static ArrayList<Tile> tempTiles;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -97,6 +98,7 @@ public class GUI extends Application
 		/* Set up game */
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
+		tempTiles = new ArrayList<Tile>();
 		game.setGUI(this);
 		game.initialize();
 		placeDeck(game.initDeck);
@@ -286,10 +288,12 @@ public class GUI extends Application
 			public void handle(ActionEvent event)
 			{
 				btnFinish.setDisable(true);
+				game.addMend(tempTiles);
 				game.playGame();
 				game.playGame();
 				game.playGame();
 				game.playGame();
+				tempTiles = new ArrayList<Tile>();
 			}
 		});
 		
@@ -425,6 +429,7 @@ public class GUI extends Application
 			for (Tile t: meld) {
 				if (tile.getId() == t.getId()) {
 					meld.remove(t);
+					tempTiles.add(t);
 					return true;
 				}
 			}
