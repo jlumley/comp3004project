@@ -132,7 +132,7 @@ public class PlayerTest extends TestCase
 			
 			testPlayer.addTile(new Tile("R", 9));
 			testPlayer.addTile(new Tile("B", 9));
-			testPlayer.addTile(new Tile("G", 9));
+
 			
 			testPlayer.addTile(new Tile("O", 6));
 			
@@ -142,11 +142,14 @@ public class PlayerTest extends TestCase
 			temp.add(new Tile("O", 8));
 			temp.add(new Tile("O", 9));
 			table.add(temp);
+			System.out.println("player hand before play:");
 			testPlayer.showHand();
 			
+			System.out.println("\ntable before play:");
+			System.out.println(table);
+			 
 			table = testPlayer.playAllTiles(table);
 			
-			testPlayer.showHand();
 			System.out.println();
 			System.out.println("Melds on Table:");
 			for (ArrayList<Tile> meld: table) {
@@ -156,7 +159,7 @@ public class PlayerTest extends TestCase
 				System.out.println();
 			}
 			assertEquals(1, testPlayer.getHand().size());
-		} 
+		}  
 		
 		public void testPlayAllCardsInHand() { 
 			Player testPlayer = new Player();

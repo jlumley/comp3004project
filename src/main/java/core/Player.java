@@ -71,7 +71,7 @@ public class Player {
 		
 		this.findMelds(hand, 0, 0);
 		this.hand = Player.matrixToTileArray(hand);
-		System.out.println(this.hand);
+		//System.out.println(this.hand);
 		
 		return hand.getMelds();
 	}
