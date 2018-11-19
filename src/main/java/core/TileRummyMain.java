@@ -261,4 +261,7 @@ public class TileRummyMain{
 		}
 		return true;
 	}
+	public int getTurn() {
+		return playerTurn;
+	}
 }

@@ -68,6 +68,7 @@ public class GUI extends Application
 	private static Text playerInfo;
 	private TileRummyMain game;
 	private static Button btnFinish;
+	public boolean inFieldOrHand = false;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -383,28 +384,67 @@ public class GUI extends Application
 		ImageView tempImageView = new ImageView(imageHolder);
 		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override public void handle(MouseEvent event) {
-				tempImageView.setVisible(false);
-				tempImageView.setX(event.getSceneX());
-				tempImageView.setY(event.getSceneY());
-				tempImageView.setVisible(true);
-				// if card being dragged in on the table, remove it
-				GUI.removeTileFromTable(tile, game.field);
-				game.player0.removeTileFromHand(tile);
+				int id = tile.getId();
+				int playerTurn = game.getTurn();
+				boolean setBoolean = true;
 				
+				for (int i = 0; i < game.player0.tilesOnField.size(); i++) { // checks to see if the tile is in our dummy field
+					if(game.player0.tilesOnField.get(i).contains(tile)) {
+						inFieldOrHand = true;
+					}
+				}
+				for (int i = 0; i < game.field.size(); i++) { // checks to see if the tile is in our actual field
+					if(game.field.get(i).contains(tile)) {		
+						inFieldOrHand = true;
+					}
+				}
+				if(game.player0.oldHand.contains(tile)) {
+					inFieldOrHand = true;
+				}
+				if(playerTurn == 0) { // players turn
+					if(inFieldOrHand){
+						tempImageView.setVisible(false);
+						tempImageView.setX(event.getSceneX());
+						tempImageView.setY(event.getSceneY());
+						tempImageView.setVisible(true);
+						// if card being dragged in on the table, remove it
+						GUI.removeTileFromTable(tile, game.field);
+						game.player0.removeTileFromHand(tile);
+					}
+				}else if(playerTurn == 1) { // AI1
+					System.out.println("AIs 1's turn or not your card");
+				}else if(playerTurn == 2) { // AI2
+					System.out.println("AIs 2's turn or not your card");
+				}else { // AI3 
+					System.out.println("AIs 3's turn or not your card");
+				}
+
 			}
 		});
 		tempImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				// TODO Auto-generated method stub
+				int id = tile.getId();
+				int playerTurn = game.getTurn();
+
+				
 				double xCord = tempImageView.getX();
 				double yCord = tempImageView.getY();
 				tempImageView.getId();
 				System.out.println(xCord + " " + yCord + " " + tempImageView.getId());
 				tile.setx(xCord);
 				tile.sety(yCord);
-				game.checkPerimeter(xCord,yCord, tile.getId(), tile);
+				if(playerTurn == 0) {
+					if(inFieldOrHand) {
+						game.checkPerimeter(xCord,yCord, id, tile);
+					}
+				}
 				// add card to array list if
+				System.out.println("----------------------");
+				System.out.println(game.player0.oldHand);
+				System.out.println(game.player0.tilesOnField);
+				
+				inFieldOrHand = false;
 			}
 		});
 		tempImageView.setId(Integer.toString(tile.getId()));
