@@ -15,6 +15,8 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.text.Position;
+import javax.swing.text.View;
+
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -69,6 +71,7 @@ public class GUI extends Application
 	private TileRummyMain game;
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
+	public ArrayList<ArrayList<Tile>> preRolleback = new ArrayList<ArrayList<Tile>>();
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -295,7 +298,10 @@ public class GUI extends Application
 				}
 				drawTilePlayer = !(game.checkPlays(game.player0.tilesOnField));
 				if(drawTilePlayer) {
-					game.player0.drawTile(game.initDeck);
+					/*
+					 * Steven Stapleton add your add tiles here
+					 * 
+					 */
 				}
 				game.playGame();
 			}
@@ -690,7 +696,7 @@ public class GUI extends Application
 		
 		return masterHand;
 	}
-	
+
 	public boolean updateTiles(ArrayList<ArrayList<Tile>> newCards)
 	{
 		ImageView tempImageView;
