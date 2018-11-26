@@ -87,7 +87,7 @@ public class Player {
 		
 		this.findMelds(hand, 0, 0);
 		this.hand = Player.matrixToTileArray(hand);
-		System.out.println(this.hand);
+		System.out.println("Hand: " + this.hand);
 		
 		return hand.getMelds();
 	}
@@ -303,7 +303,7 @@ public class Player {
 		}
 		return hand;
 	}		
-	public void addMendtoMain(ArrayList<Tile> collection) { // basic adding into the field of tiles
+	public void addMendtoMain(ArrayList<Tile> collection) { // basic adding into the s of tiles
 		TileRummyMain.addMend(collection);
 	}
 	/*
@@ -364,12 +364,16 @@ public class Player {
 			System.out.println(checkSum);
 		}
 		
-		System.out.println(checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
+		//System.out.println(checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
 		return returnV;
 	}
 	
 	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) { // goes through each 'play' and splits them off into different reuseable functions
+
 		for(int i = 0; i < temp1.size(); i++) {
+			if(temp1.get(i).size() < 3) {
+				return false;
+			}
 				if(temp1.get(i).get(0).getValue() == temp1.get(i).get(1).getValue()) { // if it is a set
 					if(!checkSet(temp1.get(i))) {
 						return false;
@@ -408,7 +412,7 @@ public class Player {
 		for(Tile tile : temp1) { // checks for the same colour
 			valuesOfRun.add(tile.getValue()); // adds it into the array
 			if(!tile.getColour().equals(colourString)) { // if not same colour
-				System.out.println(tile.getColour() + " " + colourString);
+				System.out.println("Tile: " + tile.getColour() + " " + colourString);
 				return false;
 			}
 		}
@@ -451,7 +455,7 @@ public class Player {
 			dummyHand.add(tile);
 			tilesOnField.add(dummyHand);
 
-			System.out.println(tilesOnField);
+			System.out.println("Dummy tiles on FIeld " + tilesOnField);
 
 			}else {
 				double xTile = tile.getX();
@@ -500,7 +504,7 @@ public class Player {
 				}
 			}
 			
-		System.out.println(tilesOnField);
+		System.out.println("Tiles afterwards on Field: " + tilesOnField);
 		}
 
 
@@ -518,6 +522,14 @@ public class Player {
 			}
 		}
 	}
+
+
+	public void clearDummyHand() {
+		tilesOnField.clear();	
+	}
+
+
+
 }
 class Hand {
 	public int [][]cards = new int[4][13];

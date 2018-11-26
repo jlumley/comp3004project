@@ -273,11 +273,11 @@ public class GUI extends Application
 		btnFinish = new Button("Finish Move");
 		Button btnExit = new Button("Exit Game");
 	
-		btnFinish.setLayoutX(screenWidth/2 + 100);
-		btnFinish.setLayoutY(screenHeight*0.9);
+		btnFinish.setLayoutX(200);
+		btnFinish.setLayoutY(300);
 		
-		btnExit.setLayoutX(screenWidth/2);
-		btnExit.setLayoutY(screenHeight*0.9);
+		btnExit.setLayoutX(300);
+		btnExit.setLayoutY(200);
 		
 		//Set events
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
@@ -292,7 +292,7 @@ public class GUI extends Application
 					game.player0.drawTile(game.initDeck);
 					game.player0.hand = game.player0.oldHand;
 				}
-				
+				game.checkPlays(game.player0.tilesOnField);
 				game.playGame();
 			}
 		});

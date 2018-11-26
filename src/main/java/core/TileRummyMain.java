@@ -65,7 +65,8 @@ public class TileRummyMain{
 		
 	}
 	public void showField() {
-		if(field.size() > 0) {
+		System.out.println(field);
+		System.out.print("Field : ");
 			for(int x = 0; x < field.size(); x++) { // gets the length of the first object in the first position
 				if(justPlayed.contains(field.get(x))) {
 					System.out.print("*");
@@ -73,51 +74,16 @@ public class TileRummyMain{
 				System.out.print(field.get(x) + ",");
 			}
 			System.out.println(); //spacing
-		}else {
-			System.out.println("field is empty");
-		}
 		justPlayed.clear();
-		System.out.println(justPlayed);
+		//System.out.println(justPlayed);
 	}
-/*
-	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
-		// move this to player after team meeting
-		boolean returnV = true;
-		int checkSum = 0;
-		ArrayList<String> suitDeck = new ArrayList<String>();
-		int checkValue = collection.get(0).getValue();
-		if(collection.size() == 0) {
-			return false;
-		}else {
-			for(int i = 0; i < collection.size(); i++) {
-				if(!suitDeck.contains(collection.get(i).getColour())) {
-					if(collection.get(i).getValue() == checkValue){
-						suitDeck.add(collection.get(i).getColour());
-						checkSum += collection.get(i).getValue();
-					}
-				}
-			}
-		}
-		System.out.println(checkSum + " " + suitDeck + " " + checkValue);
-		if(checkSum < 30) {
-			returnV = false;
-		}
-		if(returnV) {
-			System.out.println(checkSum);
-			addMend(collection);
-		}
-		return returnV;
-	}
-*/
 	
-	public static void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
-		System.out.println("Size: " + collection.size());
-		field.add(collection);
+	public static void addMend(ArrayList<Tile> collection1) { // basic adding into the field of tiles
+		System.out.println("Size: " + collection1.size());
+		field.add(collection1);
 		System.out.println("Add to Field" + field.get(fieldSize));
 		fieldSize++;
 	}
-	
-	
 
 	public boolean checkGameStatus() {
 		if(player0.getHand().size() == 0) {
@@ -145,16 +111,20 @@ public class TileRummyMain{
 				//GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1){
 				System.out.println("AI 1's Turn");
+				//player1.playTurn();
 				//GUI.setPlayerTurn("player2");
 			}else if(playerTurn == 2){
 				System.out.println("AI 2's Turn");
+				//player2.playTurn();
 				//GUI.setPlayerTurn("player3");
 			}else if(playerTurn == 3){
 				//GUI.setPlayerTurn("player4");
 				System.out.println("AI 3's Turn");
+				//player3.playTurn();
 				playerTurn = playerTurn%3;
 				break;
 			}
+			System.out.println("------------------------------");
 			playerTurn++;
 		}
 	}
@@ -177,15 +147,22 @@ public class TileRummyMain{
 	}
 
 	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
+		int tmpsize1 = temp1.size();
 		if(player0.checkPlays(temp1)) {
-			for(int i = 0; i < temp1.size(); i++) {
+			for(int i = 0; i < tmpsize1-1; i++){
 				addMend(temp1.get(i));
 				justPlayed.add(temp1.get(i));
 				System.out.println("Player played " + temp1.get(i));
+				System.out.println("for: " + tmpsize1);
+				
 			}
 		}
-		System.out.print("Player's New Hand: ");
-		player0.showHand();
+			if(playerTurn == 0) {
+				//player0.clearDummyHand();
+			}
+		showField();
+		System.out.println("Player's New Hand: " + player0.getHand() + " " + tmpsize1);
+		
 		return false;
 	}
 	
