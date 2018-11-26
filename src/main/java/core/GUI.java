@@ -283,6 +283,7 @@ public class GUI extends Application
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
+				boolean drawTilePlayer = false;
 				btnFinish.setDisable(false);
 				if (game.isValidTable(game.player0.tilesOnField)) {
 					game.field = game.player0.tilesOnField;
@@ -292,7 +293,10 @@ public class GUI extends Application
 					game.player0.drawTile(game.initDeck);
 					game.player0.hand = game.player0.oldHand;
 				}
-				game.checkPlays(game.player0.tilesOnField);
+				drawTilePlayer = !(game.checkPlays(game.player0.tilesOnField));
+				if(drawTilePlayer) {
+					game.player0.drawTile(game.initDeck);
+				}
 				game.playGame();
 			}
 		});
