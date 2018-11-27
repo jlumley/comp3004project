@@ -69,6 +69,9 @@ public class GUI extends Application
 	private TileRummyMain game;
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
+	private boolean startGame = true;
+	public int rowCounter = 1;
+	public int colCounter = 0;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -293,7 +296,9 @@ public class GUI extends Application
 					game.player0.hand = game.player0.oldHand;
 				}
 				game.checkPlays(game.player0.tilesOnField);
+				updateTiles();
 				game.playGame();
+				updateTiles();
 			}
 		});
 		
@@ -333,7 +338,10 @@ public class GUI extends Application
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deckTemp)
 	{
-		sayMsg("Place Deck");
+		if(startGame) {
+			sayMsg("Place Deck");
+			startGame = false;
+		}
 		int i = 0;
 		double offsetY = 0.0;
 		ImageView tempImageView;
@@ -577,7 +585,9 @@ public class GUI extends Application
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
 		double totalRun = 0;
-		sayMsg("Hands being dealt");
+		if(startGame) {
+			sayMsg("Hands being dealt");
+		}
 		
 		sortHand(p1Hand);
 		sortHand(p2Hand);
@@ -712,28 +722,26 @@ public class GUI extends Application
 		System.out.println("Field size is: " + game.fieldSize);
 		for(ArrayList<Tile> tileList: newCardsTemp)
 		{
+			colCounter +=1;
 			for(Tile tiles: tileList)
 			{
 				/* TODO display on mane field*/
 				tempImageView = setUpCardEvents(tiles.getImage(), tiles);
 				tempImageView.setFitHeight(screenHeight/19);
 				tempImageView.setFitWidth(screenWidth*0.0225);
-				tempImageView.setX(screenWidth/2);
-				tempImageView.setY(screenHeight/2);
+				tempImageView.setY((rowCounter*75));
+				tempImageView.setX((colCounter*30) + 50);
 				deck.put(tiles.getId(), tempImageView);
 				root.getChildren().add(tempImageView);
-				
-				col += 1;
-				
-				if(i > 10)
-				{
-					row += 1;
-					col = 0;
-					i = 0;
+				colCounter+=1;
+				if(colCounter > 30) {
+					rowCounter+=1;
+					colCounter = 1;
 				}
 			}
 		}
-		
+		rowCounter = 1;
+		colCounter = 0;
 		placeDeck(initDeck); //Pass init deck to my placeDeck
 		dealHand(player0Hand, AI1Hand, AI2Hand, AI3Hand);
 		return true;

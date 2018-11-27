@@ -466,11 +466,11 @@ public class Player {
 						double xTile2 = tilesOnField.get(i).get(x).getX();
 						double xFinal = Math.abs(xTile - xTile2);
             
-						System.out.println(xFinal + " x");
+						
 						if(xFinal >= 0 && xFinal <= 33) {
 							double yTile2 = tilesOnField.get(i).get(x).getY();
 							double yFinal = Math.abs(yTile - yTile2);
-							System.out.println(yFinal + " y");
+							
 							if(yFinal >= 0 && yFinal <= 33) {
 								tilesOnField.get(i).add(tile);
 								onDummy = true;
