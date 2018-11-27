@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
+
+import javax.security.auth.x500.X500Principal;
 import javax.swing.text.Position;
 import javax.swing.text.View;
+
+import org.apache.logging.log4j.core.config.yaml.YamlConfiguration;
 
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.control.Button;
@@ -61,6 +65,8 @@ import javafx.beans.property.DoubleProperty;
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
+	public int xCounter = 2;
+	public int YCounter = 1;
 	private int screenWidth;
 	private int screenHeight;
 	private Map<Integer, ImageView> deck;
@@ -297,13 +303,15 @@ public class GUI extends Application
 					game.player0.hand = game.player0.oldHand;
 				}
 				drawTilePlayer = !(game.checkPlays(game.player0.tilesOnField));
+				System.out.println("player draw: " + drawTilePlayer);
 				if(drawTilePlayer) {
-					/*
-					 * Steven Stapleton add your add tiles here
-					 * 
-					 */
+					game.player0.drawTile(game.initDeck);
 				}
+				game.player0.showHand();
+				System.out.println("Current Field: " + game.getField());
 				game.playGame();
+				updateTiles(game.getField());
+				//remakeBoard();
 			}
 		});
 		
@@ -710,19 +718,29 @@ public class GUI extends Application
 		/* Create new cards and add */
 		for(ArrayList<Tile> tileList: newCards)
 		{
+			xCounter+=1;
 			for(Tile tiles: tileList)
 			{
 				tempImageView = setUpCardEvents(tiles.getImage(), tiles);
 				tempImageView.setFitHeight(screenHeight/19);
 				tempImageView.setFitWidth(screenWidth*0.0225);
-				tempImageView.setX(tiles.getX());
-				tempImageView.setY(tiles.getY());
+				//tempImageView.setX(tiles.getX());
+				//tempImageView.setY(tiles.getY());
+				tempImageView.setX(xCounter*30);
+				tempImageView.setY(YCounter*75);
 				deck.put(tiles.getId(), tempImageView);
 				root.getChildren().add(tempImageView);
+				if(xCounter > 10) {
+					xCounter=2;
+					YCounter+=1;
+				}else {
+					xCounter += 1;
+				}
 			}
 		}
 
 		return true;
 	}
+	
 }
 
