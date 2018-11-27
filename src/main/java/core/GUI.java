@@ -757,5 +757,20 @@ public class GUI extends Application
 		return true;
 	}
 	
+	private boolean updateHelper(ArrayList<Tile> cards)
+	{
+		ImageView tempImageView;
+		for(Tile tiles: cards)
+		{
+			tempImageView = setUpCardEvents(tiles.getImage(), tiles);
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			tempImageView.setX(tiles.getX());
+			tempImageView.setY(tiles.getY());
+			deck.put(tiles.getId(), tempImageView);
+			root.getChildren().add(tempImageView);
+		}
+		return true;
+	}
 }
 
