@@ -69,6 +69,7 @@ public class GUI extends Application
 	private TileRummyMain game;
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
+	public String playerTimer = "";
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -109,7 +110,7 @@ public class GUI extends Application
 	 * Prototype: setUpscene()
 	 *   Purpose: Set the scene as the target to drop images
 	 * */
-	private void setUpscene() 
+	private void setUpscene()
 	{
 		scene.setOnDragOver(new EventHandler<DragEvent>() {
 		    public void handle(DragEvent event) {

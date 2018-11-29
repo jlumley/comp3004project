@@ -1,6 +1,7 @@
 package core;
 
 import java.util.*;
+import java.util.Timer;
 
 public class TileRummyMain{
 	
@@ -23,6 +24,7 @@ public class TileRummyMain{
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
 		dealHands();
+		playerTimer();
 	}
 	
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
@@ -79,36 +81,6 @@ public class TileRummyMain{
 		justPlayed.clear();
 		System.out.println(justPlayed);
 	}
-/*
-	public boolean checkMend(ArrayList<Tile> collection){ // checks for users first hand with sets 
-		// move this to player after team meeting
-		boolean returnV = true;
-		int checkSum = 0;
-		ArrayList<String> suitDeck = new ArrayList<String>();
-		int checkValue = collection.get(0).getValue();
-		if(collection.size() == 0) {
-			return false;
-		}else {
-			for(int i = 0; i < collection.size(); i++) {
-				if(!suitDeck.contains(collection.get(i).getColour())) {
-					if(collection.get(i).getValue() == checkValue){
-						suitDeck.add(collection.get(i).getColour());
-						checkSum += collection.get(i).getValue();
-					}
-				}
-			}
-		}
-		System.out.println(checkSum + " " + suitDeck + " " + checkValue);
-		if(checkSum < 30) {
-			returnV = false;
-		}
-		if(returnV) {
-			System.out.println(checkSum);
-			addMend(collection);
-		}
-		return returnV;
-	}
-*/
 	
 	public static void addMend(ArrayList<Tile> collection) { // basic adding into the field of tiles
 		System.out.println("Size: " + collection.size());
@@ -157,6 +129,32 @@ public class TileRummyMain{
 			}
 			playerTurn++;
 		}
+	}
+	
+	public void playerTimer() {
+		Timer t = new Timer();
+		t.scheduleAtFixedRate(
+		    new TimerTask()
+		    {
+		    	int minutes = 0;
+	    		int seconds = 10;
+		        public void run()
+		        {
+		            System.out.print(minutes + "m " + seconds + "s\n");
+		            if (seconds == 0) {
+		            	if (minutes == 0) {
+		            		cancel();
+		            		return;
+		            	}
+		            	seconds = 59;
+		            	minutes--;
+		            } else {
+		            	seconds--;
+		            }
+		        }
+		    },
+		    0,      // run first occurrence immediately
+		    1000);  // run every second seconds
 	}
 
 	public void drawTile() {
