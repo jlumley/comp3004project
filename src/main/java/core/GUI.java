@@ -714,6 +714,7 @@ public class GUI extends Application
 			newCardsTemp = game.field;
 			System.out.println("Update tiles");
 		}else {
+			game.rollbackNow();
 			newCardsTemp = game.rollbackField;
 			
 		}
