@@ -70,6 +70,10 @@ public class GUI extends Application
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
 	public String playerTimer = "";
+	private boolean startGame = true;
+	public int rowCounter = 1;
+	public int colCounter = 0;
+
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -274,11 +278,11 @@ public class GUI extends Application
 		btnFinish = new Button("Finish Move");
 		Button btnExit = new Button("Exit Game");
 	
-		btnFinish.setLayoutX(screenWidth/2 + 100);
-		btnFinish.setLayoutY(screenHeight*0.9);
+		btnFinish.setLayoutX(200);
+		btnFinish.setLayoutY(300);
 		
-		btnExit.setLayoutX(screenWidth/2);
-		btnExit.setLayoutY(screenHeight*0.9);
+		btnExit.setLayoutX(300);
+		btnExit.setLayoutY(200);
 		
 		//Set events
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
@@ -293,8 +297,10 @@ public class GUI extends Application
 					game.player0.drawTile(game.initDeck);
 					game.player0.hand = game.player0.oldHand;
 				}
-				
+				game.checkPlays(game.player0.tilesOnField);
+				updateTiles();
 				game.playGame();
+				updateTiles();
 			}
 		});
 		
@@ -334,7 +340,10 @@ public class GUI extends Application
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deckTemp)
 	{
-		sayMsg("Place Deck");
+		if(startGame) {
+			sayMsg("Place Deck");
+			startGame = false;
+		}
 		int i = 0;
 		double offsetY = 0.0;
 		ImageView tempImageView;
@@ -578,7 +587,9 @@ public class GUI extends Application
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
 		double totalRun = 0;
-		sayMsg("Hands being dealt");
+		if(startGame) {
+			sayMsg("Hands being dealt");
+		}
 		
 		sortHand(p1Hand);
 		sortHand(p2Hand);
@@ -688,10 +699,18 @@ public class GUI extends Application
 		return masterHand;
 	}
 	
-	public boolean updateTiles(ArrayList<ArrayList<Tile>> newCards)
+	public boolean updateTiles()
 	{
-		ImageView tempImageView;
+		ArrayList<Tile> player0Hand = game.player0.getHand();
+		ArrayList<Tile> initDeck = game.initDeck;
+		ArrayList<Tile> AI1Hand = game.player1.getHand();
+		ArrayList<Tile> AI2Hand = game.player2.getHand();
+		ArrayList<Tile> AI3Hand = game.player3.getHand();
+		ArrayList<ArrayList<Tile>> newCardsTemp = game.field;
 		
+		//newCards
+		ImageView tempImageView;
+		System.out.println("Update tiles");
 		/* Hide all cards */
 		for(ImageView view: deck.values())
 		{
@@ -699,20 +718,49 @@ public class GUI extends Application
 		}
 		
 		/* Create new cards and add */
-		for(ArrayList<Tile> tileList: newCards)
+		int row = 0; //Let each row be 2 cards height
+		int col = 0; //Let each column be length of 10 cards 
+		int i = 0;
+		System.out.println("Field size is: " + game.fieldSize);
+		for(ArrayList<Tile> tileList: newCardsTemp)
 		{
+			colCounter +=1;
 			for(Tile tiles: tileList)
 			{
+				/* TODO display on mane field*/
 				tempImageView = setUpCardEvents(tiles.getImage(), tiles);
 				tempImageView.setFitHeight(screenHeight/19);
 				tempImageView.setFitWidth(screenWidth*0.0225);
-				tempImageView.setX(tiles.getX());
-				tempImageView.setY(tiles.getY());
+				tempImageView.setY((rowCounter*75));
+				tempImageView.setX((colCounter*30) + 50);
 				deck.put(tiles.getId(), tempImageView);
 				root.getChildren().add(tempImageView);
+				colCounter+=1;
+				if(colCounter > 30) {
+					rowCounter+=1;
+					colCounter = 1;
+				}
 			}
 		}
-
+		rowCounter = 1;
+		colCounter = 0;
+		placeDeck(initDeck); //Pass init deck to my placeDeck
+		dealHand(player0Hand, AI1Hand, AI2Hand, AI3Hand);
+		return true;
+	}
+	private boolean updateHelper(ArrayList<Tile> cards)
+	{
+		ImageView tempImageView;
+		for(Tile tiles: cards)
+		{
+			tempImageView = setUpCardEvents(tiles.getImage(), tiles);
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			tempImageView.setX(tiles.getX());
+			tempImageView.setY(tiles.getY());
+			deck.put(tiles.getId(), tempImageView);
+			root.getChildren().add(tempImageView);
+		}
 		return true;
 	}
 }
