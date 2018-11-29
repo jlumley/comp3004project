@@ -296,7 +296,6 @@ public class GUI extends Application
 					game.player0.hand = game.player0.oldHand;
 				}
 				game.checkPlays(game.player0.tilesOnField);
-				updateTiles();
 				game.playGame();
 				updateTiles();
 			}
@@ -447,11 +446,9 @@ public class GUI extends Application
 						game.checkPerimeter(xCord,yCord, id, tile);
 					}
 				}
-				// add card to array list if
-				System.out.println("----------------------");
-				System.out.println(game.player0.oldHand);
 				System.out.println(game.player0.tilesOnField);
-				
+				System.out.println("Current Field" + game.field);
+				System.out.println("rollback Field" + game.rollbackField);
 				inFieldOrHand = false;
 			}
 		});
@@ -704,8 +701,13 @@ public class GUI extends Application
 		ArrayList<Tile> AI1Hand = game.player1.getHand();
 		ArrayList<Tile> AI2Hand = game.player2.getHand();
 		ArrayList<Tile> AI3Hand = game.player3.getHand();
-		ArrayList<ArrayList<Tile>> newCardsTemp = game.field;
-		
+		ArrayList<ArrayList<Tile>> newCardsTemp;
+		if(game.checkField()) {
+			newCardsTemp = game.field;
+		}else {
+			newCardsTemp = game.rollbackField;
+		}
+		System.out.println(newCardsTemp);
 		//newCards
 		ImageView tempImageView;
 		System.out.println("Update tiles");
