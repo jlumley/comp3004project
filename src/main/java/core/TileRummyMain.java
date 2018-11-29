@@ -134,8 +134,9 @@ public class TileRummyMain{
 				}
 				firstTurnTracker = true;
 				playerTurn = playerTurn%3;
-				System.out.println("123" + rollbackField);
-				cloneField();
+				if(checkField()) {
+					cloneField();
+				}
 				break;
 			}
 			System.out.println("------------------------------");
@@ -258,11 +259,8 @@ public class TileRummyMain{
 	
 	public boolean checkField() {
 		if(player0.checkPlays(field)) { // if true 
-			System.out.println("Field does not need rollback");
-			System.out.println(field);
 			return true;
 		}else {
-			
 			return false;
 		}
 	}
@@ -272,10 +270,15 @@ public class TileRummyMain{
 		System.out.println(rollbackField);
 		for(int i = 0; i < field.size(); i++){
 			rollbackField.add(new ArrayList<Tile>(field.get(i)));
-			for(int x = 0; x < field.get(i).size(); x++) {
-				System.out.println(field.get(i).get(x));
-			}
 		}
-		System.out.println(rollbackField);
+		System.out.println(rollbackField + " is this now");
+	}
+	
+	public void rollbackNow() {
+		field.clear();
+		for(int i = 0; i < field.size(); i++){
+			field.add(new ArrayList<Tile>(rollbackField.get(i)));
+		}
+		System.out.println("field before reroll" + field);
 	}
 }

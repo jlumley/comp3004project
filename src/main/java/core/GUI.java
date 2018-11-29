@@ -7,6 +7,7 @@ import java.awt.print.Printable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -298,6 +299,8 @@ public class GUI extends Application
 				game.checkPlays(game.player0.tilesOnField);
 				game.playGame();
 				updateTiles();
+				
+				
 			}
 		});
 		
@@ -402,6 +405,11 @@ public class GUI extends Application
 				}
 				for (int i = 0; i < game.field.size(); i++) { // checks to see if the tile is in our actual field
 					if(game.field.get(i).contains(tile)) {		
+						inFieldOrHand = true;
+					}
+				}
+				for(int i = 0; i <game.rollbackField.size(); i++) {
+					if(game.rollbackField.get(i).contains(tile)) {
 						inFieldOrHand = true;
 					}
 				}
@@ -704,13 +712,14 @@ public class GUI extends Application
 		ArrayList<ArrayList<Tile>> newCardsTemp;
 		if(game.checkField()) {
 			newCardsTemp = game.field;
+			System.out.println("Update tiles");
 		}else {
 			newCardsTemp = game.rollbackField;
+			
 		}
 		System.out.println(newCardsTemp);
 		//newCards
 		ImageView tempImageView;
-		System.out.println("Update tiles");
 		/* Hide all cards */
 		for(ImageView view: deck.values())
 		{
