@@ -2,6 +2,7 @@ package core;
 
 import java.util.*;
 
+
 public class TileRummyMain{
 	
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -78,7 +79,7 @@ public class TileRummyMain{
 			}
 			System.out.println(); //spacing
 		justPlayed.clear();
-		//System.out.println(justPlayed);
+		System.out.println(justPlayed);
 	}
 	
 	public static void addMend(ArrayList<Tile> collection1) { // basic adding into the field of tiles
@@ -143,6 +144,7 @@ public class TileRummyMain{
 			playerTurn++;
 		}
 	}
+
 
 	public void drawTile() {
 		Tile drawTile = initDeck.remove(0);

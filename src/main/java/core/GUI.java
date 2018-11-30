@@ -1,18 +1,24 @@
 package core;
 
+import javafx.application.Platform;
 import java.awt.Dimension;
+
+import javafx.scene.control.ContentDisplay;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.print.Printable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.management.PlatformLoggingMXBean;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.text.Position;
@@ -54,7 +60,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
+import javafx.scene.control.Label;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
 public class GUI extends Application
@@ -70,9 +76,12 @@ public class GUI extends Application
 	private TileRummyMain game;
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
+	Label playerTimer = new Label("");
 	private boolean startGame = true;
 	public int rowCounter = 1;
 	public int colCounter = 0;
+	Timer t = new Timer();
+
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -91,6 +100,7 @@ public class GUI extends Application
 	public void start(Stage primaryStage) throws Exception 
 	{	
 		/* Set up GUI */
+		
 		setPanePos();	
 		root = new Pane();
 		scene = new Scene(root, screenWidth, screenHeight);
@@ -103,9 +113,10 @@ public class GUI extends Application
 		game = new TileRummyMain();
 		game.initialize();
 		placeDeck(game.initDeck);
-	  dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 
 		deck = new HashMap<Integer, ImageView>();
+		
 		game.playGame();
 	}
 	
@@ -113,7 +124,7 @@ public class GUI extends Application
 	 * Prototype: setUpscene()
 	 *   Purpose: Set the scene as the target to drop images
 	 * */
-	private void setUpscene() 
+	private void setUpscene()
 	{
 		scene.setOnDragOver(new EventHandler<DragEvent>() {
 		    public void handle(DragEvent event) {
@@ -772,6 +783,39 @@ public class GUI extends Application
 			root.getChildren().add(tempImageView);
 		}
 		return true;
+	}
+	
+	public void playerTimer() {
+		root.getChildren().add(playerTimer);
+		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
+		playerTimer.setFont(new Font(30));
+		playerTimer.setContentDisplay(ContentDisplay.TOP);
+		
+		t.scheduleAtFixedRate(new TimerTask() {
+	        
+	        int minutes = 2;
+            int seconds = 0;
+            @Override
+	        public void run() {
+	            Platform.runLater(() -> {
+	            	
+	            	playerTimer.setText(minutes + "m " + seconds + "s\n");
+			          
+		            if (seconds == 0) {
+		            	if (minutes == 0) {
+		            		playerTimer.setText("");;
+		            		cancel();
+		            		return;
+		            	}
+		            	seconds = 59;
+		            	minutes--;
+		            } else {
+		            	seconds--;
+		            }
+	            	
+	            });
+	        }
+	    }, 1000, 1000);
 	}
 }
 
