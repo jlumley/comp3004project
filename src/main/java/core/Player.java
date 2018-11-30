@@ -330,8 +330,6 @@ public class Player {
 		if(returnV) {
 			System.out.println(checkSum);
 		}
-		
-		//System.out.println(checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
 		return returnV;
 	}
 	

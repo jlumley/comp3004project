@@ -8,6 +8,7 @@ public class TileRummyMain{
 	public static final String[] suites = {"R", "B", "G", "O"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
+	public static ArrayList<ArrayList<Tile>> rollbackField = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<ArrayList<Tile>> justPlayed = new ArrayList<ArrayList<Tile>>();
 	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
@@ -19,6 +20,10 @@ public class TileRummyMain{
 	public int playerTurn = 0;
 	public static int fieldSize = 0;
 	public boolean firstTurnTracker = false;
+	
+	public ArrayList<ArrayList<Tile>> getField(){
+		return field;
+	}
 	
 	public void initialize() {
 		resetStaticVars();
@@ -42,12 +47,9 @@ public class TileRummyMain{
 	}
 	
 	public void showDeck() {
-		System.out.println();
 		for(int i = 0; i < initDeck.size(); i++) {
 			System.out.print( initDeck.get(i).toString() + " ");
 		}
-		System.out.println();
-		System.out.println(initDeck.size());
 	}
 	
 	public void dealHands() {
@@ -106,7 +108,6 @@ public class TileRummyMain{
 
 	public void playGame() { // where most of the game logic is going to go.
 		while(gameStatus){
-			System.out.print(playerTurn + " ");
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
 				//Added in to set the text on GUI to the current player
@@ -134,6 +135,9 @@ public class TileRummyMain{
 				}
 				firstTurnTracker = true;
 				playerTurn = playerTurn%3;
+				if(checkField()) {
+					cloneField();
+				}
 				break;
 			}
 			System.out.println("------------------------------");
@@ -253,5 +257,30 @@ public class TileRummyMain{
 	}
 	public int getTurn() {
 		return playerTurn;
+	}
+	
+	public boolean checkField() {
+		if(player0.checkPlays(field)) { // if true 
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public void cloneField() {
+		rollbackField.clear();
+		System.out.println(rollbackField);
+		for(int i = 0; i < field.size(); i++){
+			rollbackField.add(new ArrayList<Tile>(field.get(i)));
+		}
+		System.out.println(rollbackField + " is this now");
+	}
+	
+	public void rollbackNow() {
+		field.clear();
+		for(int i = 0; i < field.size(); i++){
+			field.add(new ArrayList<Tile>(rollbackField.get(i)));
+		}
+		System.out.println("field before reroll" + field);
 	}
 }
