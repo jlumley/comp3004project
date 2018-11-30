@@ -79,6 +79,7 @@ public class GUI extends Application
 	private boolean startGame = true;
 	public int rowCounter = 1;
 	public int colCounter = 0;
+	Timer t = new Timer();
 
 	
 	/* TODO remove this when done*/
@@ -114,7 +115,7 @@ public class GUI extends Application
 		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 
 		deck = new HashMap<Integer, ImageView>();
-		playerTimer();
+		
 		game.playGame();
 	}
 	
@@ -777,7 +778,6 @@ public class GUI extends Application
 		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
 		playerTimer.setFont(new Font(30));
 		playerTimer.setContentDisplay(ContentDisplay.TOP);
-		Timer t = new Timer();
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 	        
