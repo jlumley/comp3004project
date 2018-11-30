@@ -1,7 +1,7 @@
 package core;
 
 import java.util.*;
-import java.util.Timer;
+
 
 public class TileRummyMain{
 	
@@ -25,7 +25,6 @@ public class TileRummyMain{
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
 		dealHands();
-		playerTimer();
 	}
 	
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
@@ -141,32 +140,7 @@ public class TileRummyMain{
 			playerTurn++;
 		}
 	}
-	
-	public void playerTimer() {
-		Timer t = new Timer();
-		t.scheduleAtFixedRate(
-		    new TimerTask()
-		    {
-		    	int minutes = 0;
-	    		int seconds = 10;
-		        public void run()
-		        {
-		            System.out.print(minutes + "m " + seconds + "s\n");
-		            if (seconds == 0) {
-		            	if (minutes == 0) {
-		            		cancel();
-		            		return;
-		            	}
-		            	seconds = 59;
-		            	minutes--;
-		            } else {
-		            	seconds--;
-		            }
-		        }
-		    },
-		    0,      // run first occurrence immediately
-		    1000);  // run every second seconds
-	}
+
 
 	public void drawTile() {
 		Tile drawTile = initDeck.remove(0);
