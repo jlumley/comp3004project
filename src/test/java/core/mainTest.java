@@ -26,7 +26,7 @@ public class mainTest extends TestCase{
 		Tile t6 = new Tile("B", 5);
 		temp2.add(t6);
 		temp1.add(temp2);
-		result.initialize();
+		result.initialize("");
 		result.playGame();
 		result.showDeck();
 		result.player0.showHand();
@@ -47,7 +47,7 @@ public class mainTest extends TestCase{
 	}
 	public void testdealHands() {
 		TileRummyMain result = new TileRummyMain();
-		result.initialize();
+		result.initialize("");
 		assertNotNull(result.player0.getHand());
 		assertNotNull(result.player1.getHand());
 		assertNotNull(result.player2.getHand());
@@ -64,7 +64,7 @@ public class mainTest extends TestCase{
 		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[0]);
 		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[1]);
 		assertEquals(0, result.getHandSizeOfOtherPlayers(result.player3)[2]);
-		result.initialize();
+		result.initialize("");
 		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[0]);
 		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[1]);
 		assertEquals(14, result.getHandSizeOfOtherPlayers(result.player3)[2]);

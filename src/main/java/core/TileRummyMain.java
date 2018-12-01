@@ -1,6 +1,6 @@
 package core;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 
@@ -26,11 +26,11 @@ public class TileRummyMain{
 		return field;
 	}
 	
-	public void initialize(Boolean file_input) {
+	public void initialize(String filename) {
 		resetStaticVars();
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
-		dealHands(file_input);
+		dealHands(filename);
 	}
 	
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
@@ -53,10 +53,11 @@ public class TileRummyMain{
 		}
 	}
 	
-	public void dealHands(Boolean file_input) {
+	public void dealHands(String filename) {
 		
-		if (file_input) {
+		if (!filename.isEmpty()) {
 			System.out.println("using file to deal hands");
+			dealHandsFromFile(filename);
 		}else {
 			for(int i = 0; i < 14; i++) {
 				player0.drawTile(initDeck);
@@ -290,7 +291,48 @@ public class TileRummyMain{
 		System.out.println("field before reroll" + field);
 	}
 	
-	public void deal_hands_from_file() {
+	public void dealHandsFromFile(String filename) {
 		
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		       if (line.matches("P0:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P0: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player0.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+		       if (line.matches("P1:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P1: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player1.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+		       if (line.matches("P2:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P2: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player2.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+		       if (line.matches("P3:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P3: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player3.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+
+		       
+		    }
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

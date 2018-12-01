@@ -1,5 +1,6 @@
 package core;
 
+import javafx.scene.control.TextInputDialog;
 import javafx.application.Platform;
 import java.awt.Dimension;
 import java.lang.Object;
@@ -111,7 +112,7 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
-		Boolean file_input = use_file_input();
+		String file_input = use_file_input();
 		
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
@@ -822,23 +823,18 @@ public class GUI extends Application
 	    }, 1000, 1000);
 	}
 	
-	public Boolean use_file_input() {
-		Boolean file_input = false;
+	public String use_file_input() {
+		String file_input = "";
 		
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("File input");
-		alert.setHeaderText("Would you like to deal hands from a file?");
+		TextInputDialog dialog = new TextInputDialog("");
+		dialog.setTitle("File input");
+		dialog.setHeaderText("Enter a file to deal from or leave it blank");
 	
-		ButtonType buttonTypeOne = new ButtonType("Yes");
-		ButtonType buttonTypeTwo = new ButtonType("No");
-		
-		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeOne){
-		    file_input = true;
-		} else if (result.get() == buttonTypeTwo) {
-		    file_input = false;
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    file_input = result.get();
+		    System.out.println("'" + file_input + "'");
 		}
 		return file_input;
 			
