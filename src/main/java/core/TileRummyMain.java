@@ -1,5 +1,6 @@
 package core;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -25,11 +26,11 @@ public class TileRummyMain{
 		return field;
 	}
 	
-	public void initialize() {
+	public void initialize(Boolean file_input) {
 		resetStaticVars();
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
-		dealHands();
+		dealHands(file_input);
 	}
 	
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
@@ -52,12 +53,17 @@ public class TileRummyMain{
 		}
 	}
 	
-	public void dealHands() {
-		for(int i = 0; i < 14; i++) {
-			player0.drawTile(initDeck);
-			player1.drawTile(initDeck);
-			player2.drawTile(initDeck);
-			player3.drawTile(initDeck);
+	public void dealHands(Boolean file_input) {
+		
+		if (file_input) {
+			System.out.println("using file to deal hands");
+		}else {
+			for(int i = 0; i < 14; i++) {
+				player0.drawTile(initDeck);
+				player1.drawTile(initDeck);
+				player2.drawTile(initDeck);
+				player3.drawTile(initDeck);
+			}
 		}
 	}
 
@@ -282,5 +288,9 @@ public class TileRummyMain{
 			field.add(new ArrayList<Tile>(rollbackField.get(i)));
 		}
 		System.out.println("field before reroll" + field);
+	}
+	
+	public void deal_hands_from_file() {
+		
 	}
 }

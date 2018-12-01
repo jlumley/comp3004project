@@ -2,7 +2,7 @@ package core;
 
 import javafx.application.Platform;
 import java.awt.Dimension;
-
+import java.lang.Object;
 import javafx.scene.control.ContentDisplay;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,6 +64,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.scene.control.ButtonType;
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
@@ -109,9 +111,11 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
+		Boolean file_input = use_file_input();
+		
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
-		game.initialize();
+		game.initialize(file_input);
 		placeDeck(game.initDeck);
 		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 
@@ -816,6 +820,28 @@ public class GUI extends Application
 	            });
 	        }
 	    }, 1000, 1000);
+	}
+	
+	public Boolean use_file_input() {
+		Boolean file_input = false;
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("File input");
+		alert.setHeaderText("Would you like to deal hands from a file?");
+	
+		ButtonType buttonTypeOne = new ButtonType("Yes");
+		ButtonType buttonTypeTwo = new ButtonType("No");
+		
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne){
+		    file_input = true;
+		} else if (result.get() == buttonTypeTwo) {
+		    file_input = false;
+		}
+		return file_input;
+			
 	}
 }
 
