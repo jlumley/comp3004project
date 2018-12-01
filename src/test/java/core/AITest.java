@@ -14,7 +14,7 @@ public class AITest extends TestCase{
 	}
 	public void testAIPlayer1() {
 		TileRummyMain result = new TileRummyMain();
-		result.initialize();
+		result.initialize("");
 		System.out.println("Player1 Hand: ");
 		result.player1.showHand();
 		System.out.println("Field: ");
@@ -397,7 +397,7 @@ public class AITest extends TestCase{
 	//Works when TileRummyMain dealHands() deals to Player3
 	public void testExistsAComparativelySmallHand() {
 		TileRummyMain result = new TileRummyMain();
-		result.initialize();
+		result.initialize("");
 		Strategy3 strat3 = new Strategy3();
 		assertEquals(false, strat3.existsAComparativelySmallHand());
 		result.player3.addTile(new Tile("B", 2));
