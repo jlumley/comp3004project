@@ -112,12 +112,11 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
-		getPlayerStrategies();
 		String file_input = use_file_input();
 		playerTimer = new Label("");
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
-		game.initialize(file_input);
+		game.initialize(file_input, getPlayerStrategies()); 
 		placeDeck(game.initDeck);
 		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 		deck = new HashMap<Integer, ImageView>();
@@ -128,7 +127,7 @@ public class GUI extends Application
 	 * Prototype: getPlayerStrategies()
 	 *   Purpose: Get which players will play and a riged file input
 	 */
-	private boolean getPlayerStrategies()
+	private ArrayList<String> getPlayerStrategies()
 	{
 		choices = new ArrayList<String>();
 		optionsBox.display();
@@ -151,7 +150,7 @@ public class GUI extends Application
 		System.out.println(choices.get(1));
 		System.out.println(choices.get(2));
 		System.out.println(choices.get(3));
-		return true;
+		return choices;
 	}
 	
 	/*

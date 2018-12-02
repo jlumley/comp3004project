@@ -14,19 +14,55 @@ public class TileRummyMain{
 	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public static Player player0 = new Player();
-	public static AI player1 = new AI(new Strategy1());
-	public static AI player2 = new AI(new Strategy2());
-	public static AI player3 = new AI(new Strategy3());
+	public static AI player1;
+	public static AI player2;
+	public static AI player3;
 	boolean gameStatus = true;
 	public int playerTurn = 0;
 	public static int fieldSize = 0;
 	public boolean firstTurnTracker = false;
 	
-	public ArrayList<ArrayList<Tile>> getField(){
-		return field;
+	public ArrayList<ArrayList<Tile>> getField(){return field;}
+	
+	/* Provide option to select which strategies to use*/
+	/* Options are Player, AI Strategy 1, AI Strategy 2, AI Strategy 3, AI Strategy 4*/
+	public void initialize(String filename, ArrayList<String> options) {
+		player0 = new Player();
+		player1 = setStrategy(options.get(1));
+		player2 = setStrategy(options.get(2));
+		player3 = setStrategy(options.get(3));
+				
+		resetStaticVars();
+		initDeck = buildDeck(suites,values);
+		Collections.shuffle(initDeck);
+		dealHands(filename);
 	}
 	
+	public AI setStrategy(String choice)
+	{
+		if(choice.equals("AI Strategy 1"))
+		{
+			return new AI(new Strategy1());
+		}
+		else if(choice.equals("AI Strategy 2"))
+		{
+			return new AI(new Strategy2());
+		}
+		else if(choice.equals("AI Strategy 3"))
+		{
+			return new AI(new Strategy3());
+		}
+		else
+		{
+			//Assume this is a player
+			return null;
+		}
+	}
 	public void initialize(String filename) {
+		player0 = new Player();
+		player1 = new AI(new Strategy1());
+		player2 = new AI(new Strategy2());
+		player3 = new AI(new Strategy3());
 		resetStaticVars();
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
