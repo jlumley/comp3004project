@@ -79,12 +79,13 @@ public class GUI extends Application
 	private TileRummyMain game;
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
-	Label playerTimer = new Label("");
+	Label playerTimer;
 	private boolean startGame = true;
 	public int rowCounter = 1;
 	public int colCounter = 0;
+	public ArrayList<String> choices;
 	Timer t = new Timer();
-
+	public static Alert alert;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -103,7 +104,6 @@ public class GUI extends Application
 	public void start(Stage primaryStage) throws Exception 
 	{	
 		/* Set up GUI */
-		
 		setPanePos();	
 		root = new Pane();
 		scene = new Scene(root, screenWidth, screenHeight);
@@ -112,17 +112,46 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
+		getPlayerStrategies();
 		String file_input = use_file_input();
-		
+		playerTimer = new Label("");
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
 		game.initialize(file_input);
 		placeDeck(game.initDeck);
 		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-
 		deck = new HashMap<Integer, ImageView>();
-		
 		game.playGame();
+	}
+	
+	/*
+	 * Prototype: getPlayerStrategies()
+	 *   Purpose: Get which players will play and a riged file input
+	 */
+	private boolean getPlayerStrategies()
+	{
+		choices = new ArrayList<String>();
+		optionsBox.display();
+		if(optionsBox.choices.size() > 3)
+		{
+			/* Add user options assuming they selected each one*/
+			choices.addAll(optionsBox.choices);
+		}
+		else
+		{
+			/* Default options if they didn't pick all players*/
+	        choices.add("Player");
+	        choices.add("AI Strategy 1");
+	        choices.add("AI Strategy 2");
+	        choices.add("AI Strategy 3");
+		}
+		
+		/* Check which players were selected */
+		System.out.println(choices.get(0));
+		System.out.println(choices.get(1));
+		System.out.println(choices.get(2));
+		System.out.println(choices.get(3));
+		return true;
 	}
 	
 	/*
@@ -629,10 +658,10 @@ public class GUI extends Application
 	 * */
 	public static boolean sayMsg(String msg)
 	{
-		Alert alert = new Alert(AlertType.INFORMATION);
+		alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Message");
 		alert.setContentText(msg);
-		alert.show();	
+		alert.show(); 	
 		return true;
 	}
 	
