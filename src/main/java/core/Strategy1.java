@@ -53,6 +53,7 @@ public class Strategy1 implements AIStrategy{
 				for(int i = 0; i < p1Melds.size(); i++) { //Play all the tiles it can
 					TileRummyMain.addMend(p1Melds.get(i)); //add all melds to board
 				}
+				return;
 			}
 			//otherwise
 			System.out.println("p1 could play but has no tile to play");
