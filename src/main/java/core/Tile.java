@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 public class Tile implements Comparable<Tile>
 {
 	private static final String imageDir = "src/main/resources/core/tiles/";
-	private static final String imageDirLite = "src/main/resources/core/tiles/Lite";
+	private static final String imageDirLite = "src/main/resources/core/liteTiles/Lite";
 	private int value;
 	private String colour;
 	private boolean enableMove;
