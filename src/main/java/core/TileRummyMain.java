@@ -40,6 +40,11 @@ public class TileRummyMain{
 	
 	public AI setStrategy(String choice)
 	{
+		if(choice == null)
+		{
+			return null;
+		}
+		
 		if(choice.equals("AI Strategy 1"))
 		{
 			return new AI(new Strategy1());

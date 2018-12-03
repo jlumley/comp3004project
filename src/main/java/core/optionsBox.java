@@ -15,7 +15,8 @@ import javafx.geometry.*;
 public class optionsBox {
 	public static ArrayList<String> choices;
 	
-    public static void display() {
+    @SuppressWarnings("restriction")
+	public static void display() {
     	choices = new ArrayList<String>();
     	
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -51,10 +52,46 @@ public class optionsBox {
         Button btnFinish = new Button("Finish");
         
         btnFinish.setOnAction(e -> {
-        	choices.add((String) comboBox1.getValue());
-        	choices.add((String) comboBox1.getValue());
-        	choices.add((String) comboBox1.getValue());
-        	choices.add((String) comboBox1.getValue());
+        	//Slot 1
+        	if(comboBox1.getValue() == null)
+        	{
+        		choices.add("Player");
+        	}
+        	else
+        	{
+        		choices.add((String) comboBox1.getValue());
+        	}
+        	
+        	//Slot 2
+        	if(comboBox2.getValue() == null)
+        	{
+        		choices.add("AI Strategy 1");
+        	}
+        	else
+        	{
+        		choices.add((String) comboBox2.getValue());
+        	}
+        	
+        	//Slot 3
+        	if(comboBox3.getValue() == null)
+        	{
+        		choices.add("AI Strategy 2");
+        	}
+        	else
+        	{
+        		choices.add((String) comboBox3.getValue());
+        	}
+        	
+        	//Slot 4
+        	if(comboBox4.getValue() == null)
+        	{
+        		choices.add("AI Strategy 3");
+        	}
+        	else
+        	{
+        		choices.add((String) comboBox4.getValue());
+        	}
+        	
         	gameOptions.close();  	
         });
 
