@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import javax.swing.text.html.ImageView;
+
 import javafx.scene.image.Image;
 
 public class Tile implements Comparable<Tile>
 {
 	private static final String imageDir = "src/main/resources/core/tiles/";
+	private static final String imageDirLite = "src/main/resources/core/tiles/Lite";
 	private int value;
 	private String colour;
 	private boolean enableMove;
@@ -16,6 +19,7 @@ public class Tile implements Comparable<Tile>
 	private int id;
 
 	private Image tileImage;
+	private Image liteTileImage;
 	private double x;
 	private double y;
 	
@@ -116,8 +120,11 @@ public class Tile implements Comparable<Tile>
 		try 
 		{
 			Image cardImage;
+			Image liteCardImage;
 			cardImage = new Image(new FileInputStream(imageDir + fileName));
+			liteCardImage = new Image(new FileInputStream(imageDir + fileName));
 			tileImage = cardImage;
+			liteTileImage = liteCardImage;
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -130,6 +137,15 @@ public class Tile implements Comparable<Tile>
 	
 	public Image getImage()
 	{
+		return tileImage;
+	}
+	public Image getImage2(int parser)
+	{
+		if(parser == 0) {
+			return liteTileImage;
+		}else if(parser == 1) {
+			return tileImage;
+		}
 		return tileImage;
 	}
 	public String toString() {

@@ -782,7 +782,11 @@ public class GUI extends Application
 			for(Tile tiles: tileList)
 			{
 				/* TODO display on mane field*/
-				tempImageView = setUpCardEvents(tiles.getImage(), tiles);
+				if(game.justPlayed.contains(tiles)) {
+					tempImageView = setUpCardEvents(tiles.getImage2(0), tiles);
+				}else {
+					tempImageView = setUpCardEvents(tiles.getImage2(1), tiles);
+				}
 				tempImageView.setFitHeight(screenHeight/19);
 				tempImageView.setFitWidth(screenWidth*0.0225);
 				tempImageView.setY((rowCounter*75));
