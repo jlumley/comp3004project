@@ -3,6 +3,8 @@ package core;
 import java.util.ArrayList;
 
 public class Strategy2 implements AIStrategy{
+	private AI player;
+	
 	public void playTurn() {
 		//Check board for existing tiles; 
 		// if Exists Check for 30 point limit and play
@@ -76,5 +78,9 @@ public class Strategy2 implements AIStrategy{
 			System.out.println("Player 2 draws: " + TileRummyMain.initDeck.get(0));
 			TileRummyMain.player2.drawTile(TileRummyMain.initDeck);
 		}
+	}
+	
+	public void setPlayer(AI thisPlayer) {
+		player = thisPlayer;
 	}
 }

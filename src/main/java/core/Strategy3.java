@@ -3,6 +3,7 @@ package core;
 import java.util.ArrayList;
 
 public class Strategy3 implements AIStrategy{
+	private AI player;
 	
 	public void playTurn() {
 		System.out.println("Player 3 Turn");
@@ -104,4 +105,7 @@ public class Strategy3 implements AIStrategy{
 		return false;
 	}
 	
+	public void setPlayer(AI thisPlayer) {
+		player = thisPlayer;
+	}
 }
