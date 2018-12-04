@@ -775,7 +775,7 @@ public class GUI extends Application
 		int row = 0; //Let each row be 2 cards height
 		int col = 0; //Let each column be length of 10 cards 
 		int i = 0;
-		System.out.println("Field size is: " + game.fieldSize);
+		System.out.println("Field size is: " + game.field.size());
 		for(ArrayList<Tile> tileList: newCardsTemp)
 		{
 			colCounter +=1;

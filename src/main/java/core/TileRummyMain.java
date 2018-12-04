@@ -19,7 +19,6 @@ public class TileRummyMain{
 	public static AI player3;
 	boolean gameStatus = true;
 	public int playerTurn = 0;
-	public static int fieldSize = 0;
 	public boolean firstTurnTracker = false;
 	
 	public ArrayList<ArrayList<Tile>> getField(){return field;}
@@ -132,9 +131,7 @@ public class TileRummyMain{
 	
 	public static void addMend(ArrayList<Tile> collection1) { // basic adding into the field of tiles
 		System.out.println("Size: " + collection1.size());
-		field.add(collection1);
-		System.out.println("Add to Field" + field.get(fieldSize));
-		fieldSize++;
+		System.out.println("Add to Field" + field.size());
 	}
 
 	public boolean checkGameStatus() {
@@ -164,7 +161,6 @@ public class TileRummyMain{
 				System.out.println("AI 1's Turn");
 				if(firstTurnTracker) {
 					player1.playTurn();
-					
 				}
 				//GUI.setPlayerTurn("player2");
 			}else if(playerTurn == 2){
@@ -188,6 +184,7 @@ public class TileRummyMain{
 				}
 				break;
 			}
+			System.out.println(field);
 			System.out.println("------------------------------");
 			playerTurn++;
 		}
@@ -237,7 +234,6 @@ public class TileRummyMain{
 		player2 = new AI(new Strategy2());
 		player3 = new AI(new Strategy3());
 		field = new ArrayList<ArrayList<Tile>>();
-		fieldSize = 0;
 		initDeck = new ArrayList<Tile>();
 	}
 	
