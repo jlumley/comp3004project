@@ -116,7 +116,8 @@ public class GUI extends Application
 		/* Set up game */
 		playerTimer = new Label("");
 		root.getChildren().add(playerTimer);
-		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
+		playerTimer.setTranslateX(screenWidth-150);
+		playerTimer.setTranslateY(screenHeight-100);
 		playerTimer.setFont(new Font(30));
 		playerTimer.setContentDisplay(ContentDisplay.TOP);
 		String file_input = use_file_input();
