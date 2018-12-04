@@ -318,11 +318,16 @@ public class TileRummyMain{
 		System.out.println("Dummy1" +recentDummy1);
 		System.out.println("Dummy2" +recentDummy2);
 		if(rollbackField.size() > 0) {
-			for(int c1 = 0; c1 < recentDummy1.size(); c1++) {
-				if(!(recentDummy2.contains(recentDummy1.get(c1)))) {
-					recentlyPlayedArrayList.add(recentDummy1.get(c1));
-				}
-			}
+			/*for(int c1 = 0; c1 < recentDummy1.size(); c1++) {
+				for(int c2 = 0; c2 < recentDummy2.size(); c2++) {
+					if(recentDummy1.get(c1) == recentDummy2.get(c2)) {
+					*/
+						recentDummy1.removeAll(recentDummy2);
+						System.out.println(recentDummy1);
+						//recentlyPlayedArrayList.add(recentDummy1.get(c1));
+						for(int d1 = 0; d1 < recentDummy1.size(); d1++) {
+							recentlyPlayedArrayList.add(recentDummy1.get(d1));
+						}
 		}else {
 			for(int a = 0; a < field.size(); a++) {
 				for(int b = 0; b < field.get(a).size(); b++) {

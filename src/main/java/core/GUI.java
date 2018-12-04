@@ -762,7 +762,9 @@ public class GUI extends Application
 		
 		return masterHand;
 	}
-	
+	public boolean updateHandTiles() {
+		return true;
+	}
 	public boolean updateTiles()
 	{
 		ArrayList<Tile> player0Hand = game.player0.getHand();
@@ -787,7 +789,6 @@ public class GUI extends Application
 		{
 			view.setVisible(false);
 		}
-		
 		/* Create new cards and add */
 		int row = 0; //Let each row be 2 cards height
 		int col = 0; //Let each column be length of 10 cards 
