@@ -1,8 +1,13 @@
 package core;
 
 import java.util.ArrayList;
-
+/*
+ * Each AIPlayer needs to implement a Strategy
+ * Each Strategy needs an instance of it's Player
+*/
 public class Strategy1 implements AIStrategy{
+	private AI player; 
+	
 	public void playTurn() {
 		System.out.println("Player 1 Turn");
 		System.out.println("Player 1 Hand: " + TileRummyMain.player1.getHand());
@@ -79,5 +84,9 @@ public class Strategy1 implements AIStrategy{
 			System.out.println("Player 1 draws: " + TileRummyMain.initDeck.get(0));
 			TileRummyMain.player1.drawTile(TileRummyMain.initDeck);
 		}
+	}
+	
+	public void setPlayer(AI thisPlayer) {
+		player = thisPlayer;
 	}
 }
