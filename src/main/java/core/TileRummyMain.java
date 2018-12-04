@@ -158,6 +158,9 @@ public class TileRummyMain{
 				//Added in to set the text on GUI to the current player
 				//GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1 ){
+				if(field.size() == rollbackField.size()) { // when nothing is changed
+					player0.drawTile(initDeck);
+				}
 				System.out.println("AI 1's Turn");
 				if(firstTurnTracker) {
 					player1.playTurn();
@@ -190,23 +193,6 @@ public class TileRummyMain{
 		}
 	}
 
-
-	public void drawTile() {
-		Tile drawTile = initDeck.remove(0);
-		if(playerTurn == 0) {
-			player0.addTile(drawTile);
-			System.out.println("Players draws a tile");
-		}else if(playerTurn == 1){
-			System.out.println("AI 1's draws a tile");
-			player1.addTile(drawTile);
-		}else if(playerTurn == 2){
-			System.out.println("AI 2's draws a tile");
-			player2.addTile(drawTile);
-		}else if(playerTurn == 3){
-			System.out.println("AI 3's draws a tile");
-			player3.addTile(drawTile);
-		}
-	}
 
 	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
 		int tmpsize1 = temp1.size();

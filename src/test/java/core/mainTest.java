@@ -30,7 +30,7 @@ public class mainTest extends TestCase{
 		result.playGame();
 		result.showDeck();
 		result.player0.showHand();
-		result.drawTile();
+		//result.drawTile();
 		result.player0.showHand();
 		result.showField();
 		result.getHandSize();
