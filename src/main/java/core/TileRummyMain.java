@@ -13,7 +13,6 @@ public class TileRummyMain{
 	public static ArrayList<ArrayList<Tile>> justPlayed = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<Tile> recentlyPlayedArrayList = new ArrayList<Tile>();
 	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
-	static ArrayList<Tile> tempHand = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public static Player player0 = new Player();
 	public static AI player1;
@@ -74,7 +73,6 @@ public class TileRummyMain{
 		Collections.shuffle(initDeck);
 		dealHands(filename);
 	}
-	
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
 		ArrayList<Tile> dummyDeck = new ArrayList<Tile>();
 		for(int x = 0; x < 2; x++) {
@@ -133,7 +131,8 @@ public class TileRummyMain{
 	public static void addMend(ArrayList<Tile> collection1) { // basic adding into the field of tiles
 		System.out.println("Size: " + collection1.size());
 		field.add(collection1);
-		System.out.println("Add to Field " + field.size());
+		System.out.println("Added to Field" + field.size() + " " + field.size());
+		
 	}
 
 	public boolean checkGameStatus() {
@@ -157,6 +156,8 @@ public class TileRummyMain{
 		while(gameStatus){
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
+				System.out.println("Players hand: " + player0.getHand());
+				System.out.println("------------------------------");
 				//Added in to set the text on GUI to the current player
 				//GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1 ){
@@ -166,6 +167,12 @@ public class TileRummyMain{
 					player0.drawTile(initDeck);
 				}
 				System.out.println("AI 1's Turn");
+				player1.playTurn();
+				System.out.println("Field after AI1's turn");
+				this.showField();
+				//GUI.setPlayerTurn("player2");
+			}else if(playerTurn == 2){
+				//System.out.println("AI 2's Turn");
 				if(firstTurnTracker) {
 					player1.playTurn();
 				}
@@ -179,7 +186,7 @@ public class TileRummyMain{
 				//GUI.setPlayerTurn("player3");
 			}else if(playerTurn == 3){
 				//GUI.setPlayerTurn("player4");
-				System.out.println("AI 3's Turn");
+				//System.out.println("AI 3's Turn");
 				//player3.playTurn();
 				if(firstTurnTracker) {
 					
@@ -212,6 +219,9 @@ public class TileRummyMain{
 				System.out.println("for: " + tmpsize1);
 			}
 		}
+			if(playerTurn == 0) {
+				//player0.clearDummyHand();
+			}
 		System.out.println("Just Played" + justPlayed);
 		System.out.println("Player's New Hand: " + player0.getHand() + " " + tmpsize1);
 		
@@ -335,13 +345,11 @@ public class TileRummyMain{
 		System.out.println("Just played1: " + recentlyPlayedArrayList);
 		
 		rollbackField.clear();
-		tempHand = new ArrayList<Tile>();
 		System.out.println(rollbackField);
 		for(int i = 0; i < field.size(); i++){
 			rollbackField.add(new ArrayList<Tile>(field.get(i)));
 		}
 		//save the players hand
-		tempHand = player0.hand;
 		System.out.println(rollbackField + " is this now");
 	}
 	
@@ -351,7 +359,6 @@ public class TileRummyMain{
 			field.add(new ArrayList<Tile>(rollbackField.get(i)));
 		}
 		//rollback the players hand
-		player0.hand = tempHand;
 		System.out.println("field before reroll" + field);
 	}
 	

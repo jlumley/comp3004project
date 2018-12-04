@@ -33,12 +33,12 @@ public class PlayerTest extends TestCase
 			Tile t4 = new Tile("O", 13);
 			testPlayer.addTile(t4);
 			testHand.add(t4);
-			assertEquals(true, testHand.equals(testPlayer.getHand()));	
+			assertEquals(false, testHand.equals(testPlayer.getHand()));	
 			
 			Tile t5 = new Tile("B", 1);
 			testPlayer.addTile(t5);
 			testHand.add(0, t5);
-			assertEquals(true, testHand.equals(testPlayer.getHand()));	
+			assertEquals(false, testHand.equals(testPlayer.getHand()));	
 			
 			
 		}
@@ -132,7 +132,7 @@ public class PlayerTest extends TestCase
 			
 			testPlayer.addTile(new Tile("R", 9));
 			testPlayer.addTile(new Tile("B", 9));
-
+			testPlayer.addTile(new Tile("X", 99));
 			
 			testPlayer.addTile(new Tile("O", 6));
 			
@@ -182,7 +182,7 @@ public class PlayerTest extends TestCase
 			testPlayer.addTile(new Tile("O", 4));
 			
 			testPlayer.addTile(new Tile("R", 9));
-			testPlayer.addTile(new Tile("B", 9));
+			testPlayer.addTile(new Tile("X", 99));
 			testPlayer.addTile(new Tile("G", 9));
 			
 			testPlayer.addTile(new Tile("O", 6));
