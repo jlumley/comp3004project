@@ -333,12 +333,13 @@ public class Player {
 			}
 		}
 		if(returnV) {
-			System.out.println(checkSum);
+			//System.out.println("Total played: " + checkSum);
 		}
+		System.out.println("Total: " + checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
 		return returnV;
 	}
 	
-	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) { // goes through each 'play' and splits them off into different reuseable functions
+	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) { // goesf through each 'play' and splits them off into different reuseable functions
 
 		for(int i = 0; i < temp1.size(); i++) {
 			if(temp1.get(i).size() < 3) {

@@ -23,7 +23,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
+
+import javax.security.auth.x500.X500Principal;
 import javax.swing.text.Position;
+import javax.swing.text.View;
+
+import org.apache.logging.log4j.core.config.yaml.YamlConfiguration;
+
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -69,6 +75,8 @@ import javafx.scene.control.ButtonType;
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
+	public int xCounter = 2;
+	public int YCounter = 1;
 	private int screenWidth;
 	private int screenHeight;
 	private Map<Integer, ImageView> deck;
@@ -339,6 +347,7 @@ public class GUI extends Application
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
+				boolean drawTilePlayer = false;
 				btnFinish.setDisable(false);
 				if (game.isValidTable(game.player0.tilesOnField)) {
 					game.field = game.player0.tilesOnField;
@@ -348,7 +357,13 @@ public class GUI extends Application
 					game.player0.drawTile(game.initDeck);
 					game.player0.hand = game.player0.oldHand;
 				}
-				game.checkPlays(game.player0.tilesOnField);
+				drawTilePlayer = !(game.checkPlays(game.player0.tilesOnField));
+				System.out.println("player draw: " + drawTilePlayer);
+				if(drawTilePlayer) {
+					game.player0.drawTile(game.initDeck);
+				}
+				game.player0.showHand();
+				System.out.println("Current Field: " + game.getField());
 				game.playGame();
 				updateTiles();
 				updateTiles();
@@ -762,7 +777,7 @@ public class GUI extends Application
 		
 		return masterHand;
 	}
-	
+
 	public boolean updateTiles()
 	{
 		ArrayList<Tile> player0Hand = game.player0.getHand();
@@ -770,7 +785,11 @@ public class GUI extends Application
 		ArrayList<Tile> AI1Hand = game.player1.getHand();
 		ArrayList<Tile> AI2Hand = game.player2.getHand();
 		ArrayList<Tile> AI3Hand = game.player3.getHand();
-		ArrayList<ArrayList<Tile>> newCardsTemp;
+		ArrayList<ArrayList<Tile>> newCardsTemp = game.field;
+		
+		//newCards
+		ImageView tempImageView;
+		System.out.println("Update tiles");
 		if(game.checkField()) {
 			newCardsTemp = game.field;
 			System.out.println("Update tiles");
@@ -781,7 +800,6 @@ public class GUI extends Application
 		}
 		System.out.println(newCardsTemp);
 		//newCards
-		ImageView tempImageView;
 		/* Hide all cards */
 		for(ImageView view: deck.values())
 		{
@@ -799,28 +817,30 @@ public class GUI extends Application
 			for(Tile tiles: tileList)
 			{
 				/* TODO display on mane field*/
-				if(game.recentlyPlayedArrayList.contains(tiles)) {
-					tempImageView = setUpCardEvents(tiles.getImage2(0), tiles);
-				}else {
-					tempImageView = setUpCardEvents(tiles.getImage2(1), tiles);
-				}
-				tempImageView.setFitHeight(screenHeight/19);
-				tempImageView.setFitWidth(screenWidth*0.0225);
-				tempImageView.setY((rowCounter*75));
-				tempImageView.setX((colCounter*30) + 50);
-				tiles.setx((colCounter*30)+50);
-				tiles.sety(rowCounter*75);
-				deck.put(tiles.getId(), tempImageView);
-				root.getChildren().add(tempImageView);
-				colCounter+=1;
-				if(colCounter > 30) {
-					rowCounter+=1;
-					colCounter = 1;
-				}
-			}
+		if(game.recentlyPlayedArrayList.contains(tiles)) {
+			tempImageView = setUpCardEvents(tiles.getImage2(0), tiles);
+		}else {
+			tempImageView = setUpCardEvents(tiles.getImage2(1), tiles);
+		}
+		tempImageView.setFitHeight(screenHeight/19);
+		tempImageView.setFitWidth(screenWidth*0.0225);
+		tempImageView.setY((rowCounter*75));
+		tempImageView.setX((colCounter*30) + 50);
+		tiles.setx((colCounter*30)+50);
+		tiles.sety(rowCounter*75);
+		deck.put(tiles.getId(), tempImageView);
+		root.getChildren().add(tempImageView);
+		colCounter+=1;
+		if(colCounter > 30) {
+			rowCounter+=1;
+			colCounter = 1;
+		}
+		}
 		}
 		rowCounter = 1;
 		colCounter = 0;
+				
+
 		placeDeck(initDeck); //Pass init deck to my placeDeck
 		dealHand(player0Hand, AI1Hand, AI2Hand, AI3Hand);
 		return true;
