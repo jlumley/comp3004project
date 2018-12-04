@@ -147,10 +147,9 @@ public class Tile implements Comparable<Tile>
 	{
 		if(parser == 0) {
 			return liteTileImage;
-		}else if(parser == 1) {
+		}else {
 			return tileImage;
 		}
-		return tileImage;
 	}
 	public String toString() {
 		return colour + value;
