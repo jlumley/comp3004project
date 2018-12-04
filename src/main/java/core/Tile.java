@@ -3,6 +3,7 @@ package core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.text.html.ImageView;
 
@@ -119,14 +120,17 @@ public class Tile implements Comparable<Tile>
 	{
 		try 
 		{
-			Image cardImage;
+			FileInputStream f1 = new FileInputStream(imageDir + fileName);
+			FileInputStream f2 = new FileInputStream(imageDirLite + fileName);
 			Image liteCardImage;
-			cardImage = new Image(new FileInputStream(imageDir + fileName));
-			liteCardImage = new Image(new FileInputStream(imageDirLite + fileName));
+			Image cardImage = new Image(f1);
+			liteCardImage = new Image(f2);
 			tileImage = cardImage;
 			liteTileImage = liteCardImage;
+			f1.close();
+			f2.close();
 		} 
-		catch (FileNotFoundException e) 
+		catch (IOException e) 
 		{
 			e.printStackTrace();
 			return false;

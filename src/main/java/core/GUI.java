@@ -86,6 +86,8 @@ public class GUI extends Application
 	public ArrayList<String> choices;
 	Timer t = new Timer();
 	public static Alert alert;
+    int minutes = 2;
+    int seconds = 0;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -112,14 +114,20 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
-		String file_input = use_file_input();
 		playerTimer = new Label("");
+		root.getChildren().add(playerTimer);
+		playerTimer.setTranslateX(screenWidth-150);
+		playerTimer.setTranslateY(screenHeight-100);
+		playerTimer.setFont(new Font(30));
+		playerTimer.setContentDisplay(ContentDisplay.TOP);
+		String file_input = use_file_input();
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
 		game.initialize(file_input, getPlayerStrategies()); 
 		placeDeck(game.initDeck);
 		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 		deck = new HashMap<Integer, ImageView>();
+		playerTimer();
 		game.playGame();
 	}
 	
@@ -344,11 +352,15 @@ public class GUI extends Application
 				game.playGame();
 				updateTiles();
 				updateTiles();
+				minutes = 2;
+				seconds = 0;
+
 				System.out.println("Current Field " + game.field);
 				System.out.println("rollback Field " + game.rollbackField);
 				System.out.println("recently played " + game.recentlyPlayedArrayList);
 				game.recentlyPlayedArrayList.clear();
 				System.out.println("recently played " + game.recentlyPlayedArrayList);
+
 			}
 		});
 		
@@ -830,24 +842,17 @@ public class GUI extends Application
 	}
 	
 	public void playerTimer() {
-		root.getChildren().add(playerTimer);
-		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
-		playerTimer.setFont(new Font(30));
-		playerTimer.setContentDisplay(ContentDisplay.TOP);
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 	        
-	        int minutes = 2;
-            int seconds = 0;
             @Override
 	        public void run() {
 	            Platform.runLater(() -> {
-	            	
 	            	playerTimer.setText(minutes + "m " + seconds + "s\n");
 			          
 		            if (seconds == 0) {
 		            	if (minutes == 0) {
-		            		playerTimer.setText("");;
+		            		playerTimer.setText("");
 		            		cancel();
 		            		return;
 		            	}
