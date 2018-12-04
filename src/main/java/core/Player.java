@@ -171,7 +171,6 @@ public class Player {
 	
 	public ArrayList<Tile> findRun(Hand hand, int suit, int value) {
 		ArrayList<Tile> run = new ArrayList<Tile>();
-		int jokers = hand.jokers;
 		while (value < 13) {
 			if (hand.cards[suit][value] > 0) {
 				String suitString = new String();
@@ -186,20 +185,21 @@ public class Player {
 	                     break;
 				}
 				run.add(new Tile(suitString, value+1));
-			} else if(jokers > 0) {
+			} else if(hand.jokers > 0) {
 				run.add(new Tile("X", 99));
+				hand.jokers--;
 			} else break;
 			value ++;
 		}
 		
-		while (run.size() < 3 && jokers > 0) {
+		while (run.size() < 3 && hand.jokers > 0) {
 			run.add(new Tile("X", 99));
-			jokers--;
+			hand.jokers--;
 		}
 		
 		while (run.size() > 3 && run.get(run.size()-1).joker) {
 			run.remove(run.size()-1);
-			jokers++;
+			hand.jokers++;
 		}
 		return run;
 	}
@@ -247,11 +247,13 @@ public class Player {
 					set = candidateTiles.remove(candidateTiles.size()-1);
 					set.add(new Tile("X", 99));
 					set.add(new Tile("X", 99));
+					hand.jokers -=2;
 					hand.addToMelds(set);
 				} else {
 					for (int i=0; i<2 && candidatePairs.size() > 0; i++) {
 						set = candidatePairs.remove(candidatePairs.size()-1);
 						set.add(new Tile("X", 99));
+						hand.jokers --;
 						hand.addToMelds(set);
 					}
 				}
@@ -261,6 +263,7 @@ public class Player {
 				set = candidatePairs.remove(candidatePairs.size()-1);
 				set.add(new Tile("X", 99));
 				hand.addToMelds(set);
+				hand.jokers--;
 			}
 
 		}
@@ -273,7 +276,7 @@ public class Player {
 				ArrayList<Tile> run = this.findRun(hand, suit, value); 
 				for (int len=3; len <= run.size(); len++) {
 					if (len>3 && run.get(len-1).joker) continue;
-					Hand testHand = new Hand(hand.hardCopyMatrix(), jokers);
+					Hand testHand = new Hand(hand.hardCopyMatrix(), hand.jokers);
 					testHand.removeCards(new ArrayList<Tile>(run.subList(0, len)));
 					testHand = this.findMelds(testHand, suit, value);
 
@@ -300,6 +303,7 @@ public class Player {
 			if (testHand.getValue() <= hand.getValue()) { 
 				hand.cards = testHand.cards;
 				hand.melds.addAll(testHand.melds);
+				hand.jokers = testHand.jokers;
 			}
 		}
 		return hand;

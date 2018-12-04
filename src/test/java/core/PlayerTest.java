@@ -182,7 +182,7 @@ public class PlayerTest extends TestCase
 			testPlayer.addTile(new Tile("O", 4));
 			
 			testPlayer.addTile(new Tile("R", 9));
-			testPlayer.addTile(new Tile("B", 9));
+			testPlayer.addTile(new Tile("X", 99));
 			testPlayer.addTile(new Tile("G", 9));
 			
 			testPlayer.addTile(new Tile("O", 6));
