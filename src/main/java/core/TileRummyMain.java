@@ -159,7 +159,7 @@ public class TileRummyMain{
 				//GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1 ){
 				System.out.println("Just played: " + justPlayed);
-				
+				System.out.println(field.size() + " " + rollbackField.size());
 				if(field.size() == rollbackField.size()) { // when nothing is changed
 					player0.drawTile(initDeck);
 				}
@@ -210,7 +210,7 @@ public class TileRummyMain{
 				System.out.println("for: " + tmpsize1);
 			}
 		}
-		System.out.println(temp1);
+		System.out.println("Just Played" + justPlayed);
 		System.out.println("Player's New Hand: " + player0.getHand() + " " + tmpsize1);
 		
 		return false;

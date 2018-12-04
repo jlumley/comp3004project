@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -411,7 +412,7 @@ public class Player {
 	}
 
 	public void addToDummyField(Tile tile, int arrayPos, ArrayList<ArrayList<Tile>> currField) {
-
+		System.out.println("Current Field" + currField);
 		checkInDummyField(tile);
 		boolean onDummy = false;
 		boolean onField = false;
@@ -449,6 +450,8 @@ public class Player {
 					for(int i = 0; i < currField.size(); i++) { // check everything on the dummyField.
 						for(int x = 0; x < currField.get(i).size(); x++) { // current position
 							double xTile2 = currField.get(i).get(x).getX();
+							System.out.println("a" + currField.get(i).get(x).getColour() + " " + currField.get(i).get(x).getValue());
+							System.out.println("b" + currField.get(i).get(x).getX() + " " + currField.get(i).get(x).getY());
 							double xFinal = Math.abs(xTile - xTile2);
 							if(xFinal >= 0 && xFinal <= 33) {
 								double yTile2 = tilesOnField.get(i).get(x).getY();
@@ -461,7 +464,7 @@ public class Player {
 							}
 						}
 					}
-				}	
+				}
 				if(!onField && !onDummy) {
 					ArrayList<Tile> dummyHand = new ArrayList<Tile>();
 					dummyHand.add(tile);

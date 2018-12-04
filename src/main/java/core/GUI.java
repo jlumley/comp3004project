@@ -343,7 +343,7 @@ public class GUI extends Application
 				game.checkPlays(game.player0.tilesOnField);
 				game.playGame();
 				updateTiles();
-				
+				updateTiles();
 			}
 		});
 		
@@ -790,6 +790,8 @@ public class GUI extends Application
 				tempImageView.setFitWidth(screenWidth*0.0225);
 				tempImageView.setY((rowCounter*75));
 				tempImageView.setX((colCounter*30) + 50);
+				tiles.setx((colCounter*30)+50);
+				tiles.sety(rowCounter*75);
 				deck.put(tiles.getId(), tempImageView);
 				root.getChildren().add(tempImageView);
 				colCounter+=1;
