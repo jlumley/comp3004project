@@ -238,7 +238,7 @@ public class Player {
 				candidatePairs.add(set);
 			}
 
-			while (jokers > 1 && candidatePairs.size() > 0) {
+			while (hand.jokers >= 1 && candidatePairs.size() > 0) {
 				int select = candidateTiles.get(candidateTiles.size()-1).get(0).getValue();
 				for (int i=candidatePairs.size()-1; i>=0 && i<candidatePairs.size()-3; i--) {
 					select -= candidatePairs.get(i).get(0).getValue()*2;
@@ -284,6 +284,7 @@ public class Player {
 						//hand.melds = new ArrayList<ArrayList<Tile>>();
 						testHand.melds.add(new ArrayList<Tile>(run.subList(0, len)));
 						hand.melds.addAll(testHand.melds);
+						System.out.println(hand.melds);
 						hand.cards = testHand.cards;
 						hand.jokers = testHand.jokers;  
 					}
@@ -303,6 +304,7 @@ public class Player {
 			if (testHand.getValue() <= hand.getValue()) { 
 				hand.cards = testHand.cards;
 				hand.melds.addAll(testHand.melds);
+				System.out.println(hand.melds);
 				hand.jokers = testHand.jokers;
 			}
 		}
