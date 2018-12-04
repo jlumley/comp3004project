@@ -284,7 +284,6 @@ public class Player {
 						//hand.melds = new ArrayList<ArrayList<Tile>>();
 						testHand.melds.add(new ArrayList<Tile>(run.subList(0, len)));
 						hand.melds.addAll(testHand.melds);
-						System.out.println(hand.melds);
 						hand.cards = testHand.cards;
 						hand.jokers = testHand.jokers;  
 					}
@@ -304,7 +303,6 @@ public class Player {
 			if (testHand.getValue() <= hand.getValue()) { 
 				hand.cards = testHand.cards;
 				hand.melds.addAll(testHand.melds);
-				System.out.println(hand.melds);
 				hand.jokers = testHand.jokers;
 			}
 		}
