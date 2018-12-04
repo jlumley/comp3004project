@@ -1,17 +1,26 @@
 package core;
 
+import javafx.scene.control.TextInputDialog;
+import javafx.application.Platform;
 import java.awt.Dimension;
+import java.lang.Object;
+import javafx.scene.control.ContentDisplay;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.print.Printable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.management.PlatformLoggingMXBean;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -59,9 +68,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
+import javafx.scene.control.Label;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.scene.control.ButtonType;
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
@@ -77,7 +87,15 @@ public class GUI extends Application
 	private TileRummyMain game;
 	private static Button btnFinish;
 	public boolean inFieldOrHand = false;
-	public ArrayList<ArrayList<Tile>> preRolleback = new ArrayList<ArrayList<Tile>>();
+	Label playerTimer;
+	private boolean startGame = true;
+	public int rowCounter = 1;
+	public int colCounter = 0;
+	public ArrayList<String> choices;
+	Timer t = new Timer();
+	public static Alert alert;
+    int minutes = 2;
+    int seconds = 0;
 	
 	/* TODO remove this when done*/
 	public static final String[] suites = {"R", "B", "G", "O"};
@@ -104,21 +122,58 @@ public class GUI extends Application
 		handleStage(primaryStage, scene);
 		
 		/* Set up game */
+		playerTimer = new Label("");
+		root.getChildren().add(playerTimer);
+		playerTimer.setTranslateX(screenWidth-150);
+		playerTimer.setTranslateY(screenHeight-100);
+		playerTimer.setFont(new Font(30));
+		playerTimer.setContentDisplay(ContentDisplay.TOP);
+		String file_input = use_file_input();
 		deck = new HashMap<Integer, ImageView>();
 		game = new TileRummyMain();
-		game.initialize();
+		game.initialize(file_input, getPlayerStrategies()); 
 		placeDeck(game.initDeck);
-	  dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-
+		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
 		deck = new HashMap<Integer, ImageView>();
+		playerTimer();
 		game.playGame();
+	}
+	
+	/*
+	 * Prototype: getPlayerStrategies()
+	 *   Purpose: Get which players will play and a riged file input
+	 */
+	private ArrayList<String> getPlayerStrategies()
+	{
+		choices = new ArrayList<String>();
+		optionsBox.display();
+		if(optionsBox.choices.size() > 3)
+		{
+			/* Add user options assuming they selected each one*/
+			choices.addAll(optionsBox.choices);
+		}
+		else
+		{
+			/* Default options if they didn't pick all players*/
+	        choices.add("Player");
+	        choices.add("AI Strategy 1");
+	        choices.add("AI Strategy 2");
+	        choices.add("AI Strategy 3");
+		}
+		
+		/* Check which players were selected */
+		System.out.println(choices.get(0));
+		System.out.println(choices.get(1));
+		System.out.println(choices.get(2));
+		System.out.println(choices.get(3));
+		return choices;
 	}
 	
 	/*
 	 * Prototype: setUpscene()
 	 *   Purpose: Set the scene as the target to drop images
 	 * */
-	private void setUpscene() 
+	private void setUpscene()
 	{
 		scene.setOnDragOver(new EventHandler<DragEvent>() {
 		    public void handle(DragEvent event) {
@@ -311,7 +366,16 @@ public class GUI extends Application
 				System.out.println("Current Field: " + game.getField());
 				game.playGame();
 				updateTiles();
-				
+				updateTiles();
+				minutes = 2;
+				seconds = 0;
+
+				System.out.println("Current Field " + game.field);
+				System.out.println("rollback Field " + game.rollbackField);
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
+				game.recentlyPlayedArrayList.clear();
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
+
 			}
 		});
 		
@@ -351,7 +415,10 @@ public class GUI extends Application
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deckTemp)
 	{
-		sayMsg("Place Deck");
+		if(startGame) {
+			sayMsg("Place Deck");
+			startGame = false;
+		}
 		int i = 0;
 		double offsetY = 0.0;
 		ImageView tempImageView;
@@ -416,6 +483,11 @@ public class GUI extends Application
 						inFieldOrHand = true;
 					}
 				}
+				for(int i = 0; i <game.rollbackField.size(); i++) {
+					if(game.rollbackField.get(i).contains(tile)) {
+						inFieldOrHand = true;
+					}
+				}
 				if(game.player0.oldHand.contains(tile)) {
 					inFieldOrHand = true;
 				}
@@ -457,11 +529,10 @@ public class GUI extends Application
 						game.checkPerimeter(xCord,yCord, id, tile);
 					}
 				}
-				// add card to array list if
-				System.out.println("----------------------");
-				System.out.println(game.player0.oldHand);
 				System.out.println(game.player0.tilesOnField);
-				
+				System.out.println("Just played" + game.justPlayed);
+				System.out.println("Current Field" + game.field);
+				System.out.println("rollback Field" + game.rollbackField);
 				inFieldOrHand = false;
 			}
 		});
@@ -595,7 +666,9 @@ public class GUI extends Application
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
 		double totalRun = 0;
-		sayMsg("Hands being dealt");
+		if(startGame) {
+			sayMsg("Hands being dealt");
+		}
 		
 		sortHand(p1Hand);
 		sortHand(p2Hand);
@@ -616,10 +689,10 @@ public class GUI extends Application
 	 * */
 	public static boolean sayMsg(String msg)
 	{
-		Alert alert = new Alert(AlertType.INFORMATION);
+		alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Message");
 		alert.setContentText(msg);
-		alert.show();	
+		alert.show(); 	
 		return true;
 	}
 	
@@ -717,6 +790,16 @@ public class GUI extends Application
 		//newCards
 		ImageView tempImageView;
 		System.out.println("Update tiles");
+		if(game.checkField()) {
+			newCardsTemp = game.field;
+			System.out.println("Update tiles");
+		}else {
+			game.rollbackNow();
+			newCardsTemp = game.rollbackField;
+			
+		}
+		System.out.println(newCardsTemp);
+		//newCards
 		/* Hide all cards */
 		for(ImageView view: deck.values())
 		{
@@ -727,36 +810,41 @@ public class GUI extends Application
 		int row = 0; //Let each row be 2 cards height
 		int col = 0; //Let each column be length of 10 cards 
 		int i = 0;
-		System.out.println("Field size is: " + game.fieldSize);
+		System.out.println("Field size is: " + game.field.size());
 		for(ArrayList<Tile> tileList: newCardsTemp)
 		{
+			colCounter +=1;
 			for(Tile tiles: tileList)
 			{
 				/* TODO display on mane field*/
-				tempImageView = setUpCardEvents(tiles.getImage(), tiles);
-				tempImageView.setFitHeight(screenHeight/19);
-				tempImageView.setFitWidth(screenWidth*0.0225);
-				tempImageView.setX(screenWidth/2);
-				tempImageView.setY(screenHeight/2);
-				deck.put(tiles.getId(), tempImageView);
-				root.getChildren().add(tempImageView);
-				
-				col += 1;
-				
-				if(i > 10)
-				{
-					row += 1;
-					col = 0;
-					i = 0;
-				}
-			}
+		if(game.recentlyPlayedArrayList.contains(tiles)) {
+			tempImageView = setUpCardEvents(tiles.getImage2(0), tiles);
+		}else {
+			tempImageView = setUpCardEvents(tiles.getImage2(1), tiles);
 		}
-		
+		tempImageView.setFitHeight(screenHeight/19);
+		tempImageView.setFitWidth(screenWidth*0.0225);
+		tempImageView.setY((rowCounter*75));
+		tempImageView.setX((colCounter*30) + 50);
+		tiles.setx((colCounter*30)+50);
+		tiles.sety(rowCounter*75);
+		deck.put(tiles.getId(), tempImageView);
+		root.getChildren().add(tempImageView);
+		colCounter+=1;
+		if(colCounter > 30) {
+			rowCounter+=1;
+			colCounter = 1;
+		}
+		}
+		}
+		rowCounter = 1;
+		colCounter = 0;
+				
+
 		placeDeck(initDeck); //Pass init deck to my placeDeck
 		dealHand(player0Hand, AI1Hand, AI2Hand, AI3Hand);
 		return true;
 	}
-	
 	private boolean updateHelper(ArrayList<Tile> cards)
 	{
 		ImageView tempImageView;
@@ -771,6 +859,49 @@ public class GUI extends Application
 			root.getChildren().add(tempImageView);
 		}
 		return true;
+	}
+	
+	public void playerTimer() {
+		
+		t.scheduleAtFixedRate(new TimerTask() {
+	        
+            @Override
+	        public void run() {
+	            Platform.runLater(() -> {
+	            	playerTimer.setText(minutes + "m " + seconds + "s\n");
+			          
+		            if (seconds == 0) {
+		            	if (minutes == 0) {
+		            		playerTimer.setText("");
+		            		cancel();
+		            		return;
+		            	}
+		            	seconds = 59;
+		            	minutes--;
+		            } else {
+		            	seconds--;
+		            }
+	            	
+	            });
+	        }
+	    }, 1000, 1000);
+	}
+	
+	public String use_file_input() {
+		String file_input = "";
+		
+		TextInputDialog dialog = new TextInputDialog("");
+		dialog.setTitle("File input");
+		dialog.setHeaderText("Enter a file to deal from or leave it blank");
+	
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    file_input = result.get();
+		    System.out.println("'" + file_input + "'");
+		}
+		return file_input;
+			
 	}
 }
 

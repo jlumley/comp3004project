@@ -1,31 +1,78 @@
 package core;
 
+import java.io.*;
 import java.util.*;
+
 
 public class TileRummyMain{
 	
 	public static final String[] suites = {"R", "B", "G", "O"};
 	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	public static ArrayList<ArrayList<Tile>> field = new ArrayList<ArrayList<Tile>>();
+	public static ArrayList<ArrayList<Tile>> rollbackField = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<ArrayList<Tile>> justPlayed = new ArrayList<ArrayList<Tile>>();
+	public static ArrayList<Tile> recentlyPlayedArrayList = new ArrayList<Tile>();
 	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
+	static ArrayList<Tile> tempHand = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public static Player player0 = new Player();
-	public static AI player1 = new AI(new Strategy1());
-	public static AI player2 = new AI(new Strategy2());
-	public static AI player3 = new AI(new Strategy3());
+	public static AI player1;
+	public static AI player2;
+	public static AI player3;
 	boolean gameStatus = true;
 	public int playerTurn = 0;
-	public static int fieldSize = 0;
+	public boolean firstTurnTracker = false;
 	
-	public void initialize() {
+	public ArrayList<ArrayList<Tile>> getField(){return field;}
+	
+	/* Provide option to select which strategies to use*/
+	/* Options are Player, AI Strategy 1, AI Strategy 2, AI Strategy 3, AI Strategy 4*/
+	public void initialize(String filename, ArrayList<String> options) {
+		player0 = new Player();
+		player1 = setStrategy(options.get(1));
+		player2 = setStrategy(options.get(2));
+		player3 = setStrategy(options.get(3));
+				
 		resetStaticVars();
 		initDeck = buildDeck(suites,values);
 		Collections.shuffle(initDeck);
-		dealHands();
+		dealHands(filename);
 	}
-	public ArrayList<ArrayList<Tile>> getField(){
-		return field;
+	
+	public AI setStrategy(String choice)
+	{
+		if(choice == null)
+		{
+			return null;
+		}
+		
+		if(choice.equals("AI Strategy 1"))
+		{
+			return new AI(new Strategy1());
+		}
+		else if(choice.equals("AI Strategy 2"))
+		{
+			return new AI(new Strategy2());
+		}
+		else if(choice.equals("AI Strategy 3"))
+		{
+			return new AI(new Strategy3());
+		}
+		else
+		{
+			//Assume this is a player
+			return null;
+		}
+	}
+	public void initialize(String filename) {
+		player0 = new Player();
+		player1 = new AI(new Strategy1());
+		player2 = new AI(new Strategy2());
+		player3 = new AI(new Strategy3());
+		resetStaticVars();
+		initDeck = buildDeck(suites,values);
+		Collections.shuffle(initDeck);
+		dealHands(filename);
 	}
 	public static ArrayList<Tile> buildDeck(String[] suites, int[] values){ //when we are done the tile class 
 		ArrayList<Tile> dummyDeck = new ArrayList<Tile>();
@@ -42,20 +89,23 @@ public class TileRummyMain{
 	}
 	
 	public void showDeck() {
-		System.out.println();
 		for(int i = 0; i < initDeck.size(); i++) {
 			System.out.print( initDeck.get(i).toString() + " ");
 		}
-		System.out.println();
-		System.out.println(initDeck.size());
 	}
 	
-	public void dealHands() {
-		for(int i = 0; i < 14; i++) {
-			player0.drawTile(initDeck);
-			player1.drawTile(initDeck);
-			player2.drawTile(initDeck);
-			player3.drawTile(initDeck);
+	public void dealHands(String filename) {
+		
+		if (!filename.isEmpty()) {
+			System.out.println("using file to deal hands");
+			dealHandsFromFile(filename);
+		}else {
+			for(int i = 0; i < 14; i++) {
+				player0.drawTile(initDeck);
+				player1.drawTile(initDeck);
+				player2.drawTile(initDeck);
+				player3.drawTile(initDeck);
+			}
 		}
 	}
 
@@ -76,16 +126,14 @@ public class TileRummyMain{
 				System.out.print(field.get(x) + ",");
 			}
 			System.out.println(); //spacing
-		justPlayed.clear();
-		//System.out.println(justPlayed);
+		System.out.println(justPlayed);
 	}
 	
 	public static void addMend(ArrayList<Tile> collection1) { // basic adding into the field of tiles
 		System.out.println("Size: " + collection1.size());
 		field.add(collection1);
-		System.out.println("Added to Field" + field.get(fieldSize) + " " + field.size());
+		System.out.println("Added to Field" + field.size() + " " + field.size());
 		
-		fieldSize++;
 	}
 
 	public boolean checkGameStatus() {
@@ -113,7 +161,12 @@ public class TileRummyMain{
 				System.out.println("------------------------------");
 				//Added in to set the text on GUI to the current player
 				//GUI.setPlayerTurn("player1"); 
-			}else if(playerTurn == 1){
+			}else if(playerTurn == 1 ){
+				System.out.println("Just played: " + justPlayed);
+				System.out.println(field.size() + " " + rollbackField.size());
+				if(field.size() == rollbackField.size()) { // when nothing is changed
+					player0.drawTile(initDeck);
+				}
 				System.out.println("AI 1's Turn");
 				player1.playTurn();
 				System.out.println("Field after AI1's turn");
@@ -121,15 +174,33 @@ public class TileRummyMain{
 				//GUI.setPlayerTurn("player2");
 			}else if(playerTurn == 2){
 				//System.out.println("AI 2's Turn");
+				if(firstTurnTracker) {
+					player1.playTurn();
+				}
+				//GUI.setPlayerTurn("player2");
+			}else if(playerTurn == 2){
+				System.out.println("AI 2's Turn");
+				if(firstTurnTracker) {
+					
+				}
 				//player2.playTurn();
 				//GUI.setPlayerTurn("player3");
 			}else if(playerTurn == 3){
 				//GUI.setPlayerTurn("player4");
 				//System.out.println("AI 3's Turn");
 				//player3.playTurn();
+				if(firstTurnTracker) {
+					
+				}
+				firstTurnTracker = true;
 				playerTurn = playerTurn%3;
+				if(checkField()) {
+					cloneField();
+				}
 				break;
 			}
+			System.out.println(field);
+			System.out.println("------------------------------");
 			playerTurn++;
 		}
 	}
@@ -137,18 +208,22 @@ public class TileRummyMain{
 
 	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
 		int tmpsize1 = temp1.size();
+		System.out.println(player0.checkPlays(temp1));
 		if(player0.checkPlays(temp1)) {
 			for(int i = 0; i < tmpsize1-1; i++){
-				addMend(temp1.get(i));
-				justPlayed.add(temp1.get(i));
+				System.out.println(field.contains(temp1.get(i)));
+				if(!field.contains(temp1.get(i))) {
+					addMend(temp1.get(i));
+					justPlayed.add(temp1.get(i));
+				}
 				System.out.println("Player played " + temp1.get(i));
 				System.out.println("for: " + tmpsize1);
-				
 			}
 		}
 			if(playerTurn == 0) {
 				//player0.clearDummyHand();
 			}
+		System.out.println("Just Played" + justPlayed);
 		System.out.println("Player's New Hand: " + player0.getHand() + " " + tmpsize1);
 		
 		return false;
@@ -160,7 +235,6 @@ public class TileRummyMain{
 		player2 = new AI(new Strategy2());
 		player3 = new AI(new Strategy3());
 		field = new ArrayList<ArrayList<Tile>>();
-		fieldSize = 0;
 		initDeck = new ArrayList<Tile>();
 	}
 	
@@ -228,5 +302,112 @@ public class TileRummyMain{
 	}
 	public int getTurn() {
 		return playerTurn;
+	}
+	
+	public boolean checkField() {
+		if(player0.checkPlays(field)) { // if true 
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public void cloneField() {
+		System.out.println(rollbackField + " 23" + field);
+		ArrayList<Tile> recentDummy1 = new ArrayList<Tile>();
+		ArrayList<Tile> recentDummy2 = new ArrayList<Tile>();
+		for(int a1 = 0; a1 < field.size(); a1++) {
+			for(int a2 = 0; a2 < field.get(a1).size(); a2++) {
+				recentDummy1.add(field.get(a1).get(a2));
+			}
+		}
+		for(int b1 = 0; b1 < rollbackField.size(); b1++) {
+			for(int b2 = 0; b2 < rollbackField.get(b1).size(); b2++) {
+				recentDummy2.add(rollbackField.get(b1).get(b2));
+			}
+		}
+		System.out.println("Dummy1" +recentDummy1);
+		System.out.println("Dummy2" +recentDummy2);
+		if(rollbackField.size() > 0) {
+			for(int c1 = 0; c1 < recentDummy1.size(); c1++) {
+				if(!(recentDummy2.contains(recentDummy1.get(c1)))) {
+					recentlyPlayedArrayList.add(recentDummy1.get(c1));
+				}
+			}
+		}else {
+			for(int a = 0; a < field.size(); a++) {
+				for(int b = 0; b < field.get(a).size(); b++) {
+					recentlyPlayedArrayList.add(field.get(a).get(b));
+				}
+			}
+		}
+		recentDummy1.clear();
+		recentDummy2.clear();
+		System.out.println("Just played1: " + recentlyPlayedArrayList);
+		
+		rollbackField.clear();
+		tempHand = new ArrayList<Tile>();
+		System.out.println(rollbackField);
+		for(int i = 0; i < field.size(); i++){
+			rollbackField.add(new ArrayList<Tile>(field.get(i)));
+		}
+		//save the players hand
+		tempHand = player0.hand;
+		System.out.println(rollbackField + " is this now");
+	}
+	
+	public void rollbackNow() {
+		field.clear();
+		for(int i = 0; i < field.size(); i++){
+			field.add(new ArrayList<Tile>(rollbackField.get(i)));
+		}
+		//rollback the players hand
+		player0.hand = tempHand;
+		System.out.println("field before reroll" + field);
+	}
+	
+	public void dealHandsFromFile(String filename) {
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		       if (line.matches("P0:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P0: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player0.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+		       if (line.matches("P1:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P1: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player1.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+		       if (line.matches("P2:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P2: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player2.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+		       if (line.matches("P3:(.*)")){
+		    	   System.out.println(line);
+		    	   line = line.replaceAll("P3: ", "");
+		    	   String []cards = line.split(",");
+		    	   for (String s : cards) {
+		    		   player3.addTile(new Tile(s.trim()));
+		    	   }
+			   }
+
+		       
+		    }
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

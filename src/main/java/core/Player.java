@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -170,7 +171,6 @@ public class Player {
 	
 	public ArrayList<Tile> findRun(Hand hand, int suit, int value) {
 		ArrayList<Tile> run = new ArrayList<Tile>();
-		int jokers = hand.jokers;
 		while (value < 13) {
 			if (hand.cards[suit][value] > 0) {
 				String suitString = new String();
@@ -185,20 +185,21 @@ public class Player {
 	                     break;
 				}
 				run.add(new Tile(suitString, value+1));
-			} else if(jokers > 0) {
+			} else if(hand.jokers > 0) {
 				run.add(new Tile("X", 99));
+				hand.jokers--;
 			} else break;
 			value ++;
 		}
 		
-		while (run.size() < 3 && jokers > 0) {
+		while (run.size() < 3 && hand.jokers > 0) {
 			run.add(new Tile("X", 99));
-			jokers--;
+			hand.jokers--;
 		}
 		
 		while (run.size() > 3 && run.get(run.size()-1).joker) {
 			run.remove(run.size()-1);
-			jokers++;
+			hand.jokers++;
 		}
 		return run;
 	}
@@ -246,11 +247,13 @@ public class Player {
 					set = candidateTiles.remove(candidateTiles.size()-1);
 					set.add(new Tile("X", 99));
 					set.add(new Tile("X", 99));
+					hand.jokers -=2;
 					hand.addToMelds(set);
 				} else {
 					for (int i=0; i<2 && candidatePairs.size() > 0; i++) {
 						set = candidatePairs.remove(candidatePairs.size()-1);
 						set.add(new Tile("X", 99));
+						hand.jokers --;
 						hand.addToMelds(set);
 					}
 				}
@@ -260,6 +263,7 @@ public class Player {
 				set = candidatePairs.remove(candidatePairs.size()-1);
 				set.add(new Tile("X", 99));
 				hand.addToMelds(set);
+				hand.jokers--;
 			}
 
 		}
@@ -272,7 +276,7 @@ public class Player {
 				ArrayList<Tile> run = this.findRun(hand, suit, value); 
 				for (int len=3; len <= run.size(); len++) {
 					if (len>3 && run.get(len-1).joker) continue;
-					Hand testHand = new Hand(hand.hardCopyMatrix(), jokers);
+					Hand testHand = new Hand(hand.hardCopyMatrix(), hand.jokers);
 					testHand.removeCards(new ArrayList<Tile>(run.subList(0, len)));
 					testHand = this.findMelds(testHand, suit, value);
 
@@ -299,6 +303,7 @@ public class Player {
 			if (testHand.getValue() <= hand.getValue()) { 
 				hand.cards = testHand.cards;
 				hand.melds.addAll(testHand.melds);
+				hand.jokers = testHand.jokers;
 			}
 		}
 		return hand;
@@ -306,39 +311,6 @@ public class Player {
 	public void addMendtoMain(ArrayList<Tile> collection) { // basic adding into the s of tiles
 		TileRummyMain.addMend(collection);
 	}
-	/*
-	public boolean checkSet(ArrayList<ArrayList<Tile>> collection){ // checks for users first hand with sets 
-		// move this to player after team meeting
-		boolean returnV = true;
-		int checkSum = 0;
-		ArrayList<String> suitDeck = new ArrayList<String>();
-		int checkValue = collection.get(0).get(0).getValue();
-		if(collection.size() == 0) {
-			return false;
-		}else {
-			for(int i = 0; i < collection.size(); i++) {
-				for(int x = 0; x < collection.get(i).size(); x++) {
-					if(!suitDeck.contains(collection.get(i).get(x).getColour())) {
-						if(collection.get(i).get(x).getValue() == checkValue){
-							suitDeck.add(collection.get(i).get(x).getColour());
-							checkSum += collection.get(i).get(x).getValue();
-						}
-					}
-				}
-			}
-		}
-		System.out.println(checkSum + " " + suitDeck + " " + checkValue);
-		if(checkSum < 30) {
-			returnV = false;
-		}
-		if(returnV) {
-			for(int i = 0; i < collection.size(); i++) {
-				System.out.println(checkSum);
-				addMendtoMain(collection.get(i));
-			}
-		}
-		return returnV;
-	}*/
 
 	public boolean checkSet(ArrayList<Tile> collection){ // checks for users first hand with sets 
 		// move this to player after team meeting
@@ -363,7 +335,6 @@ public class Player {
 		if(returnV) {
 			//System.out.println("Total played: " + checkSum);
 		}
-		
 		System.out.println("Total: " + checkSum + " " + suitDeck + " " + checkValue + " " + returnV + " Sets");
 		return returnV;
 	}
@@ -446,7 +417,7 @@ public class Player {
 	}
 
 	public void addToDummyField(Tile tile, int arrayPos, ArrayList<ArrayList<Tile>> currField) {
-
+		System.out.println("Current Field" + currField);
 		checkInDummyField(tile);
 		boolean onDummy = false;
 		boolean onField = false;
@@ -466,11 +437,11 @@ public class Player {
 						double xTile2 = tilesOnField.get(i).get(x).getX();
 						double xFinal = Math.abs(xTile - xTile2);
             
-						System.out.println(xFinal + " x");
+						
 						if(xFinal >= 0 && xFinal <= 33) {
 							double yTile2 = tilesOnField.get(i).get(x).getY();
 							double yFinal = Math.abs(yTile - yTile2);
-							System.out.println(yFinal + " y");
+							
 							if(yFinal >= 0 && yFinal <= 33) {
 								tilesOnField.get(i).add(tile);
 								onDummy = true;
@@ -484,6 +455,8 @@ public class Player {
 					for(int i = 0; i < currField.size(); i++) { // check everything on the dummyField.
 						for(int x = 0; x < currField.get(i).size(); x++) { // current position
 							double xTile2 = currField.get(i).get(x).getX();
+							System.out.println("a" + currField.get(i).get(x).getColour() + " " + currField.get(i).get(x).getValue());
+							System.out.println("b" + currField.get(i).get(x).getX() + " " + currField.get(i).get(x).getY());
 							double xFinal = Math.abs(xTile - xTile2);
 							if(xFinal >= 0 && xFinal <= 33) {
 								double yTile2 = tilesOnField.get(i).get(x).getY();
@@ -496,7 +469,7 @@ public class Player {
 							}
 						}
 					}
-				}	
+				}
 				if(!onField && !onDummy) {
 					ArrayList<Tile> dummyHand = new ArrayList<Tile>();
 					dummyHand.add(tile);
