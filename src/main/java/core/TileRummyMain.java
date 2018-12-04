@@ -125,13 +125,13 @@ public class TileRummyMain{
 				System.out.print(field.get(x) + ",");
 			}
 			System.out.println(); //spacing
-		justPlayed.clear();
 		System.out.println(justPlayed);
 	}
 	
 	public static void addMend(ArrayList<Tile> collection1) { // basic adding into the field of tiles
 		System.out.println("Size: " + collection1.size());
-		System.out.println("Add to Field" + field.size());
+		field.add(collection1);
+		System.out.println("Add to Field " + field.size());
 	}
 
 	public boolean checkGameStatus() {
@@ -158,6 +158,8 @@ public class TileRummyMain{
 				//Added in to set the text on GUI to the current player
 				//GUI.setPlayerTurn("player1"); 
 			}else if(playerTurn == 1 ){
+				System.out.println("Just played: " + justPlayed);
+				
 				if(field.size() == rollbackField.size()) { // when nothing is changed
 					player0.drawTile(initDeck);
 				}
@@ -196,19 +198,19 @@ public class TileRummyMain{
 
 	public boolean checkPlays(ArrayList<ArrayList<Tile>> temp1) {
 		int tmpsize1 = temp1.size();
+		System.out.println(player0.checkPlays(temp1));
 		if(player0.checkPlays(temp1)) {
 			for(int i = 0; i < tmpsize1-1; i++){
-				addMend(temp1.get(i));
-				justPlayed.add(temp1.get(i));
+				System.out.println(field.contains(temp1.get(i)));
+				if(!field.contains(temp1.get(i))) {
+					addMend(temp1.get(i));
+					justPlayed.add(temp1.get(i));
+				}
 				System.out.println("Player played " + temp1.get(i));
 				System.out.println("for: " + tmpsize1);
-				
 			}
 		}
-			if(playerTurn == 0) {
-				//player0.clearDummyHand();
-			}
-		showField();
+		System.out.println(temp1);
 		System.out.println("Player's New Hand: " + player0.getHand() + " " + tmpsize1);
 		
 		return false;

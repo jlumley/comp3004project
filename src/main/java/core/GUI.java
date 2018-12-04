@@ -344,7 +344,6 @@ public class GUI extends Application
 				game.playGame();
 				updateTiles();
 				
-				
 			}
 		});
 		
