@@ -13,7 +13,6 @@ public class TileRummyMain{
 	public static ArrayList<ArrayList<Tile>> justPlayed = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<Tile> recentlyPlayedArrayList = new ArrayList<Tile>();
 	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
-	static ArrayList<Tile> tempHand = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
 	public static Player player0 = new Player();
 	public static AI player1;
@@ -346,13 +345,11 @@ public class TileRummyMain{
 		System.out.println("Just played1: " + recentlyPlayedArrayList);
 		
 		rollbackField.clear();
-		tempHand = new ArrayList<Tile>();
 		System.out.println(rollbackField);
 		for(int i = 0; i < field.size(); i++){
 			rollbackField.add(new ArrayList<Tile>(field.get(i)));
 		}
 		//save the players hand
-		tempHand = player0.hand;
 		System.out.println(rollbackField + " is this now");
 	}
 	
@@ -362,7 +359,6 @@ public class TileRummyMain{
 			field.add(new ArrayList<Tile>(rollbackField.get(i)));
 		}
 		//rollback the players hand
-		player0.hand = tempHand;
 		System.out.println("field before reroll" + field);
 	}
 	
