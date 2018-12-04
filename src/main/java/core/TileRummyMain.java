@@ -163,9 +163,6 @@ public class TileRummyMain{
 			}else if(playerTurn == 1 ){
 				System.out.println("Just played: " + justPlayed);
 				System.out.println(field.size() + " " + rollbackField.size());
-				if(field.size() == rollbackField.size()) { // when nothing is changed
-					player0.drawTile(initDeck);
-				}
 				System.out.println("AI 1's Turn");
 				player1.playTurn();
 				System.out.println("Field after AI1's turn");
@@ -312,6 +309,7 @@ public class TileRummyMain{
 	}
 
 	public void cloneField() {
+		int checker = -1;
 		System.out.println(rollbackField + " 23" + field);
 		ArrayList<Tile> recentDummy1 = new ArrayList<Tile>();
 		ArrayList<Tile> recentDummy2 = new ArrayList<Tile>();
@@ -319,7 +317,7 @@ public class TileRummyMain{
 			for(int a2 = 0; a2 < field.get(a1).size(); a2++) {
 				recentDummy1.add(field.get(a1).get(a2));
 			}
-		}
+		} 
 		for(int b1 = 0; b1 < rollbackField.size(); b1++) {
 			for(int b2 = 0; b2 < rollbackField.get(b1).size(); b2++) {
 				recentDummy2.add(rollbackField.get(b1).get(b2));
@@ -329,9 +327,16 @@ public class TileRummyMain{
 		System.out.println("Dummy2" +recentDummy2);
 		if(rollbackField.size() > 0) {
 			for(int c1 = 0; c1 < recentDummy1.size(); c1++) {
-				if(!(recentDummy2.contains(recentDummy1.get(c1)))) {
-					recentlyPlayedArrayList.add(recentDummy1.get(c1));
+				for(int c2 = 0; c2 < recentDummy2.size(); c2++) {
+					if(recentDummy1.get(c1).compareTo(recentDummy2.get(c2)) == 0) {
+						System.out.print("Before: " + recentDummy1);
+						recentDummy1.remove(c1);
+						System.out.println("After: " + recentDummy1);
+					}
 				}
+			}
+			for(int i = 0; i < recentDummy1.size(); i++){
+				recentlyPlayedArrayList.add(recentDummy1.get(i));
 			}
 		}else {
 			for(int a = 0; a < field.size(); a++) {
