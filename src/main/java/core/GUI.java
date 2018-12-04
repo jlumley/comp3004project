@@ -344,6 +344,11 @@ public class GUI extends Application
 				game.playGame();
 				updateTiles();
 				updateTiles();
+				System.out.println("Current Field " + game.field);
+				System.out.println("rollback Field " + game.rollbackField);
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
+				game.recentlyPlayedArrayList.clear();
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
 			}
 		});
 		
@@ -498,6 +503,7 @@ public class GUI extends Application
 					}
 				}
 				System.out.println(game.player0.tilesOnField);
+				System.out.println("Just played" + game.justPlayed);
 				System.out.println("Current Field" + game.field);
 				System.out.println("rollback Field" + game.rollbackField);
 				inFieldOrHand = false;
@@ -781,7 +787,7 @@ public class GUI extends Application
 			for(Tile tiles: tileList)
 			{
 				/* TODO display on mane field*/
-				if(game.justPlayed.contains(tiles)) {
+				if(game.recentlyPlayedArrayList.contains(tiles)) {
 					tempImageView = setUpCardEvents(tiles.getImage2(0), tiles);
 				}else {
 					tempImageView = setUpCardEvents(tiles.getImage2(1), tiles);
