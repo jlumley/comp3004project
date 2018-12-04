@@ -238,7 +238,7 @@ public class Player {
 				candidatePairs.add(set);
 			}
 
-			while (jokers > 1 && candidatePairs.size() > 0) {
+			while (hand.jokers >= 1 && candidatePairs.size() > 0) {
 				int select = candidateTiles.get(candidateTiles.size()-1).get(0).getValue();
 				for (int i=candidatePairs.size()-1; i>=0 && i<candidatePairs.size()-3; i--) {
 					select -= candidatePairs.get(i).get(0).getValue()*2;
