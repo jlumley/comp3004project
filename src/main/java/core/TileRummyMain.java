@@ -49,6 +49,7 @@ public class TileRummyMain{
 				
 		resetStaticVars();
 		initDeck = buildDeck(suites,values);
+
 		Collections.shuffle(initDeck);
 		dealHands(filename);
 	}

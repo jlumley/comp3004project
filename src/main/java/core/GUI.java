@@ -979,7 +979,6 @@ public class GUI extends Application
 		} else {
 			//reset table to previous state and draw tile 
 			game.player0.hand = game.player0.oldHand;
-			//game.player0.drawTile(game.initDeck);
 			
 		}
 
@@ -989,13 +988,15 @@ public class GUI extends Application
 			for (int i = 0; i < pickupCards; i++) {
 				game.player0.drawTile(game.initDeck);
 			}
+			
+			game.player0.showHand();
+			System.out.println("Current Field: " + game.getField());
+			System.out.println("recently played " + game.recentlyPlayedArrayList);
+			game.recentlyPlayedArrayList.clear();
 		}
-		game.player0.showHand();
-		System.out.println("Current Field: " + game.getField());
-		System.out.println("recently played " + game.recentlyPlayedArrayList);
-		game.recentlyPlayedArrayList.clear();
+		
 		game.playGame();
-		updateTiles();
+		//updateTiles();
 		updateTiles();
 		minutes = 2;
 		seconds = 0;
