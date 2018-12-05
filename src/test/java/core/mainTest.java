@@ -33,7 +33,6 @@ public class mainTest extends TestCase{
 		//result.drawTile();
 		result.player0.showHand();
 		result.showField();
-		result.getHandSize();
 		assertEquals(false,result.checkPlays(temp1));
 		//assertEquals(false,result.player0.checkPlays(temp1)); // checks for addMend as well
 		result.showField(); 
@@ -85,6 +84,23 @@ public class mainTest extends TestCase{
 		temp.add(new Tile("B", 2));
 		temp.add(new Tile("B", 3));
 		table.add(temp);
+		
+		temp = new ArrayList<Tile>();
+		temp.add(new Tile("B", 1));
+		temp.add(new Tile("B", 2));
+		temp.add(new Tile("B", 3));
+		table.add(temp);
+		
+		temp = new ArrayList<Tile>();
+		temp.add(new Tile("G", 1));
+		temp.add(new Tile("G", 2));
+		temp.add(new Tile("G", 3));
+		temp.add(new Tile("G", 4));
+		temp.add(new Tile("G", 5));
+		temp.add(new Tile("G", 6));
+		table.add(temp);
+		
+		
 		
 		assertEquals(true, TileRummyMain.isValidTable(table));
 		
