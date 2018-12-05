@@ -13,8 +13,8 @@ public class Strategy2 implements AIStrategy{
 		//Play:
 			//if: can Win then play all tiles and win
 			//else: keep all in-hand melds, and try adding to existing melds on board
-		//System.out.println("Player 2 Turn");
-		//System.out.println("Player 2 Hand: " + TileRummyMain.player2.getHand());
+		System.out.println("Player using Strat2 Turn");
+		System.out.println("Player using Strat2 Hand: " + player.getHand());
 		ArrayList<ArrayList<Tile>> p2Melds = player.playAllTiles();
 		System.out.println("Possible Melds in Hand: " + p2Melds);
 		if(player.firstTurn == false) { //first turn has not passed yet
@@ -70,12 +70,12 @@ public class Strategy2 implements AIStrategy{
 		}
 		//draw a Tile
 		if(!TileRummyMain.initDeck.isEmpty()){ //if not empty NORMAL CASE
-			System.out.println("Player 2 draws: " + TileRummyMain.initDeck.get(0));
+			System.out.println("Player using Strat2 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 		else { //just when doing partial tests
 			TileRummyMain.initDeck = TileRummyMain.buildDeck(TileRummyMain.suites, TileRummyMain.values);
-			System.out.println("Player 2 draws: " + TileRummyMain.initDeck.get(0));
+			System.out.println("Player using Strat2 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 	}
