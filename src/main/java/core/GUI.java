@@ -85,6 +85,9 @@ public class GUI extends Application
 	private HashMap<Integer, ImageView> deck;
 	private HashMap<Integer, ImageView> playerHands;
 	
+	//This is meant to store imageViews for the field
+	private ArrayList<ArrayList<ImageView>> guiField = new ArrayList<ArrayList<ImageView>>();
+	
 	/*
 	 * Prototype: main(String[] args)
 	 *   Purpose: Entry point for the game
@@ -743,7 +746,6 @@ public class GUI extends Application
 	public boolean updateTiles()
 	{
 		/* New cards to be placed */
-		//ArrayList<ImageView> tempField = new ArrayList<ImageView>();
 		ArrayList<ArrayList<Tile>> newCardsTemp;
 		newCardsTemp = isRollBack(game.checkField());		
 		ImageView tempImageView;
@@ -759,11 +761,17 @@ public class GUI extends Application
 			playerHands.get(key).setVisible(false);
 		}
 		
-		//TODO hide all from field
+		for(ArrayList<ImageView> imageViewRow: guiField)
+		{
+			for(ImageView imgView: imageViewRow)
+				imgView.setVisible(false);
+		}
 		
 		/* Reset data structures */
 		deck = new HashMap<Integer, ImageView>();
 		playerHands = new HashMap<Integer, ImageView>();
+		guiField = new ArrayList<ArrayList<ImageView>>();
+		ArrayList<ImageView> tempFieldList;
 		
 		/* Create new cards and add */
 		int rowCounter = 1;
@@ -775,6 +783,8 @@ public class GUI extends Application
 		for(ArrayList<Tile> tileList: newCardsTemp)
 		{
 			colCounter +=1;
+			tempFieldList = new ArrayList<ImageView>();
+			
 			for(Tile tiles: tileList)
 			{
 				//TODO display on mane field
@@ -795,8 +805,10 @@ public class GUI extends Application
 					colCounter = 1;
 				}
 				
-				tempField.add(tempImageView);
+				tempFieldList.add(tempImageView);
 			}
+			
+			guiField.add(tempFieldList);
 		}
 		
 		/* Show player hands */
