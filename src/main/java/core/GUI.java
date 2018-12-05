@@ -23,13 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.security.auth.x500.X500Principal;
 import javax.swing.text.Position;
-import javax.swing.text.View;
-
-import org.apache.logging.log4j.core.config.yaml.YamlConfiguration;
-
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -75,32 +69,21 @@ import javafx.scene.control.ButtonType;
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
-	public int xCounter = 2;
-	public int YCounter = 1;
 	private int screenWidth;
 	private int screenHeight;
-	private Map<Integer, ImageView> deck;
 	private Pane root;
 	private Scene scene;
-	private Image tempImage;
-	private static Text playerInfo;
 	private TileRummyMain game;
 	private static Button btnFinish;
+	private Map<Integer, ImageView> deck;
 	public boolean inFieldOrHand = false;
 	Label playerTimer;
 	private boolean startGame = true;
-	public int rowCounter = 1;
-	public int colCounter = 0;
 	public ArrayList<String> choices;
 	Timer t = new Timer();
-	public static Alert alert;
-    int minutes = 2;
-    int seconds = 0;
+
 	
-	/* TODO remove this when done*/
-	public static final String[] suites = {"R", "B", "G", "O"};
-	public static final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
-	
+	private ArrayList<ImageView> playerHands;
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -113,32 +96,32 @@ public class GUI extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{	
-		/* Set up GUI */
+		setUpGUI(primaryStage);
+		setUpGame();
+	}
+	
+	private void setUpGame() 
+	{
+		deck = new HashMap<Integer, ImageView>();
+		String file_input = use_file_input();
+		playerTimer = new Label("");
+		game = new TileRummyMain();
+		game.initialize(file_input, getPlayerStrategies()); 
+		placeDeck(game.initDeck);
+		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+		game.playGame();
+	}
+
+	private void setUpGUI(Stage primaryStage) 
+	{
 		setPanePos();	
 		root = new Pane();
 		scene = new Scene(root, screenWidth, screenHeight);
 		setUpscene();
 		initUI(primaryStage, scene);
 		handleStage(primaryStage, scene);
-		
-		/* Set up game */
-		playerTimer = new Label("");
-		root.getChildren().add(playerTimer);
-		playerTimer.setTranslateX(screenWidth-150);
-		playerTimer.setTranslateY(screenHeight-100);
-		playerTimer.setFont(new Font(30));
-		playerTimer.setContentDisplay(ContentDisplay.TOP);
-		String file_input = use_file_input();
-		deck = new HashMap<Integer, ImageView>();
-		game = new TileRummyMain();
-		game.initialize(file_input, getPlayerStrategies()); 
-		placeDeck(game.initDeck);
-		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
-		deck = new HashMap<Integer, ImageView>();
-		playerTimer();
-		game.playGame();
 	}
-	
+
 	/*
 	 * Prototype: getPlayerStrategies()
 	 *   Purpose: Get which players will play and a riged file input
@@ -173,6 +156,7 @@ public class GUI extends Application
 	 * Prototype: setUpscene()
 	 *   Purpose: Set the scene as the target to drop images
 	 * */
+	@SuppressWarnings("restriction")
 	private void setUpscene()
 	{
 		scene.setOnDragOver(new EventHandler<DragEvent>() {
@@ -191,6 +175,7 @@ public class GUI extends Application
 	 * Prototype: handleStage()
 	 * 	 Purpose: Set scene for stage and configure stage
 	 * */
+	@SuppressWarnings("restriction")
 	private void handleStage(Stage primaryStage, Scene scene) 
 	{
 		primaryStage.setTitle("Rummy");
@@ -227,17 +212,12 @@ public class GUI extends Application
 	 * */
 	private boolean loadBackgroundImages() 
 	{
-		Image deckImage;
-		Image player1BoardImage;
-		Image player2BoardImage;
-		Image player3BoardImage;
-		Image player4BoardImage;
+		Text playerInfo, playerInfo2, playerInfo3, playerInfo4;
+		Image deckImage, player1BoardImage, player2BoardImage, player3BoardImage, player4BoardImage;
+		ImageView imgDeckView, imgPlayer1View, imgPlayer2View, imgPlayer3View, imgPlayer4View;
 		
-		ImageView imgDeckView;
-		ImageView imgPlayer1View;
-		ImageView imgPlayer2View;
-		ImageView imgPlayer3View;
-		ImageView imgPlayer4View;
+		ArrayList<ImageView> decks = new ArrayList<ImageView>();
+		ArrayList<Text> playerTexts = new ArrayList<Text>();
 		
 		try 
 		{
@@ -262,45 +242,75 @@ public class GUI extends Application
 			return false;
 		}
 		
-		imgDeckView = new ImageView(deckImage);
-		imgPlayer1View = new ImageView(player1BoardImage);
-		imgPlayer2View = new ImageView(player2BoardImage);
-		imgPlayer3View = new ImageView(player3BoardImage);
-		imgPlayer4View = new ImageView(player4BoardImage);
+		imgDeckView = new ImageView(deckImage);imgPlayer1View = new ImageView(player1BoardImage);imgPlayer2View = new ImageView(player2BoardImage);
+		imgPlayer3View = new ImageView(player3BoardImage);imgPlayer4View = new ImageView(player4BoardImage);
 		
-		/* Deck next to right player */
-		imgDeckView.setX(screenWidth - screenWidth*0.13); 
-		imgDeckView.setY(screenHeight/16 + screenHeight*0.05); 
-		
-		/* Player bottom of screen */
-		imgPlayer1View.setX(screenWidth - screenWidth*0.92); 
-		imgPlayer1View.setY(screenHeight - screenHeight*0.2025); 
+		decks.add(imgDeckView);decks.add(imgPlayer1View);decks.add(imgPlayer2View);decks.add(imgPlayer3View);decks.add(imgPlayer4View);
+		decks = setDeckPoistions(decks);
 				
-		/* Left side player*/
-		imgPlayer2View.setX(0); 
-		imgPlayer2View.setY(screenHeight/16 + screenHeight*0.05); 
-		
-		/* Player opposite side of screen */
-		imgPlayer3View.setY(screenHeight*0.0125); 
-		imgPlayer3View.setX(screenWidth - screenWidth*0.99); 
-
-		/* Right side player */
-		imgPlayer4View.setX(screenWidth - screenWidth*0.05); 
-		imgPlayer4View.setY(screenHeight/16 + screenHeight*0.05); 
-		
 		/* Set text fields */
-		playerInfo = new Text();
-		playerInfo.setFont(new Font(50));
-		playerInfo.setText("");//TODO setText not updating right now so just using sayMsg
-		playerInfo.setY(screenWidth - screenWidth*0.465);
-		playerInfo.setX(0);
+		playerInfo = new Text();playerInfo2 = new Text();
+		playerInfo3 = new Text();playerInfo4 = new Text();
+		playerTexts.add(playerInfo);playerTexts.add(playerInfo2);
+		playerTexts.add(playerInfo3);playerTexts.add(playerInfo4);
+		playerTexts = setTextPos(playerTexts);		
 		
-	    root.getChildren().addAll(imgDeckView, imgPlayer1View, imgPlayer2View, 
-	    		imgPlayer3View, imgPlayer4View, playerInfo);
-	    
+	    root.getChildren().addAll(decks);
+	    root.getChildren().addAll(playerTexts);
+
 	    return true;
 	}
 	
+
+	private ArrayList<Text> setTextPos(ArrayList<Text> playerTexts) 
+	{
+		playerTexts.get(0).setFont(new Font(50));
+		playerTexts.get(0).setText("Player 1");//TODO setText not updating right now so just using sayMsg
+		playerTexts.get(0).setY(screenWidth - screenWidth*0.465);
+		playerTexts.get(0).setX(0);
+
+		playerTexts.get(1).setFont(new Font(50));
+		playerTexts.get(1).setText("Player 2");//TODO setText not updating right now so just using sayMsg
+		playerTexts.get(1).setY(screenWidth - screenWidth*0.465);
+		playerTexts.get(1).setX(0);
+		
+		playerTexts.get(2).setFont(new Font(50));
+		playerTexts.get(2).setText("Player 3");//TODO setText not updating right now so just using sayMsg
+		playerTexts.get(2).setY(screenWidth - screenWidth*0.465);
+		playerTexts.get(2).setX(0);
+		
+		playerTexts.get(3).setFont(new Font(50));
+		playerTexts.get(3).setText("Player 4");//TODO setText not updating right now so just using sayMsg
+		playerTexts.get(3).setY(screenWidth - screenWidth*0.465);
+		playerTexts.get(3).setX(0);
+		
+		return playerTexts;
+	}
+
+	private ArrayList<ImageView> setDeckPoistions(ArrayList<ImageView> decks) 
+	{
+		/* Deck next to right player */
+		decks.get(0).setX(screenWidth - screenWidth*0.13); 
+		decks.get(0).setY(screenHeight/16 + screenHeight*0.05); 
+
+		/* Player bottom of screen */
+		decks.get(1).setX(screenWidth - screenWidth*0.92); 
+		decks.get(1).setY(screenHeight - screenHeight*0.2025); 
+				
+		/* Left side player*/
+		decks.get(2).setX(0); 
+		decks.get(2).setY(screenHeight/16 + screenHeight*0.05); 
+		
+		/* Player opposite side of screen */
+		decks.get(3).setY(screenHeight*0.0125); 
+		decks.get(3).setX(screenWidth - screenWidth*0.99); 
+
+		/* Right side player */
+		decks.get(4).setX(screenWidth - screenWidth*0.05); 
+		decks.get(4).setY(screenHeight/16 + screenHeight*0.05); 
+		return decks;
+	}
+
 	/*
 	 * Prototype: getCards() 
 	 * 	 Purpose: Load in card images and add to hash map
@@ -347,7 +357,6 @@ public class GUI extends Application
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event)
 			{
-				boolean drawTilePlayer = false;
 				btnFinish.setDisable(false);
 				if (game.isValidTable(game.player0.tilesOnField)) {
 					game.field = game.player0.tilesOnField;
@@ -357,25 +366,9 @@ public class GUI extends Application
 					game.player0.drawTile(game.initDeck);
 					game.player0.hand = game.player0.oldHand;
 				}
-				drawTilePlayer = !(game.checkPlays(game.player0.tilesOnField));
-				System.out.println("player draw: " + drawTilePlayer);
-				if(drawTilePlayer) {
-					game.player0.drawTile(game.initDeck);
-				}
-				game.player0.showHand();
-				System.out.println("Current Field: " + game.getField());
+				game.checkPlays(game.player0.tilesOnField);
 				game.playGame();
 				updateTiles();
-				updateTiles();
-				minutes = 2;
-				seconds = 0;
-
-				System.out.println("Current Field " + game.field);
-				System.out.println("rollback Field " + game.rollbackField);
-				System.out.println("recently played " + game.recentlyPlayedArrayList);
-				game.recentlyPlayedArrayList.clear();
-				System.out.println("recently played " + game.recentlyPlayedArrayList);
-
 			}
 		});
 		
@@ -415,14 +408,18 @@ public class GUI extends Application
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deckTemp)
 	{
-		if(startGame) {
+		int i = 0;
+		double offsetY = 0.0;
+		
+		if(startGame) 
+		{
 			sayMsg("Place Deck");
 			startGame = false;
 		}
-		int i = 0;
-		double offsetY = 0.0;
+		
 		ImageView tempImageView;
 
+		/* Set deck position and add to GUI */
 		for(Tile card : deckTemp)
 		{
 			i += 1;
@@ -437,6 +434,9 @@ public class GUI extends Application
 		return true;
 	}
 	
+	/*   prototype: createCard(int i, Tile card, double offsetY) 
+	 *   purpose: Place card in side deck
+	 * */
 	private ImageView createCard(int i, Tile card, double offsetY) 
 	{
 		ImageView tempImageView;
@@ -448,7 +448,6 @@ public class GUI extends Application
 		Image imageHolder = card.getImage();
 		
 		/* Set drag and drop events */
-
 		tempImageView = setUpCardEvents(imageHolder, card);
 		
 		//Set width and height
@@ -460,10 +459,12 @@ public class GUI extends Application
 		tempImageView.setX(screenWidth - screenWidth*0.10 + screenWidth*randNum*Math.pow(-1, i)); 
 		tempImageView.setY(screenHeight/16 + screenHeight*0.06 + offsetY);
 		
-		
 		return tempImageView;
 	}
-
+	
+	/*   prototype: setUpCardEvents(Image imageHolder, Tile tile)
+	 *   purpose: Add events to a card such as drag and drop
+	 * */
 	private ImageView setUpCardEvents(Image imageHolder, Tile tile) {
 		
 		ImageView tempImageView = new ImageView(imageHolder);
@@ -511,6 +512,7 @@ public class GUI extends Application
 
 			}
 		});
+		
 		tempImageView.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -530,12 +532,12 @@ public class GUI extends Application
 					}
 				}
 				System.out.println(game.player0.tilesOnField);
-				System.out.println("Just played" + game.justPlayed);
 				System.out.println("Current Field" + game.field);
 				System.out.println("rollback Field" + game.rollbackField);
 				inFieldOrHand = false;
 			}
 		});
+		
 		tempImageView.setId(Integer.toString(tile.getId()));
 		return tempImageView;
 	}
@@ -575,6 +577,7 @@ public class GUI extends Application
 			tempImageView.setY(screenHeight - screenHeight*0.2025); 
 			i += 1;
 			deck.put(tile.getId(), tempImageView);
+			playerHands.add(tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		
@@ -603,6 +606,7 @@ public class GUI extends Application
 			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
 			i += 1;
 			deck.put(tile.getId(), tempImageView);
+			playerHands.add(tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -629,6 +633,7 @@ public class GUI extends Application
 			tempImageView.setY(screenHeight*0.025); 
 			i += 1;
 			deck.put(tile.getId(), tempImageView);
+			playerHands.add(tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		
@@ -654,6 +659,7 @@ public class GUI extends Application
 			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
 			i += 1;
 			deck.put(tile.getId(), tempImageView);
+			playerHands.add(tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -665,31 +671,34 @@ public class GUI extends Application
 	 * */
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
+		System.out.println("Deal hand caled");
 		double totalRun = 0;
-		if(startGame) {
-			sayMsg("Hands being dealt");
-		}
+		isNewGame();
+
+		sortHand(p1Hand);sortHand(p2Hand);
+		sortHand(p3Hand);sortHand(p4Hand);
 		
-		sortHand(p1Hand);
-		sortHand(p2Hand);
-		sortHand(p3Hand);
-		sortHand(p4Hand);
-		
-		dealHandPlayer1(sortHand(p1Hand));
-		dealHandPlayer2(sortHand(p2Hand));
-		dealHandPlayer3(sortHand(p3Hand));
-		dealHandPlayer4(sortHand(p4Hand));
+		dealHandPlayer1(sortHand(p1Hand));dealHandPlayer2(sortHand(p2Hand));
+		dealHandPlayer3(sortHand(p3Hand));dealHandPlayer4(sortHand(p4Hand));
 
 		return true;
 	}
 	
+	private void isNewGame() 
+	{
+		if(startGame) 
+		{
+			sayMsg("Hands being dealt");
+		}	
+	}
+
 	/*
 	 * Prototype: sayMsg(String msg, int delay)
 	 * 	 Purpose: General function to prompt a message and add a delay
 	 * */
 	public static boolean sayMsg(String msg)
 	{
-		alert = new Alert(AlertType.INFORMATION);
+		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Message");
 		alert.setContentText(msg);
 		alert.show(); 	
@@ -703,17 +712,7 @@ public class GUI extends Application
 	public static boolean setPlayerTurn(String playerName)
 	{
 		String result = "Current Turn is: Player";
-		
-/*		try 
-		{
-			//This is added in to show each players turn
-			//TimeUnit.SECONDS.sleep(1);
-		} 
-		catch (InterruptedException e) 
-		{
-			e.printStackTrace();
-		}*/
-		
+				
 		switch (playerName)
 		{
 			case "player1": 
@@ -733,10 +732,171 @@ public class GUI extends Application
 				 return false;
 		}
 		sayMsg(result);
-		playerInfo.setText("");
 		
 		return true;
 	}
+	
+	public boolean updateTiles()
+	{
+		ArrayList<Tile> initDeck = game.initDeck;
+		ArrayList<ArrayList<Tile>> newCardsTemp;
+		ArrayList<ImageView> tempField = new ArrayList<ImageView>();
+		newCardsTemp = isRollBack(game.checkField());		
+		playerHands = new ArrayList<ImageView>();
+		
+		//newCards
+		ImageView tempImageView;
+		
+		/* Hide all cards from player hands and from field and from deck*/
+		
+		/* Create new cards and add */
+		int rowCounter = 1;
+		int colCounter = 0;
+		System.out.println("Field size is: " + game.field.size());
+		
+		/* Display field to table */
+		for(ArrayList<Tile> tileList: newCardsTemp)
+		{
+			colCounter +=1;
+			for(Tile tiles: tileList)
+			{
+				//TODO display on mane field
+				tempImageView = isPlayed(tiles);
+				tempImageView = setImageViewPos(tempImageView, rowCounter, colCounter);
+				tiles.setx((colCounter*30)+50);
+				tiles.sety(rowCounter*75);
+				
+				deck.put(tiles.getId(), tempImageView);
+				root.getChildren().add(tempImageView);
+				colCounter+=1;
+				
+				if(colCounter > 30) 
+				{
+					rowCounter+=1;
+					colCounter = 1;
+				}
+				
+				tempField.add(tempImageView);
+			}
+		}
+		
+		/* Show player hands */
+		for(ImageView view: playerHands)
+		{
+			if(!tempField.contains(view))
+			{
+				view.setVisible(false);
+			}
+		}
+		
+		placeDeck(initDeck); //Pass starting deck to placeDeck
+		dealHand(game.player0.getHand(),  game.player1.getHand(),  game.player2.getHand(),  game.player3.getHand());
+		return true;
+	}
+	
+	private ImageView setImageViewPos(ImageView tempImageView, int rowCounter, int colCounter) {
+		tempImageView.setFitHeight(screenHeight/19);
+		tempImageView.setFitWidth(screenWidth*0.0225);
+		tempImageView.setY((rowCounter*75));
+		tempImageView.setX((colCounter*30) + 50);
+		return tempImageView;
+	}
+
+	private ImageView isPlayed(Tile tiles) 
+	{
+		if(game.justPlayed.contains(tiles)) 
+		{
+			return setUpCardEvents(tiles.getImage2(0), tiles);
+		}else 
+		{
+			return setUpCardEvents(tiles.getImage2(1), tiles);
+		}
+	}
+
+	private boolean updateHelper(ArrayList<Tile> cards)
+	{
+		ImageView tempImageView;
+		for(Tile tiles: cards)
+		{
+			tempImageView = setUpCardEvents(tiles.getImage(), tiles);
+			tempImageView.setFitHeight(screenHeight/19);
+			tempImageView.setFitWidth(screenWidth*0.0225);
+			tempImageView.setX(tiles.getX());
+			tempImageView.setY(tiles.getY());
+			deck.put(tiles.getId(), tempImageView);
+			root.getChildren().add(tempImageView);
+		}
+		return true;
+	}
+	
+	/*
+	 * Prototype: isRollBack(boolean checkField)
+	 *   Purpose: Check if we roll back player move
+	 */  
+	private ArrayList<ArrayList<Tile>> isRollBack(boolean checkField) 
+	{
+		if(game.checkField()) 
+		{
+			System.out.println("Update tiles");
+			return game.field;
+		}
+		else 
+		{
+			game.rollbackNow();
+			return game.rollbackField;
+		}
+	}
+
+	
+	public void playerTimer() {
+		root.getChildren().add(playerTimer);
+		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
+		playerTimer.setFont(new Font(30));
+		playerTimer.setContentDisplay(ContentDisplay.TOP);
+		
+		t.scheduleAtFixedRate(new TimerTask() {
+	        
+	        int minutes = 2;
+            int seconds = 0;
+            @Override
+	        public void run() {
+	            Platform.runLater(() -> {
+	            	
+	            	playerTimer.setText(minutes + "m " + seconds + "s\n");
+			          
+		            if (seconds == 0) {
+		            	if (minutes == 0) {
+		            		playerTimer.setText("");;
+		            		cancel();
+		            		return;
+		            	}
+		            	seconds = 59;
+		            	minutes--;
+		            } else {
+		            	seconds--;
+		            }
+	            	
+	            });
+	        }
+	    }, 1000, 1000);
+	}
+	
+	public String use_file_input() {
+		String file_input = "";
+		
+		TextInputDialog dialog = new TextInputDialog("");
+		dialog.setTitle("File input");
+		dialog.setHeaderText("Enter a file to deal from or leave it blank");
+	
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    file_input = result.get();
+		    System.out.println("'" + file_input + "'");
+		}
+		return file_input;
+	}
+	
 	public ArrayList<Tile> sortHand(ArrayList<Tile> tempHand)
 	{
 		ArrayList<Tile> masterHand = new ArrayList<Tile>();
@@ -776,132 +936,6 @@ public class GUI extends Application
 		masterHand.addAll(redHand);
 		
 		return masterHand;
-	}
-
-	public boolean updateTiles()
-	{
-		ArrayList<Tile> player0Hand = game.player0.getHand();
-		ArrayList<Tile> initDeck = game.initDeck;
-		ArrayList<Tile> AI1Hand = game.player1.getHand();
-		ArrayList<Tile> AI2Hand = game.player2.getHand();
-		ArrayList<Tile> AI3Hand = game.player3.getHand();
-		ArrayList<ArrayList<Tile>> newCardsTemp = game.field;
-		
-		//newCards
-		ImageView tempImageView;
-		System.out.println("Update tiles");
-		if(game.checkField()) {
-			newCardsTemp = game.field;
-			System.out.println("Update tiles");
-		}else {
-			game.rollbackNow();
-			newCardsTemp = game.rollbackField;
-			
-		}
-		System.out.println(newCardsTemp);
-		//newCards
-		/* Hide all cards */
-		for(ImageView view: deck.values())
-		{
-			view.setVisible(false);
-		}
-		
-		/* Create new cards and add */
-		int row = 0; //Let each row be 2 cards height
-		int col = 0; //Let each column be length of 10 cards 
-		int i = 0;
-		System.out.println("Field size is: " + game.field.size());
-		for(ArrayList<Tile> tileList: newCardsTemp)
-		{
-			colCounter +=1;
-			for(Tile tiles: tileList)
-			{
-				/* TODO display on mane field*/
-		if(game.recentlyPlayedArrayList.contains(tiles)) {
-			tempImageView = setUpCardEvents(tiles.getImage2(0), tiles);
-		}else {
-			tempImageView = setUpCardEvents(tiles.getImage2(1), tiles);
-		}
-		tempImageView.setFitHeight(screenHeight/19);
-		tempImageView.setFitWidth(screenWidth*0.0225);
-		tempImageView.setY((rowCounter*75));
-		tempImageView.setX((colCounter*30) + 50);
-		tiles.setx((colCounter*30)+50);
-		tiles.sety(rowCounter*75);
-		deck.put(tiles.getId(), tempImageView);
-		root.getChildren().add(tempImageView);
-		colCounter+=1;
-		if(colCounter > 30) {
-			rowCounter+=1;
-			colCounter = 1;
-		}
-		}
-		}
-		rowCounter = 1;
-		colCounter = 0;
-				
-
-		placeDeck(initDeck); //Pass init deck to my placeDeck
-		dealHand(player0Hand, AI1Hand, AI2Hand, AI3Hand);
-		return true;
-	}
-	private boolean updateHelper(ArrayList<Tile> cards)
-	{
-		ImageView tempImageView;
-		for(Tile tiles: cards)
-		{
-			tempImageView = setUpCardEvents(tiles.getImage(), tiles);
-			tempImageView.setFitHeight(screenHeight/19);
-			tempImageView.setFitWidth(screenWidth*0.0225);
-			tempImageView.setX(tiles.getX());
-			tempImageView.setY(tiles.getY());
-			deck.put(tiles.getId(), tempImageView);
-			root.getChildren().add(tempImageView);
-		}
-		return true;
-	}
-	
-	public void playerTimer() {
-		
-		t.scheduleAtFixedRate(new TimerTask() {
-	        
-            @Override
-	        public void run() {
-	            Platform.runLater(() -> {
-	            	playerTimer.setText(minutes + "m " + seconds + "s\n");
-			          
-		            if (seconds == 0) {
-		            	if (minutes == 0) {
-		            		playerTimer.setText("");
-		            		cancel();
-		            		return;
-		            	}
-		            	seconds = 59;
-		            	minutes--;
-		            } else {
-		            	seconds--;
-		            }
-	            	
-	            });
-	        }
-	    }, 1000, 1000);
-	}
-	
-	public String use_file_input() {
-		String file_input = "";
-		
-		TextInputDialog dialog = new TextInputDialog("");
-		dialog.setTitle("File input");
-		dialog.setHeaderText("Enter a file to deal from or leave it blank");
-	
-
-		Optional<String> result = dialog.showAndWait();
-		if (result.isPresent()){
-		    file_input = result.get();
-		    System.out.println("'" + file_input + "'");
-		}
-		return file_input;
-			
 	}
 }
 
