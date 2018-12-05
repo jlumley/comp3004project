@@ -14,15 +14,30 @@ public class TileRummyMain{
 	public static ArrayList<Tile> recentlyPlayedArrayList = new ArrayList<Tile>();
 	static ArrayList<Tile> initDeck = new ArrayList<Tile>();
 	List<String> initDeckDummy = new ArrayList<String>();
+	public GUI gui;
 	public static Player player0 = new Player();
 	public static AI player1;
 	public static AI player2;
 	public static AI player3;
+	
+	/*
+	public static Object player0;
+	public static Object player1;
+	public static Object player2;
+	public static Object player3;
+	*/
+	
 	boolean gameStatus = true;
 	public int playerTurn = 0;
 	public boolean firstTurnTracker = false;
 	
 	public ArrayList<ArrayList<Tile>> getField(){return field;}
+	
+	
+	public void setGUI(GUI newGUI) 
+	{
+		gui = newGUI;
+	}
 	
 	/* Provide option to select which strategies to use*/
 	/* Options are Player, AI Strategy 1, AI Strategy 2, AI Strategy 3, AI Strategy 4*/
@@ -45,6 +60,10 @@ public class TileRummyMain{
 			return null;
 		}
 		
+		/*if(choice.equals("Player 1"))
+		{
+			return new AI(new Strategy1());
+		}*/
 		if(choice.equals("AI Strategy 1"))
 		{
 			return new AI(new Strategy1());
@@ -156,6 +175,11 @@ public class TileRummyMain{
 		while(gameStatus){
 			if(playerTurn == 0) {
 				System.out.println("Players Turn");
+				gui.playerTexts.get(0).setText("Current Player: " + optionsBox.choices.get(0));
+				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
+				gui.playerTexts.get(2).setText(optionsBox.choices.get(2));
+				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
+				
 				System.out.println("Players hand: " + player0.getHand());
 				System.out.println("------------------------------");
 				//Added in to set the text on GUI to the current player
@@ -164,6 +188,11 @@ public class TileRummyMain{
 				System.out.println("Just played: " + justPlayed);
 				System.out.println(field.size() + " " + rollbackField.size());
 				System.out.println("AI 1's Turn");
+				gui.playerTexts.get(0).setText(optionsBox.choices.get(0));
+				gui.playerTexts.get(1).setText("Current Player: " + optionsBox.choices.get(1));
+				gui.playerTexts.get(2).setText(optionsBox.choices.get(2));
+				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
+				
 				player1.playTurn();
 				System.out.println("Field after AI1's turn");
 				this.showField();
@@ -173,6 +202,10 @@ public class TileRummyMain{
 				if(firstTurnTracker) {
 					player1.playTurn();
 				}
+				gui.playerTexts.get(0).setText(optionsBox.choices.get(0));
+				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
+				gui.playerTexts.get(2).setText("Current Player: " + optionsBox.choices.get(2));
+				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
 				//GUI.setPlayerTurn("player2");
 			}else if(playerTurn == 2){
 				System.out.println("AI 2's Turn");
@@ -181,10 +214,20 @@ public class TileRummyMain{
 				}
 				//player2.playTurn();
 				//GUI.setPlayerTurn("player3");
+				gui.playerTexts.get(0).setText(optionsBox.choices.get(0));
+				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
+				gui.playerTexts.get(2).setText("Current Player: " + optionsBox.choices.get(2));
+				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
+				
 			}else if(playerTurn == 3){
 				//GUI.setPlayerTurn("player4");
 				//System.out.println("AI 3's Turn");
 				//player3.playTurn();
+				gui.playerTexts.get(0).setText("Current Player: " + optionsBox.choices.get(0));
+				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
+				gui.playerTexts.get(2).setText(optionsBox.choices.get(2));
+				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
+				
 				if(firstTurnTracker) {
 					
 				}
@@ -409,4 +452,5 @@ public class TileRummyMain{
 			System.out.println(e);
 		}
 	}
+
 }

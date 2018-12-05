@@ -30,12 +30,14 @@ public class optionsBox {
         gameOptions.setMinWidth(screenHeight*0.25);
 
         Label info = new Label();
+        Label infoTimer = new Label();
         info.setText("Please select the players");
-        
+        infoTimer.setText("Would you like a timer?");
         ComboBox comboBox1 = new ComboBox();
         ComboBox comboBox2 = new ComboBox();
         ComboBox comboBox3 = new ComboBox();
         ComboBox comboBox4 = new ComboBox();
+        ComboBox comboBox5 = new ComboBox();
         
         ArrayList<String> options = new ArrayList<String>();
         options.add("Player");
@@ -48,6 +50,8 @@ public class optionsBox {
         comboBox2.getItems().addAll(options);
         comboBox3.getItems().addAll(options);
         comboBox4.getItems().addAll(options);
+        comboBox5.getItems().add("Yes");
+        comboBox5.getItems().add("No");
         
         Button btnFinish = new Button("Finish");
         
@@ -92,11 +96,20 @@ public class optionsBox {
         		choices.add((String) comboBox4.getValue());
         	}
         	
+        	//Slot 5
+        	if(comboBox5.getValue() == null)
+        	{
+        		choices.add((String) "No");
+        	}
+        	else
+        	{
+        		choices.add((String) comboBox5.getValue());
+        	}
         	gameOptions.close();  	
         });
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(info, comboBox1, comboBox2, comboBox3, comboBox4, btnFinish);
+        layout.getChildren().addAll(info, comboBox1, comboBox2, comboBox3, comboBox4, infoTimer, comboBox5, btnFinish);
         layout.setAlignment(Pos.CENTER);
 
         //Display window and wait for it to be closed before returning

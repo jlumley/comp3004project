@@ -2,6 +2,8 @@ package core;
 
 import javafx.scene.control.TextInputDialog;
 import javafx.application.Platform;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.lang.Object;
 import javafx.scene.control.ContentDisplay;
@@ -83,7 +85,8 @@ public class GUI extends Application
 	public double minutes = 0;
 	public double seconds = 0;
 	public boolean drawTilePlayer = false;
-	private ArrayList<Text> playerTexts;
+	public ArrayList<Text> playerTexts;
+	public String isTimer;//Yes or No 
 	
 	/* Data structures to hold cards */
 	public ArrayList<String> choices;
@@ -118,7 +121,6 @@ public class GUI extends Application
 		/* Initialize data structures to hold on to cards on game board */
 		deck = new HashMap<Integer, ImageView>();
 		playerHands = new HashMap<Integer, ImageView>();
-		
 		/* Get rigged game if applies*/
 		String file_input = use_file_input();
 		
@@ -127,6 +129,7 @@ public class GUI extends Application
 		
 		/* Initialize game logic */
 		game = new TileRummyMain();
+		game.setGUI(this);
 		game.initialize(file_input, getPlayerStrategies()); 
 		
 		/* Set player strategy texts */
@@ -134,6 +137,7 @@ public class GUI extends Application
 		playerTexts.get(1).setText(optionsBox.choices.get(1));
 		playerTexts.get(2).setText(optionsBox.choices.get(2));
 		playerTexts.get(3).setText(optionsBox.choices.get(3));
+		isTimer = optionsBox.choices.get(4);
 		
 		/* Deal hands */
 		placeDeck(game.initDeck);
@@ -304,7 +308,6 @@ public class GUI extends Application
 	 */
 	private ArrayList<Text> setTextPos() 
 	{
-		//TODO set proper positions
 		playerTexts.get(0).setFont(new Font(50));
 		playerTexts.get(0).setText("");
 		playerTexts.get(0).setY(screenWidth - screenWidth*0.465);
