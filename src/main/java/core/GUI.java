@@ -75,15 +75,20 @@ public class GUI extends Application
 	private Scene scene;
 	private TileRummyMain game;
 	private static Button btnFinish;
-	private Map<Integer, ImageView> deck;
 	public boolean inFieldOrHand = false;
 	Label playerTimer;
 	private boolean startGame = true;
-	public ArrayList<String> choices;
 	Timer t = new Timer();
-
 	
-	private ArrayList<ImageView> playerHands;
+	/* Data structures to hold cards */
+	public ArrayList<String> choices;
+	private HashMap<Integer, ImageView> deck;
+	private HashMap<Integer, ImageView> playerHands;
+	
+	/*
+	 * Prototype: main(String[] args)
+	 *   Purpose: Entry point for the game
+	 * */
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -102,13 +107,25 @@ public class GUI extends Application
 	
 	private void setUpGame() 
 	{
+		/* Initialize data structures to hold on to cards on game board */
 		deck = new HashMap<Integer, ImageView>();
+		playerHands = new HashMap<Integer, ImageView>();
+		
+		/* Get rigged game if applies*/
 		String file_input = use_file_input();
+		
+		/* Start up timer */
 		playerTimer = new Label("");
+		
+		/* Initialize game logic */
 		game = new TileRummyMain();
 		game.initialize(file_input, getPlayerStrategies()); 
+		
+		/* Deal hands */
 		placeDeck(game.initDeck);
 		dealHand(game.player0.getHand(), game.player1.getHand(), game.player2.getHand(), game.player3.getHand());
+		
+		/* Start game */
 		game.playGame();
 	}
 
@@ -130,6 +147,7 @@ public class GUI extends Application
 	{
 		choices = new ArrayList<String>();
 		optionsBox.display();
+		
 		if(optionsBox.choices.size() > 3)
 		{
 			/* Add user options assuming they selected each one*/
@@ -251,36 +269,48 @@ public class GUI extends Application
 		/* Set text fields */
 		playerInfo = new Text();playerInfo2 = new Text();
 		playerInfo3 = new Text();playerInfo4 = new Text();
+		
+		/* Store text filed to pass to function */
 		playerTexts.add(playerInfo);playerTexts.add(playerInfo2);
 		playerTexts.add(playerInfo3);playerTexts.add(playerInfo4);
+		
+		/* Set positions to player names */
 		playerTexts = setTextPos(playerTexts);		
 		
+		/* Add player names to stage */
 	    root.getChildren().addAll(decks);
 	    root.getChildren().addAll(playerTexts);
 
 	    return true;
 	}
 	
-
+	/*
+	 * Prototype: setTextPos(ArrayList<Text> playerTexts) 
+	 *   Purpose: Helper function to set player names in game
+	 */
 	private ArrayList<Text> setTextPos(ArrayList<Text> playerTexts) 
 	{
+		//TODO set proper positions
 		playerTexts.get(0).setFont(new Font(50));
-		playerTexts.get(0).setText("Player 1");//TODO setText not updating right now so just using sayMsg
+		//playerTexts.get(0).setText(optionsBox.choices.get(0));
+		playerTexts.get(0).setText("Player 1");
 		playerTexts.get(0).setY(screenWidth - screenWidth*0.465);
 		playerTexts.get(0).setX(0);
 
 		playerTexts.get(1).setFont(new Font(50));
-		playerTexts.get(1).setText("Player 2");//TODO setText not updating right now so just using sayMsg
+		//playerTexts.get(1).setText(optionsBox.choices.get(1));
+		playerTexts.get(1).setText("AI Strategy 1");
 		playerTexts.get(1).setY(screenWidth - screenWidth*0.465);
 		playerTexts.get(1).setX(0);
 		
 		playerTexts.get(2).setFont(new Font(50));
-		playerTexts.get(2).setText("Player 3");//TODO setText not updating right now so just using sayMsg
+		//playerTexts.get(2).setText(optionsBox.choices.get(2));
+		playerTexts.get(2).setText("AI Strategy 2");
 		playerTexts.get(2).setY(screenWidth - screenWidth*0.465);
 		playerTexts.get(2).setX(0);
 		
 		playerTexts.get(3).setFont(new Font(50));
-		playerTexts.get(3).setText("Player 4");//TODO setText not updating right now so just using sayMsg
+		playerTexts.get(3).setText("AI Strategy 3");
 		playerTexts.get(3).setY(screenWidth - screenWidth*0.465);
 		playerTexts.get(3).setX(0);
 		
@@ -309,31 +339,6 @@ public class GUI extends Application
 		decks.get(4).setX(screenWidth - screenWidth*0.05); 
 		decks.get(4).setY(screenHeight/16 + screenHeight*0.05); 
 		return decks;
-	}
-
-	/*
-	 * Prototype: getCards() 
-	 * 	 Purpose: Load in card images and add to hash map
-	 * */
-	private boolean getCards() 
-	{
-		//TODO getCards can be removed since tile will load in the card image
-		
-			char[] colours = {'B', 'G', 'O', 'R'};
-			String tempCardName;
-			
-			for(int i=0; i < 4; i++) //Color
-			{
-				for(int j=1; j < 14; j++) //Card Value
-				{
-					//Create card file name
-					tempCardName = "Tile" + colours[i] + j;
-					//deck.put(tempCardName, new Image(new FileInputStream(image_dir + tempCardName + ".jpg")));
-				}
-			}
-		 
-	
-		return true;
 	}
 
 	/*
@@ -382,9 +387,7 @@ public class GUI extends Application
 		root.getChildren().addAll(btnFinish, btnExit);
 		
 	}
-	
-	/* GUI Helpers */
-	
+		
 	/*
 	 * Prototype: setPanePos
 	 * 	 Purpose: Set the width and height of the window(scene)
@@ -395,19 +398,16 @@ public class GUI extends Application
 		screenWidth = screenSize.width;
 		screenHeight = 	screenSize.height;
 	}
-	
-	/* --------------------------------------------------------------------------------
-	 * 
-	 * 			GUI Interface
-	 * 
-	 * --------------------------------------------------------------------------------
-	 * */
-	
+		
 	/*   prototype: placeDeck(ArrayList<Tile> deck)
 	 *   purpose: Place all cards given in pile
 	 * */
 	public boolean placeDeck(ArrayList<Tile> deckTemp)
 	{
+		//In order to avoid multiple calls to place deck 
+		//adding the same tiles we will reset the stored deck for the new one
+		deck = new HashMap<Integer, ImageView>();
+		
 		int i = 0;
 		double offsetY = 0.0;
 		
@@ -422,13 +422,18 @@ public class GUI extends Application
 		/* Set deck position and add to GUI */
 		for(Tile card : deckTemp)
 		{
+			/* Every 4th card reset x position */
 			i += 1;
 			if(i%4 == 0)
 				offsetY += screenHeight*0.0265;
 			
-			//Store all tiles in hash map
+			//Create card with given position 
 			tempImageView = createCard(i, card, offsetY);
+			
+			//Store the tile ID and the image view
 			deck.put(card.getId(), tempImageView);	
+			
+			//Add card to the game
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -441,8 +446,8 @@ public class GUI extends Application
 	{
 		ImageView tempImageView;
 		
+		//Randomly position tiles on deck
 		double randNum = 0.0;
-	
 		Random rand = new Random();
 
 		Image imageHolder = card.getImage();
@@ -465,8 +470,8 @@ public class GUI extends Application
 	/*   prototype: setUpCardEvents(Image imageHolder, Tile tile)
 	 *   purpose: Add events to a card such as drag and drop
 	 * */
-	private ImageView setUpCardEvents(Image imageHolder, Tile tile) {
-		
+	private ImageView setUpCardEvents(Image imageHolder, Tile tile) 
+	{
 		ImageView tempImageView = new ImageView(imageHolder);
 		tempImageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override public void handle(MouseEvent event) {
@@ -555,6 +560,7 @@ public class GUI extends Application
 		return false;
 	}
 
+	//TODO these functions should be refactored 
 	public boolean dealHandPlayer1(ArrayList<Tile> playerHand)
 	{
 		ImageView tempImageView;
@@ -568,16 +574,12 @@ public class GUI extends Application
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
 			tempImageView.setFitWidth(screenWidth*0.0225);
-
-			//Set Pos
-			tempImageView.setFitHeight(screenHeight/19);
-			tempImageView.setFitWidth(screenWidth*0.0225);
 			
 			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
 			tempImageView.setY(screenHeight - screenHeight*0.2025); 
 			i += 1;
-			deck.put(tile.getId(), tempImageView);
-			playerHands.add(tempImageView);
+			
+			playerHands.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		
@@ -597,16 +599,12 @@ public class GUI extends Application
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
 			tempImageView.setFitWidth(screenWidth*0.0225);
-
-			//Set Pos
-			tempImageView.setFitHeight(screenHeight/19);
-			tempImageView.setFitWidth(screenWidth*0.0225);
 			
 			tempImageView.setX(screenWidth*0.0125); 
 			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
 			i += 1;
-			deck.put(tile.getId(), tempImageView);
-			playerHands.add(tempImageView);
+			
+			playerHands.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -624,16 +622,12 @@ public class GUI extends Application
 			//Set width and height
 			tempImageView.setFitHeight(screenHeight/19);
 			tempImageView.setFitWidth(screenWidth*0.0225);
-
-			//Set Pos
-			tempImageView.setFitHeight(screenHeight/19);
-			tempImageView.setFitWidth(screenWidth*0.0225);
 			
 			tempImageView.setX(screenWidth - screenWidth*0.92 + i*screenWidth*0.025); 
 			tempImageView.setY(screenHeight*0.025); 
 			i += 1;
-			deck.put(tile.getId(), tempImageView);
-			playerHands.add(tempImageView);
+			
+			playerHands.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		
@@ -658,8 +652,8 @@ public class GUI extends Application
 			tempImageView.setX(screenWidth*0.965); 
 			tempImageView.setY(screenHeight*0.86 - i*screenHeight*0.0525); 
 			i += 1;
-			deck.put(tile.getId(), tempImageView);
-			playerHands.add(tempImageView);
+			
+			playerHands.put(tile.getId(), tempImageView);
 			root.getChildren().add(tempImageView);
 		}
 		return true;
@@ -671,19 +665,28 @@ public class GUI extends Application
 	 * */
 	public boolean dealHand(ArrayList<Tile> p1Hand, ArrayList<Tile> p2Hand, ArrayList<Tile> p3Hand, ArrayList<Tile> p4Hand)
 	{
-		System.out.println("Deal hand caled");
+		System.out.println("Deal hand called");
+		
+		/* Reset playerHands */
+		playerHands = new HashMap<Integer, ImageView>();
 		double totalRun = 0;
 		isNewGame();
-
+		
+		/* Sort hand to ensure each players card are in color ascending order */
 		sortHand(p1Hand);sortHand(p2Hand);
 		sortHand(p3Hand);sortHand(p4Hand);
 		
+		/* Place tiles on player hands */
 		dealHandPlayer1(sortHand(p1Hand));dealHandPlayer2(sortHand(p2Hand));
 		dealHandPlayer3(sortHand(p3Hand));dealHandPlayer4(sortHand(p4Hand));
 
 		return true;
 	}
 	
+	/*
+	 * Prototype: isNewGame()
+	 *   Purpose: Check if a new game was started
+	 */
 	private void isNewGame() 
 	{
 		if(startGame) 
@@ -736,22 +739,36 @@ public class GUI extends Application
 		return true;
 	}
 	
+	//TODO fix this
 	public boolean updateTiles()
 	{
-		ArrayList<Tile> initDeck = game.initDeck;
+		/* New cards to be placed */
+		//ArrayList<ImageView> tempField = new ArrayList<ImageView>();
 		ArrayList<ArrayList<Tile>> newCardsTemp;
-		ArrayList<ImageView> tempField = new ArrayList<ImageView>();
 		newCardsTemp = isRollBack(game.checkField());		
-		playerHands = new ArrayList<ImageView>();
-		
-		//newCards
 		ImageView tempImageView;
 		
-		/* Hide all cards from player hands and from field and from deck*/
+		/* Hide all cards from player hands and from field and from deck */
+		for(Integer key: deck.keySet())
+		{
+			deck.get(key).setVisible(false);
+		}
+		
+		for(Integer key: playerHands.keySet())
+		{
+			playerHands.get(key).setVisible(false);
+		}
+		
+		//TODO hide all from field
+		
+		/* Reset data structures */
+		deck = new HashMap<Integer, ImageView>();
+		playerHands = new HashMap<Integer, ImageView>();
 		
 		/* Create new cards and add */
 		int rowCounter = 1;
 		int colCounter = 0;
+		
 		System.out.println("Field size is: " + game.field.size());
 		
 		/* Display field to table */
@@ -766,8 +783,10 @@ public class GUI extends Application
 				tiles.setx((colCounter*30)+50);
 				tiles.sety(rowCounter*75);
 				
-				deck.put(tiles.getId(), tempImageView);
+				//Check this since it is the temp field
+				//TODO figure out how to store field
 				root.getChildren().add(tempImageView);
+				
 				colCounter+=1;
 				
 				if(colCounter > 30) 
@@ -781,15 +800,8 @@ public class GUI extends Application
 		}
 		
 		/* Show player hands */
-		for(ImageView view: playerHands)
-		{
-			if(!tempField.contains(view))
-			{
-				view.setVisible(false);
-			}
-		}
-		
-		placeDeck(initDeck); //Pass starting deck to placeDeck
+		//TODO show field
+		placeDeck(game.initDeck); 
 		dealHand(game.player0.getHand(),  game.player1.getHand(),  game.player2.getHand(),  game.player3.getHand());
 		return true;
 	}
