@@ -6,8 +6,8 @@ public class Strategy3 implements AIStrategy{
 	private AI player;
 	
 	public void playTurn() {
-		//System.out.println("Player 3 Turn");
-		//System.out.println("Player 3 Hand: " + player.getHand());
+		System.out.println("Player using Strat3 Turn");
+		System.out.println("Player using Strat3 Hand: " + player.getHand());
 		//Check for 30 point limit and play it
 		ArrayList<ArrayList<Tile>> p3Melds = player.playAllTiles();
 		System.out.println("Possible Melds in Hand: " + p3Melds);
@@ -54,7 +54,7 @@ public class Strategy3 implements AIStrategy{
 					}
 				}
 				//otherwise
-				System.out.println("p3 could play but has no tile to play");
+				System.out.println("AIPlayer could play but has no tile to play");
 				returnCardsAndDrawCard(p3Melds);
 			}
 			else {//Else: keep all in-hand melds, and try adding to existing melds on board
@@ -85,12 +85,12 @@ public class Strategy3 implements AIStrategy{
 		}
 		//draw a Tile
 		if(!TileRummyMain.initDeck.isEmpty()){ //if not empty NORMAL CASE
-			System.out.println("Player 3 draws: " + TileRummyMain.initDeck.get(0));
+			System.out.println("Player using Strat3 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 		else { //just when doing partial tests
 			TileRummyMain.initDeck = TileRummyMain.buildDeck(TileRummyMain.suites, TileRummyMain.values);
-			System.out.println("Player 3 draws: " + TileRummyMain.initDeck.get(0));
+			System.out.println("Player using Strat3 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 	}
@@ -98,7 +98,7 @@ public class Strategy3 implements AIStrategy{
 	public boolean existsAComparativelySmallHand() { // 3 or less Tiles then in this Player's Hand
 		int[] handSizes = TileRummyMain.getHandSizeOfOtherPlayers(player); //get HandSizes
 		for(int i = 0; i < handSizes.length; i++) { 
-			if(player.getHand().size() >= (handSizes[i] + 3)) {
+			if(player.getHand().size() >= (handSizes[i] + 3)) { //if this hand is 3+ any other hand
 				return true;
 			}
 		}

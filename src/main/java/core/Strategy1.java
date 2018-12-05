@@ -9,8 +9,8 @@ public class Strategy1 implements AIStrategy{
 	private AI player; 
 	
 	public void playTurn() {
-		//System.out.println("Player 1 Turn");
-		//System.out.println("Player 1 Hand: " + TileRummyMain.player1.getHand());
+		System.out.println("Player using Strat1 Turn");
+		System.out.println("Player using Strat1 Hand: " + player.getHand());
 		ArrayList<ArrayList<Tile>> p1Melds = player.playAllTiles();
 		System.out.println("Possible Melds in Hand: " + p1Melds);
 		if(player.firstTurn == false) { //first turn has not passed yet
@@ -61,7 +61,7 @@ public class Strategy1 implements AIStrategy{
 				return;
 			}
 			//otherwise
-			System.out.println("Player could play but has no tile to play");
+			System.out.println("AIPlayer could play but has no tile to play");
 			returnCardsAndDrawCard(p1Melds);
 		}
 		
@@ -76,12 +76,12 @@ public class Strategy1 implements AIStrategy{
 		}
 		//draw a Tile
 		if(!TileRummyMain.initDeck.isEmpty()){ //if not empty NORMAL CASE
-			System.out.println("Player 1 draws: " + TileRummyMain.initDeck.get(0));
+			System.out.println("Player using Strat1 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 		else { //just when doing partial tests
 			TileRummyMain.initDeck = TileRummyMain.buildDeck(TileRummyMain.suites, TileRummyMain.values);
-			System.out.println("Player 1 draws: " + TileRummyMain.initDeck.get(0));
+			System.out.println("Player using Strat1 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 	}
