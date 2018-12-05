@@ -201,29 +201,17 @@ public class TileRummyMain{
 			}else if(playerTurn == 2){
 				//System.out.println("AI 2's Turn");
 				if(firstTurnTracker) {
-					player1.playTurn();
+					player2.playTurn();
 				}
 				gui.playerTexts.get(0).setText(optionsBox.choices.get(0));
 				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
 				gui.playerTexts.get(2).setText("Current Player: " + optionsBox.choices.get(2));
 				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
 				//GUI.setPlayerTurn("player2");
-			}else if(playerTurn == 2){
-				System.out.println("AI 2's Turn");
-				if(firstTurnTracker) {
-					
-				}
-				//player2.playTurn();
-				//GUI.setPlayerTurn("player3");
-				gui.playerTexts.get(0).setText(optionsBox.choices.get(0));
-				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
-				gui.playerTexts.get(2).setText("Current Player: " + optionsBox.choices.get(2));
-				gui.playerTexts.get(3).setText(optionsBox.choices.get(3));
-				
 			}else if(playerTurn == 3){
 				//GUI.setPlayerTurn("player4");
 				//System.out.println("AI 3's Turn");
-				//player3.playTurn();
+				player3.playTurn();
 				gui.playerTexts.get(0).setText("Current Player: " + optionsBox.choices.get(0));
 				gui.playerTexts.get(1).setText(optionsBox.choices.get(1));
 				gui.playerTexts.get(2).setText(optionsBox.choices.get(2));
