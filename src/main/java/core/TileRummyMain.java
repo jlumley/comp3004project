@@ -309,8 +309,8 @@ public class TileRummyMain{
 	}
 
 	public void cloneField() {
-		int checker = -1;
-		System.out.println(rollbackField + " 23" + field);
+		
+		System.out.println(rollbackField + "---" + field);
 		ArrayList<Tile> recentDummy1 = new ArrayList<Tile>();
 		ArrayList<Tile> recentDummy2 = new ArrayList<Tile>();
 		for(int a1 = 0; a1 < field.size(); a1++) {
@@ -323,20 +323,18 @@ public class TileRummyMain{
 				recentDummy2.add(rollbackField.get(b1).get(b2));
 			}
 		}
-		System.out.println("Dummy1" +recentDummy1);
-		System.out.println("Dummy2" +recentDummy2);
+		System.out.println("Dummy1" +recentDummy1 + " " + recentDummy1.size());
+		System.out.println("Dummy2" +recentDummy2 + " " + recentDummy2.size());
 		if(rollbackField.size() > 0) {
 			for(int c1 = 0; c1 < recentDummy1.size(); c1++) {
 				for(int c2 = 0; c2 < recentDummy2.size(); c2++) {
+					System.out.println(c1 + " " + recentDummy1.get(c1) +  " " + c2 + " " + recentDummy2.get(c2));
 					if(recentDummy1.get(c1).compareTo(recentDummy2.get(c2)) == 0) {
-						System.out.print("Before: " + recentDummy1);
-						recentDummy1.remove(c1);
-						System.out.println("After: " + recentDummy1);
+						break;
+					}else if((c2+1) == recentDummy2.size()) {
+						recentlyPlayedArrayList.add(recentDummy1.get(c1));
 					}
 				}
-			}
-			for(int i = 0; i < recentDummy1.size(); i++){
-				recentlyPlayedArrayList.add(recentDummy1.get(i));
 			}
 		}else {
 			for(int a = 0; a < field.size(); a++) {

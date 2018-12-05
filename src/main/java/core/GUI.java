@@ -364,6 +364,8 @@ public class GUI extends Application
 				}
 				game.player0.showHand();
 				System.out.println("Current Field: " + game.getField());
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
+				game.recentlyPlayedArrayList.clear();
 				game.playGame();
 				updateTiles();
 				updateTiles();
@@ -372,8 +374,6 @@ public class GUI extends Application
 
 				System.out.println("Current Field " + game.field);
 				System.out.println("rollback Field " + game.rollbackField);
-				System.out.println("recently played " + game.recentlyPlayedArrayList);
-				game.recentlyPlayedArrayList.clear();
 				System.out.println("recently played " + game.recentlyPlayedArrayList);
 
 			}
