@@ -89,8 +89,8 @@ public class Strategy3 implements AIStrategy{
 			player.drawTile(TileRummyMain.initDeck);
 		}
 		else { //just when doing partial tests
-			TileRummyMain.initDeck = TileRummyMain.buildDeck(TileRummyMain.suites, TileRummyMain.values);
-			System.out.println("Player using Strat3 draws: " + TileRummyMain.initDeck.get(0));
+			//TileRummyMain.initDeck = TileRummyMain.buildDeck(TileRummyMain.suites, TileRummyMain.values);
+			//System.out.println("Player using Strat3 draws: " + TileRummyMain.initDeck.get(0));
 			player.drawTile(TileRummyMain.initDeck);
 		}
 	}
