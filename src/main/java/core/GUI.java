@@ -82,8 +82,8 @@ public class GUI extends Application
 	Label playerTimer;
 	private boolean startGame = true;
 	Timer t = new Timer();
-	public double minutes = 0;
-	public double seconds = 0;
+	public int minutes = 2;
+	public int seconds = 0;
 	public boolean drawTilePlayer = false;
 	public ArrayList<Text> playerTexts;
 	public String isTimer;//Yes or No 
@@ -124,13 +124,21 @@ public class GUI extends Application
 		/* Get rigged game if applies*/
 		String file_input = use_file_input();
 		
-		/* Start up timer */
-		playerTimer = new Label("");
-		
 		/* Initialize game logic */
 		game = new TileRummyMain();
 		game.setGUI(this);
 		game.initialize(file_input, getPlayerStrategies()); 
+		
+		
+	    /* Start up timer */
+		playerTimer = new Label("");
+		this.root.getChildren().add(playerTimer);
+		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
+		playerTimer.setFont(new Font(30));
+		playerTimer.setContentDisplay(ContentDisplay.TOP);
+		playerTimer.setTranslateX(screenWidth-150);
+		playerTimer.setTranslateY(screenHeight-100);
+		
 		
 		/* Set player strategy texts */
 		playerTexts.get(0).setText(optionsBox.choices.get(0));
@@ -138,6 +146,10 @@ public class GUI extends Application
 		playerTexts.get(2).setText(optionsBox.choices.get(2));
 		playerTexts.get(3).setText(optionsBox.choices.get(3));
 		isTimer = optionsBox.choices.get(4);
+		
+		if (isTimer.trim() == "Yes") {
+			playerTimer();
+		}
 		
 		/* Deal hands */
 		placeDeck(game.initDeck);
@@ -299,6 +311,7 @@ public class GUI extends Application
 	    root.getChildren().addAll(decks);
 	    root.getChildren().addAll(playerTexts);
 
+	    	
 	    return true;
 	}
 	
@@ -404,6 +417,7 @@ public class GUI extends Application
 				System.out.println("Current Field " + game.field);
 				System.out.println("rollback Field " + game.rollbackField);
 				System.out.println("recently played " + game.recentlyPlayedArrayList);
+				
 			}
 		});
 		
@@ -900,24 +914,19 @@ public class GUI extends Application
 
 	
 	public void playerTimer() {
-		root.getChildren().add(playerTimer);
-		playerTimer.setAlignment(Pos.BOTTOM_RIGHT);
-		playerTimer.setFont(new Font(30));
-		playerTimer.setContentDisplay(ContentDisplay.TOP);
-		
+	
 		t.scheduleAtFixedRate(new TimerTask() {
-	        
-	        int minutes = 2;
-            int seconds = 0;
+			
             @Override
 	        public void run() {
+
 	            Platform.runLater(() -> {
 	            	
 	            	playerTimer.setText(minutes + "m " + seconds + "s\n");
-			          
+			         
 		            if (seconds == 0) {
 		            	if (minutes == 0) {
-		            		playerTimer.setText("");;
+		            		playerTimer.setText("");
 		            		cancel();
 		            		return;
 		            	}
@@ -929,7 +938,7 @@ public class GUI extends Application
 	            	
 	            });
 	        }
-	    }, 1000, 1000);
+	    }, 10, 1000);
 	}
 	
 	public String use_file_input() {
