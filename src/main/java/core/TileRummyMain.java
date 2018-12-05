@@ -284,6 +284,21 @@ public class TileRummyMain{
 			holder[1] = player1.getHand().size();
 			holder[2] = player2.getHand().size();
 		}
+		else if(asker == player0) {
+			holder[0] = player1.getHand().size();
+			holder[1] = player2.getHand().size();
+			holder[2] = player3.getHand().size();
+		}
+		else if(asker == player1) {
+			holder[0] = player0.getHand().size();
+			holder[1] = player2.getHand().size();
+			holder[2] = player3.getHand().size();
+		}
+		else if(asker == player2) {
+			holder[0] = player0.getHand().size();
+			holder[1] = player1.getHand().size();
+			holder[2] = player3.getHand().size();
+		}
 		return holder;
 	}
 

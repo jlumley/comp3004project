@@ -394,11 +394,11 @@ public class AITest extends TestCase{
 		assertEquals(false, result.checkGameStatus()); //won 16a
 	}
 	
-	//Works when TileRummyMain dealHands() deals to Player3
 	public void testExistsAComparativelySmallHand() {
 		TileRummyMain result = new TileRummyMain();
 		result.initialize("");
 		Strategy3 strat3 = new Strategy3();
+		result.player3.setStrategy(strat3);
 		assertEquals(false, strat3.existsAComparativelySmallHand());
 		result.player3.addTile(new Tile("B", 2));
 		result.player3.addTile(new Tile("B", 3));
