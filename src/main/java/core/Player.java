@@ -455,8 +455,8 @@ public class Player {
 					for(int i = 0; i < currField.size(); i++) { // check everything on the dummyField.
 						for(int x = 0; x < currField.get(i).size(); x++) { // current position
 							double xTile2 = currField.get(i).get(x).getX();
-							System.out.println("a" + currField.get(i).get(x).getColour() + " " + currField.get(i).get(x).getValue());
-							System.out.println("b" + currField.get(i).get(x).getX() + " " + currField.get(i).get(x).getY());
+							System.out.println("a " + currField.get(i).get(x).getColour() + " " + currField.get(i).get(x).getValue());
+							System.out.println("b " + currField.get(i).get(x).getX() + " " + currField.get(i).get(x).getY());
 							double xFinal = Math.abs(xTile - xTile2);
 							if(xFinal >= 0 && xFinal <= 33) {
 								double yTile2 = tilesOnField.get(i).get(x).getY();

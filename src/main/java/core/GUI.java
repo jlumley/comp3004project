@@ -79,6 +79,9 @@ public class GUI extends Application
 	Label playerTimer;
 	private boolean startGame = true;
 	Timer t = new Timer();
+	public double minutes = 0;
+	public double seconds = 0;
+	public boolean drawTilePlayer = false;
 	
 	/* Data structures to hold cards */
 	public ArrayList<String> choices;
@@ -374,9 +377,25 @@ public class GUI extends Application
 					game.player0.drawTile(game.initDeck);
 					game.player0.hand = game.player0.oldHand;
 				}
-				game.checkPlays(game.player0.tilesOnField);
+
+				drawTilePlayer = !(game.checkPlays(game.player0.tilesOnField));
+				System.out.println("player draw: " + drawTilePlayer);
+				if(drawTilePlayer) {
+					game.player0.drawTile(game.initDeck);
+				}
+				game.player0.showHand();
+				System.out.println("Current Field: " + game.getField());
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
+				game.recentlyPlayedArrayList.clear();
 				game.playGame();
 				updateTiles();
+				updateTiles();
+				minutes = 2;
+				seconds = 0;
+
+				System.out.println("Current Field " + game.field);
+				System.out.println("rollback Field " + game.rollbackField);
+				System.out.println("recently played " + game.recentlyPlayedArrayList);
 			}
 		});
 		
