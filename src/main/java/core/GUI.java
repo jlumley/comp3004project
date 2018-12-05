@@ -66,6 +66,7 @@ import javafx.scene.control.Label;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.ButtonType;
+
 public class GUI extends Application
 {
 	public static final String image_dir = "src/main/resources/core/images/";
@@ -82,6 +83,7 @@ public class GUI extends Application
 	public double minutes = 0;
 	public double seconds = 0;
 	public boolean drawTilePlayer = false;
+	private ArrayList<Text> playerTexts;
 	
 	/* Data structures to hold cards */
 	public ArrayList<String> choices;
@@ -126,6 +128,12 @@ public class GUI extends Application
 		/* Initialize game logic */
 		game = new TileRummyMain();
 		game.initialize(file_input, getPlayerStrategies()); 
+		
+		/* Set player strategy texts */
+		playerTexts.get(0).setText(optionsBox.choices.get(0));
+		playerTexts.get(1).setText(optionsBox.choices.get(1));
+		playerTexts.get(2).setText(optionsBox.choices.get(2));
+		playerTexts.get(3).setText(optionsBox.choices.get(3));
 		
 		/* Deal hands */
 		placeDeck(game.initDeck);
@@ -241,7 +249,7 @@ public class GUI extends Application
 		ImageView imgDeckView, imgPlayer1View, imgPlayer2View, imgPlayer3View, imgPlayer4View;
 		
 		ArrayList<ImageView> decks = new ArrayList<ImageView>();
-		ArrayList<Text> playerTexts = new ArrayList<Text>();
+		playerTexts = new ArrayList<Text>();
 		
 		try 
 		{
@@ -281,7 +289,7 @@ public class GUI extends Application
 		playerTexts.add(playerInfo3);playerTexts.add(playerInfo4);
 		
 		/* Set positions to player names */
-		playerTexts = setTextPos(playerTexts);		
+		playerTexts = setTextPos();		
 		
 		/* Add player names to stage */
 	    root.getChildren().addAll(decks);
@@ -294,31 +302,28 @@ public class GUI extends Application
 	 * Prototype: setTextPos(ArrayList<Text> playerTexts) 
 	 *   Purpose: Helper function to set player names in game
 	 */
-	private ArrayList<Text> setTextPos(ArrayList<Text> playerTexts) 
+	private ArrayList<Text> setTextPos() 
 	{
 		//TODO set proper positions
 		playerTexts.get(0).setFont(new Font(50));
-		//playerTexts.get(0).setText(optionsBox.choices.get(0));
-		playerTexts.get(0).setText("Player 1");
+		playerTexts.get(0).setText("");
 		playerTexts.get(0).setY(screenWidth - screenWidth*0.465);
-		playerTexts.get(0).setX(0);
+		playerTexts.get(0).setX(screenWidth*0.05);
 
 		playerTexts.get(1).setFont(new Font(50));
-		//playerTexts.get(1).setText(optionsBox.choices.get(1));
-		playerTexts.get(1).setText("AI Strategy 1");
-		playerTexts.get(1).setY(screenWidth - screenWidth*0.465);
-		playerTexts.get(1).setX(0);
+		playerTexts.get(1).setText("");
+		playerTexts.get(1).setY(screenWidth - screenWidth*0.885);
+		playerTexts.get(1).setX(screenWidth*0.05);
 		
 		playerTexts.get(2).setFont(new Font(50));
-		//playerTexts.get(2).setText(optionsBox.choices.get(2));
-		playerTexts.get(2).setText("AI Strategy 2");
-		playerTexts.get(2).setY(screenWidth - screenWidth*0.465);
-		playerTexts.get(2).setX(0);
+		playerTexts.get(2).setText("");
+		playerTexts.get(2).setY(screenWidth - screenWidth*0.885);
+		playerTexts.get(2).setX(screenWidth*0.65);
 		
 		playerTexts.get(3).setFont(new Font(50));
-		playerTexts.get(3).setText("AI Strategy 3");
+		playerTexts.get(3).setText("");
 		playerTexts.get(3).setY(screenWidth - screenWidth*0.465);
-		playerTexts.get(3).setX(0);
+		playerTexts.get(3).setX(screenWidth*0.65);
 		
 		return playerTexts;
 	}
@@ -362,7 +367,7 @@ public class GUI extends Application
 		btnFinish.setLayoutY(300);
 		
 		btnExit.setLayoutX(300);
-		btnExit.setLayoutY(200);
+		btnExit.setLayoutY(400);
 		
 		//Set events
 		btnFinish.setOnAction(new EventHandler<ActionEvent>() {
